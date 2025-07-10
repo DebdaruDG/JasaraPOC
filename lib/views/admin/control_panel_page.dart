@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/utils/app_palette.dart';
-import '../widgets/utils/app_textStyles.dart';
+import '../../widgets/utils/app_palette.dart';
+import '../../widgets/utils/app_textStyles.dart';
 
 class ControlPanelPage extends StatelessWidget {
   const ControlPanelPage({super.key});

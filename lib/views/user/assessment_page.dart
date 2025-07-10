@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
 import 'package:provider/provider.dart';
-import '../core/services/api/api_response.dart';
-import '../providers/assessment_provider.dart';
-import '../widgets/utils/app_textStyles.dart';
+import '../../core/services/api/api_response.dart';
+import '../../providers/assessment_provider.dart';
+import '../../widgets/utils/app_textStyles.dart';
 
 class AssessmentPage extends StatelessWidget {
   const AssessmentPage({super.key});
