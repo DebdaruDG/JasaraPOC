@@ -13,14 +13,102 @@ class ControlPanelPage extends StatefulWidget {
 }
 
 class _ControlPanelPageState extends State<ControlPanelPage> {
-  final List<CriteriaData> _criteriaList = [CriteriaData()];
+  final List<CriteriaData> _criteriaList = [];
 
-  void _addCriteria() {
-    setState(() => _criteriaList.add(CriteriaData()));
+  void _addCriteria(CriteriaData data) {
+    setState(() => _criteriaList.add(data));
   }
 
   void _removeCriteria(int index) {
     setState(() => _criteriaList.removeAt(index));
+  }
+
+  void _openCriteriaDialog({CriteriaData? initialData, int? editIndex}) {
+    final CriteriaData data = initialData ?? CriteriaData();
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            backgroundColor: const Color.fromARGB(255, 240, 247, 221),
+            contentPadding: const EdgeInsets.all(16),
+            title: Text(
+              editIndex == null ? 'Add Criteria' : 'Update Criteria',
+              style: JasaraTextStyles.primaryText500.copyWith(
+                fontSize: 20,
+                color: JasaraPalette.dark2,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  AppTextField(
+                    label: "Criteria (max 1000 chars)",
+                    controller: data.criteriaController,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: data.instructionController,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      labelText: "Text Instructions (max 2500 chars)",
+                      filled: true,
+                      fillColor: JasaraPalette.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    children: List.generate(3, (fileIndex) {
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                          child: _buildFilePicker(
+                            label: "Instructions PDF ${fileIndex + 1}",
+                            file: data.files[fileIndex],
+                            onFilePicked: (file) {
+                              setState(() => data.files[fileIndex] = file);
+                            },
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("Cancel"),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  if (editIndex != null) {
+                    setState(() => _criteriaList[editIndex] = data);
+                  } else {
+                    _addCriteria(data);
+                  }
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: JasaraPalette.primary,
+                  foregroundColor: JasaraPalette.white,
+                ),
+                child: const Text("Save"),
+              ),
+            ],
+          ),
+    );
   }
 
   @override
@@ -33,29 +121,59 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Enter Criteria for AI Assessment",
+              "AI Assessment Criteria's",
               style: JasaraTextStyles.primaryText500.copyWith(
                 fontSize: 22,
                 color: JasaraPalette.dark2,
               ),
             ),
             const SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: _criteriaList.length,
-              itemBuilder: (context, index) {
-                return _buildCriteriaCard(index);
-              },
-            ),
+            _criteriaList.isEmpty
+                ? const Center(child: Text("No Criteria Added Yet"))
+                : ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _criteriaList.length,
+                  itemBuilder: (context, index) {
+                    final data = _criteriaList[index];
+                    return Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      child: ListTile(
+                        title: Text(data.criteriaController.text),
+                        subtitle: Text(
+                          data.instructionController.text,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed:
+                                  () => _openCriteriaDialog(
+                                    initialData: data,
+                                    editIndex: index,
+                                  ),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete),
+                              onPressed: () => _removeCriteria(index),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
+                    backgroundColor: JasaraPalette.primary,
+                    foregroundColor: JasaraPalette.white,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                       vertical: 12,
@@ -64,74 +182,8 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  onPressed: _addCriteria,
+                  onPressed: () => _openCriteriaDialog(),
                   child: const Text("Add a new criteria"),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCriteriaCard(int index) {
-    final data = _criteriaList[index];
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppTextField(
-              label: "Criteria (${index + 1}) (max 1000 chars)",
-              controller: data.criteriaController,
-            ),
-            const SizedBox(height: 12),
-            AppTextField(
-              label: "Text Instructions (max 2500 chars)",
-              controller: data.instructionController,
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: List.generate(3, (fileIndex) {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: _buildFilePicker(
-                      label: "Instructions PDF ${fileIndex + 1}",
-                      file: data.files[fileIndex],
-                      onFilePicked: (file) {
-                        setState(() => data.files[fileIndex] = file);
-                      },
-                    ),
-                  ),
-                );
-              }),
-            ),
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () => _removeCriteria(index),
-                  child: const Text("Remove Criteria"),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                  ),
-                  onPressed: () {
-                    // Save logic here
-                    debugPrint("Saved criteria ${index + 1}");
-                  },
-                  child: const Text("Save"),
                 ),
               ],
             ),
