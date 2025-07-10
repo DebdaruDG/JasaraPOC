@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
+import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/app_state_provider.dart';
@@ -16,11 +17,14 @@ class AppWrapper extends StatelessWidget {
     final isUser = appState.currentScreen == AppScreen.user;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            isUser
-                ? JasaraPalette.accent
-                : JasaraPalette.charcoalGrey.withOpacity(0.3),
-        title: Text(isUser ? 'User View' : 'Admin Control Panel'),
+        backgroundColor: isUser ? JasaraPalette.accent : JasaraPalette.primary,
+        title: Text(
+          isUser ? 'User View' : 'Admin Control Panel',
+          style: JasaraTextStyles.primaryText500.copyWith(
+            color: isUser ? JasaraPalette.dark1 : JasaraPalette.white,
+            fontSize: 20,
+          ),
+        ),
         actions: [
           Container(
             padding: const EdgeInsets.all(8.0),
@@ -30,18 +34,26 @@ class AppWrapper extends StatelessWidget {
                 context.read<AppStateProvider>().switchScreen(newScreen);
               },
               label: '',
-              backgroundColor: JasaraPalette.primary,
-              borderColor: JasaraPalette.primary,
+              backgroundColor:
+                  isUser ? JasaraPalette.primary : JasaraPalette.accent,
+              borderColor:
+                  isUser ? JasaraPalette.primary : JasaraPalette.accent,
               customWidget: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Icon(Icons.swap_horiz, color: Colors.white),
+                  Icon(
+                    Icons.swap_horiz,
+                    color: isUser ? JasaraPalette.white : JasaraPalette.dark1,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     'Switch to ${isUser ? 'Admin' : 'User'}',
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
+                    style: TextStyle(
+                      color: isUser ? JasaraPalette.white : JasaraPalette.dark2,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),
