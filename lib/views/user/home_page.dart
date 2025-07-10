@@ -7,6 +7,7 @@ import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 import '../../widgets/utils/app_text_field.dart';
 import '../../widgets/utils/app_drop_down.dart';
+import 'assessment_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -249,6 +250,12 @@ class _HomePageState extends State<HomePage> {
                     label: "Submit",
                     backgroundColor: JasaraPalette.primary,
                     onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => AssessmentPage(),
+                        ),
+                      );
                       if (_formKey.currentState!.validate()) {
                         print("Form Submitted");
                       }
