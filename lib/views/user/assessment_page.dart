@@ -106,7 +106,6 @@ class AssessmentPage extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(12),
-            // ),
             child:
                 isLoading
                     ? _buildSparkleLoader()

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/services/file_service.dart';
 import '../../widgets/utils/app_button.dart';
@@ -60,7 +61,7 @@ class _HomePageState extends State<HomePage> {
         radius: const Radius.circular(12),
         color: JasaraPalette.primary,
         dashPattern: const [8, 4],
-        strokeWidth: 2,
+        strokeWidth: 0.8,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.all(24),
@@ -73,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                   ? Column(
                     children: const [
                       Icon(
-                        Icons.upload_file,
+                        CupertinoIcons.upload_circle_fill,
                         size: 40,
                         color: JasaraPalette.primary,
                       ),
@@ -190,7 +191,7 @@ class _HomePageState extends State<HomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Attach the RPF Document and Fill the Go/No-Go Form ",
+                "Attach the RPF Document",
                 style: JasaraTextStyles.primaryText500.copyWith(
                   fontSize: 22,
                   color: JasaraPalette.dark2,
@@ -198,6 +199,14 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 16),
               _buildFileUploadField(),
+              const SizedBox(height: 16),
+              Text(
+                "Fill the Go/No-Go Form ",
+                style: JasaraTextStyles.primaryText500.copyWith(
+                  fontSize: 22,
+                  color: JasaraPalette.dark2,
+                ),
+              ),
               const SizedBox(height: 24),
               Wrap(
                 spacing: 16,
