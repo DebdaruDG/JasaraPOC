@@ -1,4 +1,3 @@
-// home_page.dart
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +5,8 @@ import '../../core/services/file_service.dart';
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
+import '../../widgets/utils/app_text_field.dart';
+import '../../widgets/utils/app_drop_down.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,51 +42,6 @@ class _HomePageState extends State<HomePage> {
       controller.dispose();
     }
     super.dispose();
-  }
-
-  Widget _buildTextField(String label, TextEditingController controller) {
-    return TextFormField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: JasaraPalette.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 12.0,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdown(String label, String key, List<String> items) {
-    return DropdownButtonFormField<String>(
-      value: _controllers[key]!.text.isEmpty ? null : _controllers[key]!.text,
-      decoration: InputDecoration(
-        labelText: label,
-        filled: true,
-        fillColor: JasaraPalette.white,
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 12.0,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      items:
-          items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
-      onChanged: (value) {
-        setState(() {
-          _controllers[key]!.text = value!;
-        });
-      },
-    );
   }
 
   Widget _buildFileUploadField() {
@@ -147,35 +103,80 @@ class _HomePageState extends State<HomePage> {
     final isWide = MediaQuery.of(context).size.width > 600;
 
     List<Widget> fields = [
-      _buildTextField("Opportunity Code", _controllers['opportunityCode']!),
-      _buildTextField("Opportunity Name", _controllers['opportunityName']!),
-      _buildTextField("Date", _controllers['date']!),
-      _buildTextField("Proposal Manager", _controllers['proposalManager']!),
-      _buildTextField(
-        "Brief Description of Work",
-        _controllers['description']!,
+      AppTextField(
+        label: "Opportunity Code",
+        controller: _controllers['opportunityCode']!,
       ),
-      _buildDropdown("Project Type", 'projectType', [
-        'Internal',
-        'Client-Based',
-        'R&D',
-      ]),
-      _buildTextField("Client Name", _controllers['clientName']!),
-      _buildDropdown("Client Type", 'clientType', [
-        'Government',
-        'Private',
-        'NGO',
-      ]),
-      _buildDropdown("Relationship with Client", 'relationship', [
-        'Excellent',
-        'Good',
-        'Neutral',
-        'Poor',
-      ]),
-      _buildTextField("Submission Date", _controllers['submissionDate']!),
-      _buildTextField("Bidding Criteria", _controllers['biddingCriteria']!),
-      _buildDropdown("Is it a targeted project?", 'isTargeted', ['Yes', 'No']),
-      _buildTextField("Comments", _controllers['comments']!),
+      AppTextField(
+        label: "Opportunity Name",
+        controller: _controllers['opportunityName']!,
+      ),
+      AppTextField(label: "Date", controller: _controllers['date']!),
+      AppTextField(
+        label: "Proposal Manager",
+        controller: _controllers['proposalManager']!,
+      ),
+      AppTextField(
+        label: "Brief Description of Work",
+        controller: _controllers['description']!,
+      ),
+      AppDropdown(
+        label: "Project Type",
+        dropdownKey: 'projectType',
+        items: ['Internal', 'Client-Based', 'R&D'],
+        controller: _controllers['projectType']!,
+        onChanged: (value) {
+          setState(() {
+            _controllers['projectType']!.text = value!;
+          });
+        },
+      ),
+      AppTextField(
+        label: "Client Name",
+        controller: _controllers['clientName']!,
+      ),
+      AppDropdown(
+        label: "Client Type",
+        dropdownKey: 'clientType',
+        items: ['Government', 'Private', 'NGO'],
+        controller: _controllers['clientType']!,
+        onChanged: (value) {
+          setState(() {
+            _controllers['clientType']!.text = value!;
+          });
+        },
+      ),
+      AppDropdown(
+        label: "Relationship with Client",
+        dropdownKey: 'relationship',
+        items: ['Excellent', 'Good', 'Neutral', 'Poor'],
+        controller: _controllers['relationship']!,
+        onChanged: (value) {
+          setState(() {
+            _controllers['relationship']!.text = value!;
+          });
+        },
+      ),
+      AppTextField(
+        label: "Submission Date",
+        controller: _controllers['submissionDate']!,
+      ),
+      AppTextField(
+        label: "Bidding Criteria",
+        controller: _controllers['biddingCriteria']!,
+      ),
+      AppDropdown(
+        label: "Is it a targeted project?",
+        dropdownKey: 'isTargeted',
+        items: ['Yes', 'No'],
+        controller: _controllers['isTargeted']!,
+        onChanged: (value) {
+          setState(() {
+            _controllers['isTargeted']!.text = value!;
+          });
+        },
+      ),
+      AppTextField(label: "Comments", controller: _controllers['comments']!),
     ];
 
     return Scaffold(
