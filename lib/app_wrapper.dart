@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jasara_poc/widgets/utils/app_palette.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/app_state_provider.dart';
@@ -15,6 +16,8 @@ class AppWrapper extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor:
+            isUser ? JasaraPalette.accent : JasaraPalette.charcoalGrey,
         title: Text(isUser ? 'User View' : 'Admin Control Panel'),
         actions: [
           TextButton.icon(
