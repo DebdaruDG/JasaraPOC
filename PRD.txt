@@ -1,0 +1,87 @@
+Project Overview
+This Flutter-based PoC will have two major sections:
+AI Assessment UI (End User View)
+Control Panel UI (Admin View)
+Both can exist in the same app with navigation switching based on user role or toggle during development.
+Features and Screens Breakdown
+1. AI Assessment Page
+Purpose: User uploads RFP + Go/No Go form → AI processes → returns assessment
+UI Components:
+FilePicker for:
+RFP Document (PDF)
+Hand-Filled Go/No-Go Form (PDF)
+Submit Button
+Placeholder for loading spinner (while waiting for API)
+Display of detailed assessment result (post-submission)
+Questions
+AI-generated Answers
+Conclusion/Score (if any)
+Steps for Implementation:
+Create page layout with Column or ListView
+Add 2x file upload widgets with file_picker package
+Add a Submit button (disabled until both files are uploaded)
+On submit:
+Show loading indicator
+Send request to API (mock until backend is ready)
+Display response in a scrollable card/grid format
+2. Control Panel Page
+Purpose: Admin can configure questions + instructions + upload context PDFs
+UI Components:
+Add Question button
+For each question:
+TextField: Question
+TextField: Instruction (how AI should answer it)
+PDF Upload for up to 3 context files
+Delete Question Button
+Save or Submit all configuration button
+Steps for Implementation:
+Create dynamic form list (ListView.builder) for questions
+Each entry:
+Multiline TextField for question
+Multiline TextField for instructions
+3x FilePicker fields (with max 500kb size validation)
+Add ability to delete a question dynamically
+Submit button at the bottom for saving configurations (to API)
+Development Plan (Step-by-Step)
+Setup
+Set up Flutter project
+Add necessary packages:
+file_picker
+http (for future API calls)
+provider or riverpod (for state management if needed)
+flutter_hooks (optional for cleaner state)
+AI Assessment Page
+Design UI with:
+Two file pickers
+Submit button
+Placeholder for result
+Implement file upload logic
+Create dummy function simulating API call
+Create mock response and display logic
+Control Panel Page
+Build dynamic form UI for adding questions
+Add per-question instruction field and 3x file uploads
+Validate file size (< 500kb)
+Maintain list of questions in state
+Implement "Save Configuration" button (logs to console or mock)
+Integration Prep
+Wrap both pages in navigation:
+BottomNavigationBar or Drawer for switching views (Assessment vs Control Panel)
+Create folder structure:
+Add dummy response JSON to simulate result page
+Polishing & Testing
+Add file size error messages
+Add success/failure toasts
+Add loading states (circular progress indicators)
+Test entire flow end to end with mock data
+Optional Enhancements (Post-PoC)
+User login (if role-based access needed)
+Persistent storage for questions via local DB or API
+Multi-language support (i18n)
+Dark mode
+Deliverables
+Full Flutter UI with two main pages
+Dynamic control panel for adding questions + instructions + PDFs
+File upload & validation
+Simulated API integration
+Result display (mocked)
