@@ -97,55 +97,45 @@ class _AssessmentPageState extends State<AssessmentPage> {
   }
 
   Widget _buildCriteriaCard(int index) {
-    return Card(
-      elevation: 2,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(criteriaList[index], style: JasaraTextStyles.primaryText500),
-            const SizedBox(height: 8),
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(criteriaList[index], style: JasaraTextStyles.primaryText500),
+          const SizedBox(height: 8),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: JasaraPalette.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: JasaraPalette.primary.withOpacity(0.3)),
+            ),
+            child:
+                isLoading[index]
+                    ? _buildSparkleLoader()
+                    : Text(
+                      responses[index] ?? "--",
+                      style: JasaraTextStyles.primaryText400,
+                    ),
+          ),
+          const SizedBox(height: 8),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
               decoration: BoxDecoration(
-                color: JasaraPalette.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: JasaraPalette.primary.withOpacity(0.3),
-                ),
+                color: JasaraPalette.primary.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
               ),
-              child:
-                  isLoading[index]
-                      ? _buildSparkleLoader()
-                      : Text(
-                        responses[index] ?? "--",
-                        style: JasaraTextStyles.primaryText400,
-                      ),
-            ),
-            const SizedBox(height: 8),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: JasaraPalette.primary.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  isLoading[index] ? "Calculating..." : "Score: 10",
-                  style: JasaraTextStyles.primaryText400,
-                ),
+              child: Text(
+                isLoading[index] ? "Calculating..." : "Score: 10",
+                style: JasaraTextStyles.primaryText400,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
