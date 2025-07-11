@@ -23,8 +23,14 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
     setState(() => _criteriaList.add(data));
   }
 
-  void _removeCriteria(int index) {
-    setState(() => _criteriaList.removeAt(index));
+  @override
+  void initState() {
+    super.initState();
+    final criteriaVM = Provider.of<CriteriaProvider>(context, listen: false);
+    Future.delayed(
+      Duration.zero,
+      () async => await criteriaVM.fetchCriteriaList(),
+    );
   }
 
   void _openCriteriaDialog({CriteriaData? initialData, int? editIndex}) {
@@ -163,20 +169,26 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
               ),
             ),
             const SizedBox(height: 16),
-            _criteriaList.isEmpty
-                ? const Center(child: Text("No Criteria Added Yet"))
-                : ListView.builder(
+            Consumer<CriteriaProvider>(
+              builder: (context, criteriaVM, _) {
+                final list = criteriaVM.criteriaListResponse;
+
+                if (list.isEmpty) {
+                  return const Center(child: Text("No Criteria Added Yet"));
+                }
+
+                return ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _criteriaList.length,
+                  itemCount: list.length,
                   itemBuilder: (context, index) {
-                    final data = _criteriaList[index];
+                    final item = list[index];
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       child: ListTile(
-                        title: Text(data.criteriaController.text),
+                        title: Text(item.title),
                         subtitle: Text(
-                          data.instructionController.text,
+                          item.textInstructions,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -185,22 +197,24 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.edit),
-                              onPressed:
-                                  () => _openCriteriaDialog(
-                                    initialData: data,
-                                    editIndex: index,
-                                  ),
+                              onPressed: () {
+                                // Optional: Handle edit logic
+                              },
                             ),
                             IconButton(
                               icon: const Icon(Icons.delete),
-                              onPressed: () => _removeCriteria(index),
+                              onPressed: () {
+                                // Optional: Handle delete logic
+                              },
                             ),
                           ],
                         ),
                       ),
                     );
                   },
-                ),
+                );
+              },
+            ),
             const SizedBox(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

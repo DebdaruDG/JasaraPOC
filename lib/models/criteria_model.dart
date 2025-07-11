@@ -39,4 +39,16 @@ class CriteriaModel {
       'title': title,
     };
   }
+
+  factory CriteriaModel.fromDoc(String id, Map<String, dynamic> data) {
+    return CriteriaModel(
+      docId: id,
+      assistantId: data['assistant_id'] ?? '',
+      title: data['title'] ?? '',
+      textInstructions: data['text_instructions'] ?? '',
+      pdf1: data['pdf1'] ?? '',
+      pdf2: data['pdf2'] ?? '',
+      pdf3: data['pdf3'] ?? '',
+    );
+  }
 }

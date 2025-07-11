@@ -1,10 +1,10 @@
-import 'dart:developer' as console;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import '../core/services/api/api_response.dart';
 import '../core/services/backend/criteria_services.dart';
-import '../core/services/firebase/core_service.dart'; // <-- Add this
+import '../core/services/firebase/core_service.dart';
+import '../models/criteria_model.dart';
 import '../models/evaluation_result.dart';
 import '../models/response/criteria_response_model.dart';
 
@@ -63,6 +63,32 @@ class CriteriaProvider extends ChangeNotifier {
       _responseBodyModel = ApiResponse.error(response.message);
     }
 
+    notifyListeners();
+  }
+
+  Future<void> fetchCriteriaListFromFirebase() async {
+    try {
+      final fetchedList = await FirebaseService.fetchCriteriaList();
+      fetchedList
+        ..clear()
+        ..addAll(fetchedList);
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error fetching criteria list: $e');
+    }
+  }
+
+  final List<CriteriaModel> _criteriaListResponse = [];
+  List<CriteriaModel> get criteriaListResponse => _criteriaListResponse;
+
+  Future<void> fetchCriteriaList() async {
+    final response = await FirebaseService.fetchCriteriaList();
+    if (response.isNotEmpty) {
+      _criteriaListResponse.clear();
+      _criteriaListResponse.addAll(response);
+    } else {
+      debugPrint('No criteria found');
+    }
     notifyListeners();
   }
 }

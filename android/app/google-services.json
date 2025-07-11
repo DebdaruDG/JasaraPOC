@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "375800134189",
+    "project_id": "jasara-poc",
+    "storage_bucket": "jasara-poc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:375800134189:android:1d023c40fbc45076b716a4",
+        "android_client_info": {
+          "package_name": "com.example.jasara_poc"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhacAiKqV0QiYeeQNYhCCzglof_xfIa7Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
