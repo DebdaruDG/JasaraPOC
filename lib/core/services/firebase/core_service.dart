@@ -19,7 +19,7 @@ class FirebaseService {
     String? pdf3,
   }) async {
     try {
-      await criteriaPdfs.add({
+      final result = await criteriaPdfs.add({
         'assistant_id': assistantId,
         'pdf1': pdf1,
         'pdf2': pdf2,
@@ -27,6 +27,7 @@ class FirebaseService {
         'text_instructions': textInstructions,
         'title': title,
       });
+      console.log('Criteria added to Firestore: $result');
     } catch (e) {
       console.log('Error adding criteria PDF: $e');
     }

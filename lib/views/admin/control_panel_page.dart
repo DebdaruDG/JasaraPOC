@@ -134,13 +134,6 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
                     console.log('errors - $e');
                     JasaraToast.error(context, "Something went wrong!");
                   }
-
-                  // if (editIndex != null) {
-                  //   setState(() => _criteriaList[editIndex] = data);
-                  // } else {
-                  //   _addCriteria(data);
-                  // }
-                  // Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: JasaraPalette.primary,
