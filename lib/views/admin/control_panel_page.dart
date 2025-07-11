@@ -1,9 +1,13 @@
+import 'dart:developer' as console;
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:provider/provider.dart';
+import '../../providers/criteria_provider.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 import '../../widgets/utils/app_text_field.dart';
+import '../../widgets/utils/app_toast.dart';
 
 class ControlPanelPage extends StatefulWidget {
   const ControlPanelPage({super.key});
@@ -92,13 +96,51 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
                 child: const Text("Cancel"),
               ),
               ElevatedButton(
-                onPressed: () {
-                  if (editIndex != null) {
-                    setState(() => _criteriaList[editIndex] = data);
-                  } else {
-                    _addCriteria(data);
+                onPressed: () async {
+                  final criteriaName = data.criteriaController.text.trim();
+                  final textInstruction =
+                      data.instructionController.text.trim();
+
+                  if (criteriaName.isEmpty || textInstruction.isEmpty) {
+                    JasaraToast.error(context, "Please fill all fields.");
+                    return;
                   }
-                  Navigator.pop(context);
+
+                  final provider = Provider.of<CriteriaProvider>(
+                    context,
+                    listen: false,
+                  );
+
+                  try {
+                    await provider.createCriteriaBE(
+                      criteriaName,
+                      textInstruction,
+                      pdf1: data.files[0],
+                      pdf2: data.files[1],
+                      pdf3: data.files[2],
+                    );
+                    await JasaraToast.success(
+                      context,
+                      "Criteria added successfully!",
+                    );
+
+                    if (editIndex != null) {
+                      setState(() => _criteriaList[editIndex] = data);
+                    } else {
+                      _addCriteria(data);
+                    }
+                    Navigator.pop(context);
+                  } catch (e) {
+                    console.log('errors - $e');
+                    JasaraToast.error(context, "Something went wrong!");
+                  }
+
+                  // if (editIndex != null) {
+                  //   setState(() => _criteriaList[editIndex] = data);
+                  // } else {
+                  //   _addCriteria(data);
+                  // }
+                  // Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: JasaraPalette.primary,

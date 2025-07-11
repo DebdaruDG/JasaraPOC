@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import '../core/services/api/api_response.dart';
 import '../core/services/backend/criteria_services.dart';
@@ -31,9 +33,9 @@ class CriteriaProvider extends ChangeNotifier {
   Future<void> createCriteriaBE(
     String criteriaName,
     String textInstruction, {
-    String? pdf1,
-    String? pdf2,
-    String? pdf3,
+    File? pdf1,
+    File? pdf2,
+    File? pdf3,
   }) async {
     _responseBodyModel = ApiResponse.loading();
     notifyListeners();
@@ -52,9 +54,9 @@ class CriteriaProvider extends ChangeNotifier {
         assistantId: assistantId,
         title: criteriaName,
         textInstructions: textInstruction,
-        pdf1: pdf1,
-        pdf2: pdf2,
-        pdf3: pdf3,
+        pdf1: pdf1?.path,
+        pdf2: pdf2?.path,
+        pdf3: pdf3?.path,
       );
     } else {
       _responseBodyModel = ApiResponse.error(response.message);

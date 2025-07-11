@@ -4,6 +4,7 @@ import 'providers/app_state_provider.dart';
 import 'providers/assessment_page_provider.dart';
 import 'providers/assessment_provider.dart';
 import 'app.dart';
+import 'providers/criteria_provider.dart';
 
 void main() {
   runApp(
@@ -12,7 +13,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => AppStateProvider()),
         ChangeNotifierProvider(create: (_) => AssessmentProvider()),
         ChangeNotifierProvider(create: (_) => AssessmentPageProvider()),
-        //
+        ChangeNotifierProvider(create: (_) => CriteriaProvider()),
+        ChangeNotifierProvider(create: (_) => AssessmentProvider()),
       ],
       child: const MyApp(),
     ),

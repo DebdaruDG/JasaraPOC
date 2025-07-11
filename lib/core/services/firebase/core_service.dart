@@ -1,3 +1,5 @@
+import 'dart:developer' as console;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirebaseService {
@@ -16,14 +18,18 @@ class FirebaseService {
     String? pdf2,
     String? pdf3,
   }) async {
-    await criteriaPdfs.add({
-      'assistant_id': assistantId,
-      'pdf1': pdf1,
-      'pdf2': pdf2,
-      'pdf3': pdf3,
-      'text_instructions': textInstructions,
-      'title': title,
-    });
+    try {
+      await criteriaPdfs.add({
+        'assistant_id': assistantId,
+        'pdf1': pdf1,
+        'pdf2': pdf2,
+        'pdf3': pdf3,
+        'text_instructions': textInstructions,
+        'title': title,
+      });
+    } catch (e) {
+      console.log('Error adding criteria PDF: $e');
+    }
   }
 
   // Collection 2: rfp_pdf

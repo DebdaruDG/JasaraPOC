@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer' as console;
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -11,7 +12,7 @@ class CriteriaService {
   static Future<ApiResponse<CriteriaResponse>> createCriteria({
     required String criteriaName,
     required String instruction,
-    File? pdfFile, // Uncomment if you want to handle file uploads
+    File? pdfFile,
   }) async {
     try {
       final uri = Uri.parse('${URLconstants.baseUrlRender}criteria');
@@ -34,6 +35,7 @@ class CriteriaService {
         );
       }
     } catch (e) {
+      console.log('Error in createCriteria: $e');
       return ApiResponse.error(NetworkExceptions.getMessage(e));
     }
   }
