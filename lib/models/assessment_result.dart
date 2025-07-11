@@ -29,7 +29,8 @@ class AssessmentResult {
       criteriaList: [
         AssessmentCriteria(
           title: 'Clarity',
-          response: 'The RFP was clearly articulated and aligns with goals.',
+          response:
+              'The RFP/RFI was clearly articulated and aligns with goals.',
           score: 9.0,
         ),
         AssessmentCriteria(

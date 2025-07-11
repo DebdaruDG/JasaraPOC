@@ -193,7 +193,7 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Attach the RFP Document",
+                      "Attach the RFP/RFI Document",
                       style: JasaraTextStyles.primaryText500.copyWith(
                         fontSize: 22,
                         color: JasaraPalette.dark2,
@@ -229,28 +229,28 @@ class HomePage extends StatelessWidget {
                               .toList(),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      "Final Decision:",
-                      style: JasaraTextStyles.primaryText500,
-                    ),
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: provider.finalDecision == 'Go',
-                          onChanged: (val) {
-                            provider.setFinalDecision(val! ? 'Go' : null);
-                          },
-                        ),
-                        const Text("Go"),
-                        Checkbox(
-                          value: provider.finalDecision == 'No Go',
-                          onChanged: (val) {
-                            provider.setFinalDecision(val! ? 'No Go' : null);
-                          },
-                        ),
-                        const Text("No Go"),
-                      ],
-                    ),
+                    // const Text(
+                    //   "Final Decision:",
+                    //   style: JasaraTextStyles.primaryText500,
+                    // ),
+                    // Row(
+                    //   children: [
+                    //     Checkbox(
+                    //       value: provider.finalDecision == 'Go',
+                    //       onChanged: (val) {
+                    //         provider.setFinalDecision(val! ? 'Go' : null);
+                    //       },
+                    //     ),
+                    //     const Text("Go"),
+                    //     Checkbox(
+                    //       value: provider.finalDecision == 'No Go',
+                    //       onChanged: (val) {
+                    //         provider.setFinalDecision(val! ? 'No Go' : null);
+                    //       },
+                    //     ),
+                    //     const Text("No Go"),
+                    //   ],
+                    // ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -350,7 +350,8 @@ class HomePage extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            "Drag & Drop or Click to Upload PDF",
+                            // Drag & Drop or
+                            "Click to Upload PDF",
                             style: JasaraTextStyles.primaryText400,
                           ),
                         ],
