@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../providers/criteria_provider.dart';
+import '../../providers/evaluation_manager_provider.dart';
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
@@ -95,8 +97,18 @@ class HomePageProvider extends ChangeNotifier {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -263,6 +275,30 @@ class HomePage extends StatelessWidget {
                           //     ? null
                           // :
                           () {
+                            final criteriaList =
+                                context
+                                    .read<CriteriaProvider>()
+                                    .criteriaListResponse;
+                            final homePageVM = context.read<HomePageProvider>();
+                            final formJson = {
+                              'opportunityCode':
+                                  homePageVM
+                                      .controllers['opportunityCode']
+                                      ?.text,
+                              'clientName':
+                                  homePageVM.controllers['clientName']?.text,
+                            };
+                            final evalManager =
+                                context.read<EvaluationManagerProvider>();
+
+                            for (var criteria in criteriaList) {
+                              evalManager.evaluateSingleCriteria(
+                                criteria: criteria,
+                                formJson: formJson,
+                                file: homePageVM.uploadedFile!,
+                              );
+                            }
+
                             Navigator.push(
                               context,
                               MaterialPageRoute(

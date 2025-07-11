@@ -177,38 +177,41 @@ class _ControlPanelPageState extends State<ControlPanelPage> {
                   return const Center(child: Text("No Criteria Added Yet"));
                 }
 
-                return ListView.builder(
+                return ListView.separated(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: list.length,
+                  separatorBuilder:
+                      (context, index) => const Divider(
+                        thickness: 0.8,
+                        height: 10,
+                        color: Colors.grey,
+                      ),
                   itemBuilder: (context, index) {
                     final item = list[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: ListTile(
-                        title: Text(item.title),
-                        subtitle: Text(
-                          item.textInstructions,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit),
-                              onPressed: () {
-                                // Optional: Handle edit logic
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {
-                                // Optional: Handle delete logic
-                              },
-                            ),
-                          ],
-                        ),
+                    return ListTile(
+                      title: Text(item.title),
+                      subtitle: Text(
+                        item.textInstructions,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.edit),
+                            onPressed: () {
+                              // Optional: Handle edit logic
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () {
+                              // Optional: Handle delete logic
+                            },
+                          ),
+                        ],
                       ),
                     );
                   },
