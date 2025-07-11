@@ -1,19 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
@@ -31,6 +18,25 @@
 
   <title>jasara_poc</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- 🔥 Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-firestore.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbTTxyDiJ4Ywmz6rQbBn6WLEX0m-XC7qo",
+      authDomain: "jasara-poc.firebaseapp.com",
+      projectId: "jasara-poc",
+      storageBucket: "jasara-poc.firebasestorage.app",
+      messagingSenderId: "375800134189",
+      appId: "1:375800134189:web:e680efb714a9f88eb716a4",
+      measurementId: "G-PLVW7T1KE1"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+  </script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

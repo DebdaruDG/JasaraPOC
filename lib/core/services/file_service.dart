@@ -14,4 +14,21 @@ class FileService {
   }
 
   static int getFileSizeInKB(File file) => file.lengthSync() ~/ 1024;
+
+  static Future<File?> handleDroppedFiles(List<dynamic> droppedFiles) async {
+    if (droppedFiles.isEmpty) return null;
+
+    for (var file in droppedFiles) {
+      if (file is PlatformFile) {
+        if (file.extension?.toLowerCase() == 'pdf' && file.path != null) {
+          return File(file.path!);
+        }
+      } else if (file is String) {
+        if (file.toLowerCase().endsWith('.pdf')) {
+          return File(file);
+        }
+      }
+    }
+    return null;
+  }
 }
