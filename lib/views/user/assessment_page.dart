@@ -1,12 +1,44 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/assessment_page_provider.dart';
+import '../../providers/assessment_provider.dart';
+import '../../providers/criteria_provider.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 
-class AssessmentPage extends StatelessWidget {
-  const AssessmentPage({super.key});
+class AssessmentPage extends StatefulWidget {
+  final File? file;
+  final Map<String, dynamic>? formJson;
+  const AssessmentPage({super.key, required this.file, this.formJson});
+
+  @override
+  State<AssessmentPage> createState() => _AssessmentPageState();
+}
+
+class _AssessmentPageState extends State<AssessmentPage> {
+  @override
+  void initState() {
+    super.initState();
+    final criteriaVM = Provider.of<CriteriaProvider>(context, listen: false);
+    final assessmentVM = Provider.of<AssessmentProvider>(
+      context,
+      listen: false,
+    );
+    Future.delayed(
+      Duration.zero,
+      () async => await criteriaVM.fetchCriteriaList(),
+    );
+    for (var item in criteriaVM.criteriaListResponse) {
+      assessmentVM.evaluateBE(
+        widget.formJson ?? {},
+        item.assistantId,
+        widget.file!,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

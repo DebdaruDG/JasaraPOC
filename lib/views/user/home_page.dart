@@ -1,3 +1,4 @@
+import 'dart:developer' as console;
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
     final isWide = MediaQuery.of(context).size.width > 600;
 
     return ChangeNotifierProvider(
-      create: (_) => HomePageProvider(),
+      create: (homePageVM) => HomePageProvider(),
       child: Consumer<HomePageProvider>(
         builder: (context, provider, _) {
           final formKey = GlobalKey<FormState>();
@@ -194,6 +195,8 @@ class _HomePageState extends State<HomePage> {
               controller: provider.controllers['comments']!,
             ),
           ];
+
+          File _uploadedFile = provider.uploadedFile ?? File('');
 
           return Scaffold(
             backgroundColor: JasaraPalette.background,
@@ -275,38 +278,46 @@ class _HomePageState extends State<HomePage> {
                           //     ? null
                           // :
                           () {
-                            final criteriaList =
-                                context
-                                    .read<CriteriaProvider>()
-                                    .criteriaListResponse;
-                            final homePageVM = context.read<HomePageProvider>();
-                            final formJson = {
-                              'opportunityCode':
-                                  homePageVM
-                                      .controllers['opportunityCode']
-                                      ?.text,
-                              'clientName':
-                                  homePageVM.controllers['clientName']?.text,
-                            };
-                            final evalManager =
-                                context.read<EvaluationManagerProvider>();
+                            // final criteriaList =
+                            //     context
+                            //         .read<CriteriaProvider>()
+                            //         .criteriaListResponse;
+                            // final homePageVM = context.read<HomePageProvider>();
+                            // final formJson = {
+                            //   'opportunityCode':
+                            //       homePageVM
+                            //           .controllers['opportunityCode']
+                            //           ?.text,
+                            //   'clientName':
+                            //       homePageVM.controllers['clientName']?.text,
+                            // };
+                            // final evalManager =
+                            //     context.read<EvaluationManagerProvider>();
 
-                            for (var criteria in criteriaList) {
-                              evalManager.evaluateSingleCriteria(
-                                criteria: criteria,
-                                formJson: formJson,
-                                file: homePageVM.uploadedFile!,
-                              );
-                            }
+                            // for (var criteria in criteriaList) {
+                            //   evalManager.evaluateSingleCriteria(
+                            //     criteria: criteria,
+                            //     formJson: formJson,
+                            //     file: homePageVM.uploadedFile!,
+                            //   );
+                            // }
 
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => AssessmentPage(),
+                                builder:
+                                    (context) => AssessmentPage(
+                                      file: _uploadedFile,
+                                      formJson: {
+                                        'project_name': 'Solar Grid',
+                                        'budget': '3M',
+                                        'location': 'Rajasthan',
+                                      },
+                                    ),
                               ),
                             );
                             if (formKey.currentState!.validate()) {
-                              print("Form Submitted");
+                              console.log("Form Submitted");
                             }
                           },
                         ),

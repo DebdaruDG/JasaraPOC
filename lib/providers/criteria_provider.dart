@@ -66,18 +66,6 @@ class CriteriaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchCriteriaListFromFirebase() async {
-    try {
-      final fetchedList = await FirebaseService.fetchCriteriaList();
-      fetchedList
-        ..clear()
-        ..addAll(fetchedList);
-      notifyListeners();
-    } catch (e) {
-      debugPrint('Error fetching criteria list: $e');
-    }
-  }
-
   final List<CriteriaModel> _criteriaListResponse = [];
   List<CriteriaModel> get criteriaListResponse => _criteriaListResponse;
 
