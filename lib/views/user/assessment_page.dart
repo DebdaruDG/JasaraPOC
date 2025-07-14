@@ -123,11 +123,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
     int index, {
     bool isLoading = false,
   }) {
-    // final response = provider.responses[index];
-    // final score = provider.scores[index];
-    // final isLoading = provider.loadingStates[index];
-    // final criteria = provider.criteria[index];
-    // final repsonses = provider.criteria[index];
     final provider = Provider.of<AssessmentProvider>(context, listen: false);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),

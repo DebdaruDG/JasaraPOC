@@ -64,20 +64,16 @@ class ApiBaseService {
 
       formData.appendBlob(fileFieldName, file, fileName);
 
-      console.log('formdata - ${formData.toString()}');
-
       final completer = Completer<ApiResponse<T>>();
       final request = html.HttpRequest();
 
       request
         ..open('POST', uri.toString())
         ..onLoadEnd.listen((event) {
-          console.log("Response Status: ${request.status}");
           if (!completer.isCompleted) {
             if (request.status == 200) {
               try {
                 final data = jsonDecode(request.responseText!);
-                console.log('Response Data: $data');
                 completer.complete(ApiResponse.completed(fromJson(data)));
               } catch (e) {
                 completer.complete(ApiResponse.error('Invalid JSON Response'));

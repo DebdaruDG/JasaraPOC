@@ -19,7 +19,6 @@ class FirebaseService {
       final snapshot = await criteriaPdfs.get();
       criteriaList =
           snapshot.docs.map((doc) {
-            // console.log('data - ${doc.data()}');
             return CriteriaModel.fromDoc(
               doc.id,
               doc.data() as Map<String, dynamic>,

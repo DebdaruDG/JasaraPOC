@@ -23,7 +23,6 @@ class EvaluateService {
         fileName: 'RFI_HR_Solutions.pdf',
         fromJson: (json) => EvaluateResponse.fromJson(json),
       );
-      console.log('response - $response');
       return ApiResponse.completed(response.data!);
     } catch (e) {
       console.log('Error submitting evaluation: $e');
