@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:developer' as console;
+import 'dart:html' as html; // ✅ Only Web
 import 'package:http/http.dart' as http;
 import 'api_response.dart';
 import 'network_exceptions.dart';
@@ -38,6 +41,60 @@ class ApiBaseService {
       );
       return _handleResponse(res, fromJson);
     } catch (e) {
+      return ApiResponse.error(NetworkExceptions.getMessage(e));
+    }
+  }
+
+  /// 💡 Multipart POST - Web Only
+  Future<ApiResponse<T>> postMultipart<T>(
+    String endpoint, {
+    required Map<String, dynamic> fields,
+    required html.File file,
+    required T Function(dynamic json) fromJson,
+    String fileFieldName = 'file',
+    String fileName = 'upload.pdf',
+  }) async {
+    try {
+      final uri = Uri.parse('$baseUrl$endpoint');
+
+      final formData = html.FormData();
+      fields.forEach((key, value) {
+        formData.append(key, value.toString());
+      });
+
+      formData.appendBlob(fileFieldName, file, fileName);
+
+      console.log('formdata - ${formData.toString()}');
+      final completer = Completer<ApiResponse<T>>();
+      final request = html.HttpRequest();
+
+      request
+        ..open('POST', uri.toString())
+        ..onLoadEnd.listen((event) {
+          if (request.status == 200) {
+            try {
+              final data = jsonDecode(request.responseText!);
+              console.log('Response Data: $data');
+              completer.complete(ApiResponse.completed(fromJson(data)));
+            } catch (e) {
+              completer.complete(ApiResponse.error('Invalid JSON Response'));
+            }
+          } else {
+            completer.complete(
+              ApiResponse.error(
+                'Error ${request.status}: ${request.statusText}',
+              ),
+            );
+          }
+        })
+        ..onError.listen((event) {
+          completer.complete(ApiResponse.error('Network error occurred'));
+        })
+        ..send(formData);
+
+      return completer.future;
+    } catch (e) {
+      console.log('Error in postMultipart: $e');
       return ApiResponse.error(NetworkExceptions.getMessage(e));
     }
   }

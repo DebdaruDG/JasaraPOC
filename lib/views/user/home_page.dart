@@ -1,48 +1,45 @@
 import 'dart:developer' as console;
-import 'dart:io';
+import 'dart:html' as html;
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
-import '../../providers/criteria_provider.dart';
-import '../../providers/evaluation_manager_provider.dart';
+
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 import '../../widgets/utils/app_text_field.dart';
 import '../../widgets/utils/app_drop_down.dart';
+import '../../widgets/utils/app_toast.dart';
 import 'assessment_page.dart';
 
-// FileService with Drag-and-Drop Support
 class FileService {
-  // Pick PDF via file picker (tap/click)
-  static Future<File?> pickPDF() async {
+  static Future<html.File?> pickPDF() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
       allowMultiple: false,
+      withData: true,
     );
-    if (result != null && result.files.single.path != null) {
-      return File(result.files.single.path!);
+    if (result != null && result.files.single.bytes != null) {
+      final name = result.files.single.name;
+      final bytes = result.files.single.bytes!;
+      return html.File([bytes], name);
     }
     return null;
   }
 
-  // Handle dropped files (for drag-and-drop)
-  static Future<File?> handleDroppedFiles(List<dynamic> droppedFiles) async {
+  static Future<html.File?> handleDroppedFiles(
+    List<dynamic> droppedFiles,
+  ) async {
     if (droppedFiles.isEmpty) return null;
 
     for (var file in droppedFiles) {
-      if (file is PlatformFile) {
-        // Web or desktop with file_picker
-        if (file.extension?.toLowerCase() == 'pdf' && file.path != null) {
-          return File(file.path!);
-        }
-      } else if (file is String) {
-        // Desktop path from drag_and_drop_files or similar
-        if (file.toLowerCase().endsWith('.pdf')) {
-          return File(file);
+      if (file is html.File) {
+        if (file.name.toLowerCase().endsWith('.pdf')) {
+          return file;
         }
       }
     }
@@ -50,7 +47,6 @@ class FileService {
   }
 }
 
-// HomePageProvider for State Management
 class HomePageProvider extends ChangeNotifier {
   final Map<String, TextEditingController> _controllers = {
     'opportunityCode': TextEditingController(),
@@ -67,13 +63,14 @@ class HomePageProvider extends ChangeNotifier {
     'isTargeted': TextEditingController(),
     'comments': TextEditingController(),
   };
+
   String? _finalDecision;
-  File? _uploadedFile;
+  html.File? _uploadedFile;
   bool _isDragOver = false;
 
   Map<String, TextEditingController> get controllers => _controllers;
   String? get finalDecision => _finalDecision;
-  File? get uploadedFile => _uploadedFile;
+  html.File? get uploadedFile => _uploadedFile;
   bool get isDragOver => _isDragOver;
 
   void setFinalDecision(String? value) {
@@ -81,7 +78,7 @@ class HomePageProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setUploadedFile(File? file) async {
+  Future<void> setUploadedFile(html.File? file) async {
     _uploadedFile = file;
     notifyListeners();
   }
@@ -107,16 +104,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 600;
 
     return ChangeNotifierProvider(
-      create: (homePageVM) => HomePageProvider(),
+      create: (_) => HomePageProvider(),
       child: Consumer<HomePageProvider>(
         builder: (context, provider, _) {
           final formKey = GlobalKey<FormState>();
@@ -147,9 +139,8 @@ class _HomePageState extends State<HomePage> {
               dropdownKey: 'projectType',
               items: ['Internal', 'Client-Based', 'R&D'],
               controller: provider.controllers['projectType']!,
-              onChanged: (value) {
-                provider.controllers['projectType']!.text = value!;
-              },
+              onChanged:
+                  (value) => provider.controllers['projectType']!.text = value!,
             ),
             AppTextField(
               label: "Client Name",
@@ -160,18 +151,17 @@ class _HomePageState extends State<HomePage> {
               dropdownKey: 'clientType',
               items: ['Government', 'Private', 'NGO'],
               controller: provider.controllers['clientType']!,
-              onChanged: (value) {
-                provider.controllers['clientType']!.text = value!;
-              },
+              onChanged:
+                  (value) => provider.controllers['clientType']!.text = value!,
             ),
             AppDropdown(
               label: "Relationship with Client",
               dropdownKey: 'relationship',
               items: ['Excellent', 'Good', 'Neutral', 'Poor'],
               controller: provider.controllers['relationship']!,
-              onChanged: (value) {
-                provider.controllers['relationship']!.text = value!;
-              },
+              onChanged:
+                  (value) =>
+                      provider.controllers['relationship']!.text = value!,
             ),
             AppTextField(
               label: "Submission Date",
@@ -186,17 +176,14 @@ class _HomePageState extends State<HomePage> {
               dropdownKey: 'isTargeted',
               items: ['Yes', 'No'],
               controller: provider.controllers['isTargeted']!,
-              onChanged: (value) {
-                provider.controllers['isTargeted']!.text = value!;
-              },
+              onChanged:
+                  (value) => provider.controllers['isTargeted']!.text = value!,
             ),
             AppTextField(
               label: "Comments",
               controller: provider.controllers['comments']!,
             ),
           ];
-
-          File _uploadedFile = provider.uploadedFile ?? File('');
 
           return Scaffold(
             backgroundColor: JasaraPalette.background,
@@ -244,70 +231,27 @@ class _HomePageState extends State<HomePage> {
                               .toList(),
                     ),
                     const SizedBox(height: 16),
-                    // const Text(
-                    //   "Final Decision:",
-                    //   style: JasaraTextStyles.primaryText500,
-                    // ),
-                    // Row(
-                    //   children: [
-                    //     Checkbox(
-                    //       value: provider.finalDecision == 'Go',
-                    //       onChanged: (val) {
-                    //         provider.setFinalDecision(val! ? 'Go' : null);
-                    //       },
-                    //     ),
-                    //     const Text("Go"),
-                    //     Checkbox(
-                    //       value: provider.finalDecision == 'No Go',
-                    //       onChanged: (val) {
-                    //         provider.setFinalDecision(val! ? 'No Go' : null);
-                    //       },
-                    //     ),
-                    //     const Text("No Go"),
-                    //   ],
-                    // ),
-                    const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomButton2(
                           label: "Submit",
                           backgroundColor: JasaraPalette.primary,
-                          onPressed:
-                          // provider.uploadedFile == null
-                          //     ? null
-                          // :
-                          () {
-                            // final criteriaList =
-                            //     context
-                            //         .read<CriteriaProvider>()
-                            //         .criteriaListResponse;
-                            // final homePageVM = context.read<HomePageProvider>();
-                            // final formJson = {
-                            //   'opportunityCode':
-                            //       homePageVM
-                            //           .controllers['opportunityCode']
-                            //           ?.text,
-                            //   'clientName':
-                            //       homePageVM.controllers['clientName']?.text,
-                            // };
-                            // final evalManager =
-                            //     context.read<EvaluationManagerProvider>();
-
-                            // for (var criteria in criteriaList) {
-                            //   evalManager.evaluateSingleCriteria(
-                            //     criteria: criteria,
-                            //     formJson: formJson,
-                            //     file: homePageVM.uploadedFile!,
-                            //   );
-                            // }
+                          onPressed: () {
+                            if (provider.uploadedFile == null) {
+                              JasaraToast.error(
+                                context,
+                                "Please upload the RFI / RPF document first",
+                              );
+                              return;
+                            }
 
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder:
-                                    (context) => AssessmentPage(
-                                      file: _uploadedFile,
+                                    (_) => AssessmentPage(
+                                      file: provider.uploadedFile!,
                                       formJson: {
                                         'project_name': 'Solar Grid',
                                         'budget': '3M',
@@ -316,6 +260,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                               ),
                             );
+
                             if (formKey.currentState!.validate()) {
                               console.log("Form Submitted");
                             }
@@ -342,9 +287,7 @@ class _HomePageState extends State<HomePage> {
         provider.setDragOver(true);
         return true;
       },
-      onLeave: (data) {
-        provider.setDragOver(false);
-      },
+      onLeave: (_) => provider.setDragOver(false),
       onAcceptWithDetails: (details) async {
         provider.setDragOver(false);
         final file = await FileService.handleDroppedFiles([details.data]);
@@ -362,7 +305,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context, candidateData, rejectedData) {
         return GestureDetector(
           onTap: () async {
-            File? file = await FileService.pickPDF();
+            html.File? file = await FileService.pickPDF();
             if (file != null) {
               provider.setUploadedFile(file);
               ScaffoldMessenger.of(context).showSnackBar(
@@ -397,7 +340,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            // Drag & Drop or
                             "Click to Upload PDF",
                             style: JasaraTextStyles.primaryText400,
                           ),
@@ -409,7 +351,7 @@ class _HomePageState extends State<HomePage> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: Text(
-                              provider.uploadedFile!.path.split('/').last,
+                              provider.uploadedFile!.name,
                               style: JasaraTextStyles.primaryText400,
                               overflow: TextOverflow.ellipsis,
                             ),

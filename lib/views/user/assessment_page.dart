@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 
 class AssessmentPage extends StatefulWidget {
-  final File? file;
+  final html.File? file;
   final Map<String, dynamic>? formJson;
   const AssessmentPage({super.key, required this.file, this.formJson});
 
@@ -27,17 +27,16 @@ class _AssessmentPageState extends State<AssessmentPage> {
       context,
       listen: false,
     );
-    Future.delayed(
-      Duration.zero,
-      () async => await criteriaVM.fetchCriteriaList(),
-    );
-    for (var item in criteriaVM.criteriaListResponse) {
-      assessmentVM.evaluateBE(
-        widget.formJson ?? {},
-        item.assistantId,
-        widget.file!,
-      );
-    }
+    Future.delayed(Duration.zero, () async {
+      await criteriaVM.fetchCriteriaList();
+      for (var item in criteriaVM.criteriaListResponse) {
+        assessmentVM.evaluateBE(
+          widget.formJson ?? {},
+          item.assistantId,
+          widget.file!,
+        );
+      }
+    });
   }
 
   @override

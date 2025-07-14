@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:developer' as console;
+import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
 import '../core/services/api/api_client.dart';
@@ -27,7 +28,7 @@ class AssessmentProvider with ChangeNotifier {
   Future<void> evaluateBE(
     Map<String, dynamic> formJson,
     String criteriaId,
-    File file,
+    html.File file,
   ) async {
     _evaluateResponse = ApiResponse.loading();
     notifyListeners();
@@ -37,6 +38,7 @@ class AssessmentProvider with ChangeNotifier {
       criteriaId: criteriaId,
       file: file,
     );
+    console.log('Evaluation Response: ${response.data}');
     _evaluateResponse = response;
     notifyListeners();
   }

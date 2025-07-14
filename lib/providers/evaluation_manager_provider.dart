@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class EvaluationManagerProvider with ChangeNotifier {
   Future<void> evaluateSingleCriteria({
     required CriteriaModel criteria,
     required Map<String, dynamic> formJson,
-    required File file,
+    required html.File file,
   }) async {
     final criteriaId = criteria.docId!;
     _evaluations[criteriaId] = ApiResponse.loading();
