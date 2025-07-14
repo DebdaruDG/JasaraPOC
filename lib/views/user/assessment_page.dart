@@ -1,4 +1,3 @@
-import 'dart:developer' as console;
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
@@ -30,16 +29,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
       listen: false,
     );
     Future.delayed(Duration.zero, () async {
+      await assessmentVM.clearEvaluateResponses();
       await criteriaVM.fetchCriteriaList();
       for (var item in criteriaVM.criteriaListResponse) {
-        console.log('item.assistantId: ${item.assistantId}');
         await assessmentVM.evaluateBE(
           widget.formJson ?? {},
           item.assistantId,
           widget.file!,
-        );
-        console.log(
-          'Evaluation Response: ${assessmentVM.evaluateResponse.data?.toJson()}',
         );
       }
     });
@@ -87,8 +83,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ),
                     SparkleAnimation(
                       child: Text(
-                        "Final Score: 8.00",
-                        // ${provider.averageScore}",
+                        "${provider.averageScore}",
                         style: JasaraTextStyles.primaryText500.copyWith(
                           fontSize: 16,
                           color: JasaraPalette.primary,

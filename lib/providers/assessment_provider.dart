@@ -24,6 +24,27 @@ class AssessmentProvider with ChangeNotifier {
   List<EvaluateResponse> _evaluateResponses = [];
   List<EvaluateResponse> get evaluateResponses => _evaluateResponses;
 
+  clearEvaluateResponses() {
+    _evaluateResponses.clear();
+    notifyListeners();
+  }
+
+  double get averageScore {
+    if (_evaluateResponses.isEmpty) return 0.0;
+
+    int totalScore = 0;
+    int scoreCount = 0;
+
+    for (var response in _evaluateResponses) {
+      for (var result in response.results) {
+        totalScore += result.score;
+        scoreCount++;
+      }
+    }
+
+    return scoreCount > 0 ? totalScore / scoreCount : 0.0;
+  }
+
   ApiResponse<EvaluateResponse> _evaluateResponse = ApiResponse.loading();
   ApiResponse<EvaluateResponse> get evaluateResponse => _evaluateResponse;
 
