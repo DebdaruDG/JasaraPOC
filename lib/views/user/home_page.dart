@@ -256,6 +256,21 @@ class _HomePageState extends State<HomePage> {
                           label: "Submit",
                           backgroundColor: JasaraPalette.primary,
                           onPressed: () {
+                            // if (provider
+                            //         .controllers['project_name']!
+                            //         .text
+                            //         .isEmpty ||
+                            //     provider.controllers['budget']!.text.isEmpty ||
+                            //     provider
+                            //         .controllers['location']!
+                            //         .text
+                            //         .isEmpty) {
+                            //   JasaraToast.error(
+                            //     context,
+                            //     "Please fill all the fields",
+                            //   );
+                            //   return;
+                            // }
                             if (provider.uploadedFile == null) {
                               JasaraToast.error(
                                 context,

@@ -24,6 +24,9 @@ class AssessmentProvider with ChangeNotifier {
   List<EvaluateResponse> _evaluateResponses = [];
   List<EvaluateResponse> get evaluateResponses => _evaluateResponses;
 
+  final Set<String> _loadingIds = {};
+  Set<String> get loadingIds => _loadingIds;
+
   clearEvaluateResponses() {
     _evaluateResponses.clear();
     notifyListeners();
@@ -53,7 +56,7 @@ class AssessmentProvider with ChangeNotifier {
     String criteriaId,
     html.File file,
   ) async {
-    _evaluateResponse = ApiResponse.loading();
+    _loadingIds.add(criteriaId);
     notifyListeners();
 
     final response = await EvaluateService.submitEvaluation(
@@ -61,8 +64,11 @@ class AssessmentProvider with ChangeNotifier {
       criteriaId: criteriaId,
       file: file,
     );
-    _evaluateResponse = response;
-    _evaluateResponses.add(_evaluateResponse.data!);
+
+    _loadingIds.remove(criteriaId);
+    if (response.data != null) {
+      _evaluateResponses.add(response.data!);
+    }
     notifyListeners();
   }
 

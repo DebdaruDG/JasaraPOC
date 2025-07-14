@@ -3,7 +3,6 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../core/services/api/api_response.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_page_provider.dart';
 import '../../providers/assessment_provider.dart';
@@ -33,7 +32,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
       await assessmentVM.clearEvaluateResponses();
       await criteriaVM.fetchCriteriaList();
       for (var item in criteriaVM.criteriaListResponse) {
-        await assessmentVM.evaluateBE(
+        assessmentVM.evaluateBE(
           widget.formJson ?? {},
           item.assistantId,
           widget.file!,
@@ -59,13 +58,10 @@ class _AssessmentPageState extends State<AssessmentPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Consumer<AssessmentProvider>(
-        builder: (context, provider, _) {
-          final total = provider.evaluateResponses.length;
-          final completed =
-              provider.evaluateResponses
-                  .where((r) => r.document.isNotEmpty)
-                  .length;
+      body: Consumer2<AssessmentProvider, CriteriaProvider>(
+        builder: (context, assessmentProvider, criteriaProvider, _) {
+          final total = criteriaProvider.criteriaListResponse.length;
+          final completed = assessmentProvider.evaluateResponses.length;
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -84,7 +80,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ),
                     SparkleAnimation(
                       child: Text(
-                        "${provider.averageScore}",
+                        assessmentProvider.averageScore.toStringAsFixed(2),
                         style: JasaraTextStyles.primaryText500.copyWith(
                           fontSize: 16,
                           color: JasaraPalette.primary,
@@ -98,12 +94,30 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   child: ListView.builder(
                     itemCount: total,
                     itemBuilder: (context, index) {
+                      final criteria =
+                          criteriaProvider.criteriaListResponse[index];
+                      final assistantId = criteria.assistantId;
+
+                      final matchedResponse = assessmentProvider
+                          .evaluateResponses
+                          .firstWhere(
+                            (e) => e.results.any(
+                              (r) => r.assistantId == assistantId,
+                            ),
+                            orElse:
+                                () =>
+                                    EvaluateResponse(document: '', results: []),
+                          );
+
                       return _buildCriteriaItem(
                         context,
-                        provider.evaluateResponses[index],
+                        matchedResponse,
                         index,
-                        isLoading:
-                            provider.evaluateResponses[index].document.isEmpty,
+                        assistantId: assistantId,
+                        criteriaLabel: criteria.title,
+                        isLoading: assessmentProvider.loadingIds.contains(
+                          assistantId,
+                        ),
                       );
                     },
                   ),
@@ -119,11 +133,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   Widget _buildCriteriaItem(
     BuildContext context,
-    EvaluateResponse model,
+    EvaluateResponse? model,
     int index, {
-    bool isLoading = false,
+    required String assistantId,
+    required String criteriaLabel,
+    required bool isLoading,
   }) {
-    final provider = Provider.of<AssessmentProvider>(context, listen: false);
+    final hasData = model != null && model.results.isNotEmpty;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16.0),
@@ -135,7 +152,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Criteria ${index + 1}: ${model.results[0].criteria}",
+            "Criteria ${index + 1}: $criteriaLabel",
             style: JasaraTextStyles.primaryText500.copyWith(
               fontSize: 16,
               color: JasaraPalette.dark2,
@@ -146,10 +163,10 @@ class _AssessmentPageState extends State<AssessmentPage> {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             child:
-                provider.evaluateResponse.status == Status.loading
+                isLoading || !hasData
                     ? _buildSparkleLoader()
                     : Text(
-                      model.results[0].summary.toString(),
+                      model!.results[0].summary.toString(),
                       style: JasaraTextStyles.primaryText400.copyWith(
                         fontSize: 14,
                         color: JasaraPalette.dark2,
@@ -170,7 +187,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  "Score: ${model.results[0].score}",
+                  "Score: ${hasData ? model!.results[0].score.toString() : "--"}",
                   style: JasaraTextStyles.primaryText500.copyWith(
                     fontSize: 14,
                     color: JasaraPalette.primary,
