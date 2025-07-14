@@ -62,6 +62,9 @@ class HomePageProvider extends ChangeNotifier {
     'biddingCriteria': TextEditingController(),
     'isTargeted': TextEditingController(),
     'comments': TextEditingController(),
+    'project_name': TextEditingController(),
+    'budget': TextEditingController(),
+    'location': TextEditingController(),
   };
 
   String? _finalDecision;
@@ -113,7 +116,7 @@ class _HomePageState extends State<HomePage> {
         builder: (context, provider, _) {
           final formKey = GlobalKey<FormState>();
 
-          List<Widget> fields = [
+          List<Widget> oldFields = [
             AppTextField(
               label: "Opportunity Code",
               controller: provider.controllers['opportunityCode']!,
@@ -185,6 +188,21 @@ class _HomePageState extends State<HomePage> {
             ),
           ];
 
+          List<Widget> fields = [
+            AppTextField(
+              label: "Project Name",
+              controller: provider.controllers['project_name']!,
+            ),
+            AppTextField(
+              label: "Location",
+              controller: provider.controllers['location']!,
+            ),
+            AppTextField(
+              label: "Budget",
+              controller: provider.controllers['budget']!,
+            ),
+          ];
+
           return Scaffold(
             backgroundColor: JasaraPalette.background,
             body: SingleChildScrollView(
@@ -253,9 +271,18 @@ class _HomePageState extends State<HomePage> {
                                     (_) => AssessmentPage(
                                       file: provider.uploadedFile!,
                                       formJson: {
-                                        'project_name': 'Solar Grid',
-                                        'budget': '3M',
-                                        'location': 'Rajasthan',
+                                        'project_name':
+                                            provider
+                                                .controllers['project_name']!
+                                                .text,
+                                        'budget':
+                                            provider
+                                                .controllers['budget']!
+                                                .text,
+                                        'location':
+                                            provider
+                                                .controllers['location']!
+                                                .text,
                                       },
                                     ),
                               ),

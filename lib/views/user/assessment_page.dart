@@ -3,6 +3,7 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/api/api_response.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_page_provider.dart';
 import '../../providers/assessment_provider.dart';
@@ -127,7 +128,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     // final isLoading = provider.loadingStates[index];
     // final criteria = provider.criteria[index];
     // final repsonses = provider.criteria[index];
-
+    final provider = Provider.of<AssessmentProvider>(context, listen: false);
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16.0),
@@ -150,7 +151,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             width: double.infinity,
             padding: const EdgeInsets.all(12),
             child:
-                isLoading
+                provider.evaluateResponse.status == Status.loading
                     ? _buildSparkleLoader()
                     : Text(
                       model.results[0].summary.toString(),
