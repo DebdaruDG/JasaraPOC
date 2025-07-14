@@ -1,4 +1,3 @@
-import 'dart:developer' as console;
 import 'dart:html' as html;
 
 import 'package:flutter/foundation.dart';
@@ -22,6 +21,9 @@ class AssessmentProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  List<EvaluateResponse> _evaluateResponses = [];
+  List<EvaluateResponse> get evaluateResponses => _evaluateResponses;
+
   ApiResponse<EvaluateResponse> _evaluateResponse = ApiResponse.loading();
   ApiResponse<EvaluateResponse> get evaluateResponse => _evaluateResponse;
 
@@ -38,8 +40,8 @@ class AssessmentProvider with ChangeNotifier {
       criteriaId: criteriaId,
       file: file,
     );
-    console.log('Evaluation Response: ${response.data}');
     _evaluateResponse = response;
+    _evaluateResponses.add(_evaluateResponse.data!);
     notifyListeners();
   }
 

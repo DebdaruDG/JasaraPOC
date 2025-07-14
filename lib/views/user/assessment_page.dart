@@ -1,8 +1,10 @@
+import 'dart:developer' as console;
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_page_provider.dart';
 import '../../providers/assessment_provider.dart';
 import '../../providers/criteria_provider.dart';
@@ -30,10 +32,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
     Future.delayed(Duration.zero, () async {
       await criteriaVM.fetchCriteriaList();
       for (var item in criteriaVM.criteriaListResponse) {
-        assessmentVM.evaluateBE(
+        console.log('item.assistantId: ${item.assistantId}');
+        await assessmentVM.evaluateBE(
           widget.formJson ?? {},
           item.assistantId,
           widget.file!,
+        );
+        console.log(
+          'Evaluation Response: ${assessmentVM.evaluateResponse.data?.toJson()}',
         );
       }
     });
@@ -56,11 +62,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Consumer<AssessmentPageProvider>(
+      body: Consumer<AssessmentProvider>(
         builder: (context, provider, _) {
-          final total = provider.criteria.length;
+          final total = provider.evaluateResponses.length;
           final completed =
-              provider.responses.where((r) => r.isNotEmpty).length;
+              provider.evaluateResponses
+                  .where((r) => r.document.isNotEmpty)
+                  .length;
 
           return Padding(
             padding: const EdgeInsets.all(16.0),
@@ -79,7 +87,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ),
                     SparkleAnimation(
                       child: Text(
-                        "Final Score: ${provider.averageScore}",
+                        "Final Score: 8.00",
+                        // ${provider.averageScore}",
                         style: JasaraTextStyles.primaryText500.copyWith(
                           fontSize: 16,
                           color: JasaraPalette.primary,
@@ -93,7 +102,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   child: ListView.builder(
                     itemCount: total,
                     itemBuilder: (context, index) {
-                      return _buildCriteriaItem(context, provider, index);
+                      return _buildCriteriaItem(
+                        context,
+                        provider.evaluateResponses[index],
+                        index,
+                        isLoading:
+                            provider.evaluateResponses[index].document.isEmpty,
+                      );
                     },
                   ),
                 ),
@@ -108,13 +123,15 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   Widget _buildCriteriaItem(
     BuildContext context,
-    AssessmentPageProvider provider,
-    int index,
-  ) {
-    final response = provider.responses[index];
-    final score = provider.scores[index];
-    final isLoading = provider.loadingStates[index];
-    final criteria = provider.criteria[index];
+    EvaluateResponse model,
+    int index, {
+    bool isLoading = false,
+  }) {
+    // final response = provider.responses[index];
+    // final score = provider.scores[index];
+    // final isLoading = provider.loadingStates[index];
+    // final criteria = provider.criteria[index];
+    // final repsonses = provider.criteria[index];
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
@@ -127,7 +144,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Criteria ${index + 1}: $criteria",
+            "Criteria ${index + 1}: ${model.results[0].criteria}",
             style: JasaraTextStyles.primaryText500.copyWith(
               fontSize: 16,
               color: JasaraPalette.dark2,
@@ -141,7 +158,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 isLoading
                     ? _buildSparkleLoader()
                     : Text(
-                      response,
+                      model.results[0].summary.toString(),
                       style: JasaraTextStyles.primaryText400.copyWith(
                         fontSize: 14,
                         color: JasaraPalette.dark2,
@@ -162,7 +179,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  "Score: $score",
+                  "Score: ${model.results[0].score}",
                   style: JasaraTextStyles.primaryText500.copyWith(
                     fontSize: 14,
                     color: JasaraPalette.primary,

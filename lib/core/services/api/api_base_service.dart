@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer' as console;
-import 'dart:html' as html; // ✅ Only Web
+import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 import 'api_response.dart';
 import 'network_exceptions.dart';
@@ -65,30 +65,37 @@ class ApiBaseService {
       formData.appendBlob(fileFieldName, file, fileName);
 
       console.log('formdata - ${formData.toString()}');
+
       final completer = Completer<ApiResponse<T>>();
       final request = html.HttpRequest();
 
       request
         ..open('POST', uri.toString())
         ..onLoadEnd.listen((event) {
-          if (request.status == 200) {
-            try {
-              final data = jsonDecode(request.responseText!);
-              console.log('Response Data: $data');
-              completer.complete(ApiResponse.completed(fromJson(data)));
-            } catch (e) {
-              completer.complete(ApiResponse.error('Invalid JSON Response'));
+          console.log("Response Status: ${request.status}");
+          if (!completer.isCompleted) {
+            if (request.status == 200) {
+              try {
+                final data = jsonDecode(request.responseText!);
+                console.log('Response Data: $data');
+                completer.complete(ApiResponse.completed(fromJson(data)));
+              } catch (e) {
+                completer.complete(ApiResponse.error('Invalid JSON Response'));
+              }
+            } else {
+              completer.complete(
+                ApiResponse.error(
+                  'Error ${request.status}: ${request.statusText}',
+                ),
+              );
             }
-          } else {
-            completer.complete(
-              ApiResponse.error(
-                'Error ${request.status}: ${request.statusText}',
-              ),
-            );
           }
         })
         ..onError.listen((event) {
-          completer.complete(ApiResponse.error('Network error occurred'));
+          console.log('Error occurred: ${event.toString()}');
+          if (!completer.isCompleted) {
+            completer.complete(ApiResponse.error('Network error occurred'));
+          }
         })
         ..send(formData);
 

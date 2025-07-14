@@ -12,6 +12,13 @@ class EvaluateResponse {
       ),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'document': document,
+      'results': results.map((x) => x.toJson()).toList(),
+    };
+  }
 }
 
 class EvaluateResult {
@@ -34,5 +41,14 @@ class EvaluateResult {
       summary: json['summary'],
       score: json['score'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'assistant_id': assistantId,
+      'criteria': criteria,
+      'summary': summary,
+      'score': score,
+    };
   }
 }
