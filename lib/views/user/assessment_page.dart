@@ -80,7 +80,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ),
                     SparkleAnimation(
                       child: Text(
-                        assessmentProvider.averageScore.toStringAsFixed(2),
+                        'Final Score - ${assessmentProvider.averageScore.toStringAsFixed(2)}',
                         style: JasaraTextStyles.primaryText500.copyWith(
                           fontSize: 16,
                           color: JasaraPalette.primary,
@@ -166,7 +166,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 isLoading || !hasData
                     ? _buildSparkleLoader()
                     : Text(
-                      model!.results[0].summary.toString(),
+                      model.results[0].summary.toString(),
                       style: JasaraTextStyles.primaryText400.copyWith(
                         fontSize: 14,
                         color: JasaraPalette.dark2,
@@ -187,7 +187,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  "Score: ${hasData ? model!.results[0].score.toString() : "--"}",
+                  "Score: ${hasData ? model.results[0].score.toString() : "--"}",
                   style: JasaraTextStyles.primaryText500.copyWith(
                     fontSize: 14,
                     color: JasaraPalette.primary,
