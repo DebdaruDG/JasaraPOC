@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../../providers/criteria_provider.dart';
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 import '../../widgets/utils/app_text_field.dart';
 import '../../widgets/utils/app_toast.dart';
+import '../admin/control_panel_page.dart';
 import 'assessment_page.dart';
 
 class FileService {
@@ -182,22 +184,28 @@ class _HomePageState extends State<HomePage> {
                         CustomButton2(
                           label: "Submit",
                           backgroundColor: JasaraPalette.primary,
-                          onPressed: () {
-                            // if (provider
-                            //         .controllers['project_name']!
-                            //         .text
-                            //         .isEmpty ||
-                            //     provider.controllers['budget']!.text.isEmpty ||
-                            //     provider
-                            //         .controllers['location']!
-                            //         .text
-                            //         .isEmpty) {
-                            //   JasaraToast.error(
-                            //     context,
-                            //     "Please fill all the fields",
-                            //   );
-                            //   return;
-                            // }
+                          onPressed: () async {
+                            final criteriaProvider =
+                                Provider.of<CriteriaProvider>(
+                                  context,
+                                  listen: false,
+                                );
+
+                            await criteriaProvider
+                                .fetchCriteriaList(); // Ensure criteria list is fetched
+                            if (criteriaProvider.criteriaListResponse.isEmpty) {
+                              JasaraToast.error(
+                                context,
+                                "No criteria found. Please add criteria first.",
+                              );
+                              await Future.delayed(
+                                const Duration(seconds: 2),
+                              ); // Show toast for 2 seconds
+                              openCriteriaDialog(
+                                context,
+                              ); // Open the criteria dialog
+                              return;
+                            }
                             if (provider.uploadedFile == null) {
                               JasaraToast.error(
                                 context,

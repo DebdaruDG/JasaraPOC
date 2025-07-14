@@ -300,3 +300,168 @@ class CriteriaData {
     instructionController.dispose();
   }
 }
+
+Future<void> openCriteriaDialog(
+  BuildContext context, {
+  CriteriaData? initialData,
+  int? editIndex,
+  Function(CriteriaData)? onAddCriteria,
+}) async {
+  final CriteriaData data = initialData ?? CriteriaData();
+
+  return showDialog(
+    context: context,
+    builder:
+        (context) => AlertDialog(
+          backgroundColor: const Color.fromARGB(255, 240, 247, 221),
+          contentPadding: const EdgeInsets.all(16),
+          title: Text(
+            editIndex == null ? 'Add Criteria' : 'Update Criteria',
+            style: JasaraTextStyles.primaryText500.copyWith(
+              fontSize: 20,
+              color: JasaraPalette.dark2,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppTextField(
+                  label: "Criteria (max 1000 chars)",
+                  controller: data.criteriaController,
+                ),
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: data.instructionController,
+                  maxLines: 5,
+                  decoration: InputDecoration(
+                    labelText: "Text Instructions (max 2500 chars)",
+                    filled: true,
+                    fillColor: JasaraPalette.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 12.0,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16.0),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: List.generate(3, (fileIndex) {
+                    return Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: _buildFilePicker(
+                          label: "Instructions PDF ${fileIndex + 1}",
+                          file: data.files[fileIndex],
+                          onFilePicked: (file) {
+                            data.files[fileIndex] = file;
+                          },
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final criteriaName = data.criteriaController.text.trim();
+                final textInstruction = data.instructionController.text.trim();
+
+                if (criteriaName.isEmpty || textInstruction.isEmpty) {
+                  JasaraToast.error(context, "Please fill all fields.");
+                  return;
+                }
+
+                final provider = Provider.of<CriteriaProvider>(
+                  context,
+                  listen: false,
+                );
+
+                try {
+                  await provider.createCriteriaBE(
+                    criteriaName,
+                    textInstruction,
+                    pdf1: data.files[0],
+                    pdf2: data.files[1],
+                    pdf3: data.files[2],
+                  );
+                  await JasaraToast.success(
+                    context,
+                    "Criteria added successfully!",
+                  );
+
+                  if (onAddCriteria != null) {
+                    onAddCriteria(data);
+                  }
+                  Navigator.pop(context);
+                } catch (e) {
+                  console.log('errors - $e');
+                  JasaraToast.error(context, "Something went wrong!");
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: JasaraPalette.primary,
+                foregroundColor: JasaraPalette.white,
+              ),
+              child: const Text("Save"),
+            ),
+          ],
+        ),
+  );
+}
+
+Widget _buildFilePicker({
+  required String label,
+  required File? file,
+  required ValueChanged<File?> onFilePicked,
+}) {
+  return InkWell(
+    onTap: () async {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf'],
+        withData: false,
+      );
+      if (result != null && result.files.single.size <= 500 * 1024) {
+        final path = result.files.single.path;
+        if (path != null) {
+          onFilePicked(File(path));
+        }
+      }
+    },
+    child: Container(
+      height: 80,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: JasaraPalette.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: JasaraPalette.primary.withOpacity(0.4)),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.picture_as_pdf, color: Colors.red.shade400),
+          const SizedBox(height: 4),
+          Text(
+            file != null ? file.path.split("/").last : label,
+            style: JasaraTextStyles.primaryText400,
+            textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    ),
+  );
+}

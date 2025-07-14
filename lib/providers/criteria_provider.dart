@@ -21,12 +21,6 @@ class CriteriaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void evaluateAll(String pdfBase64) {
-    for (int i = 0; i < _results.length; i++) {
-      // _evaluateSingle(i, pdfBase64);
-    }
-  }
-
   ApiResponse<CriteriaResponse> _responseBodyModel = ApiResponse.loading();
   ApiResponse<CriteriaResponse> get responseBodyModel => _responseBodyModel;
 
@@ -59,6 +53,7 @@ class CriteriaProvider extends ChangeNotifier {
         pdf2: pdf2?.path,
         pdf3: pdf3?.path,
       );
+      await fetchCriteriaList();
     } else {
       _responseBodyModel = ApiResponse.error(response.message);
     }
