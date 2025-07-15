@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_state_provider.dart';
-import '../views/admin/control_panel_page.dart';
-import '../views/user/rfi_list.dart';
+import '../views/criterias_list.dart';
+import '../views/rfi_list.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});
@@ -15,7 +15,7 @@ class AppWrapper extends StatelessWidget {
     return Scaffold(
       // Earlier App bar, which i have commented out now, i am shifting it to the dashboard wrapper section.
       // appBar: buildRoleBasedAppBar(context, isUser),
-      body: isRfi ? RFIListPage() : const ControlPanelPage(),
+      body: isRfi ? RFIListPage() : const CriteriasList(),
     );
   }
 }

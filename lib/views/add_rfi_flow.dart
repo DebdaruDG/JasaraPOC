@@ -5,49 +5,16 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
-
-import '../../providers/add_rfi_provider.dart';
-import '../../providers/criteria_provider.dart';
-import '../../widgets/utils/app_button.dart';
-import '../../widgets/utils/app_palette.dart';
-import '../../widgets/utils/app_textStyles.dart';
-import '../../widgets/utils/app_text_field.dart';
-import '../../widgets/utils/app_toast.dart';
-import '../admin/control_panel_page.dart';
+import '../core/services/file_service.dart';
+import '../providers/add_rfi_provider.dart';
+import '../providers/criteria_provider.dart';
+import '../widgets/utils/app_button.dart';
+import '../widgets/utils/app_palette.dart';
+import '../widgets/utils/app_textStyles.dart';
+import '../widgets/utils/app_text_field.dart';
+import '../widgets/utils/app_toast.dart';
+import 'criterias_list.dart';
 import 'assessment_page.dart';
-
-class FileService {
-  static Future<html.File?> pickPDF() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf'],
-      allowMultiple: false,
-      withData: true,
-    );
-    if (result != null && result.files.single.bytes != null) {
-      final name = result.files.single.name;
-      final bytes = result.files.single.bytes!;
-      return html.File([bytes], name);
-    }
-    return null;
-  }
-
-  static Future<html.File?> handleDroppedFiles(
-    List<dynamic> droppedFiles,
-  ) async {
-    if (droppedFiles.isEmpty) return null;
-
-    for (var file in droppedFiles) {
-      if (file is html.File) {
-        if (file.name.toLowerCase().endsWith('.pdf')) {
-          return file;
-        }
-      }
-    }
-    return null;
-  }
-}
 
 class AddRFIDocumentPage extends StatefulWidget {
   const AddRFIDocumentPage({super.key});
@@ -150,7 +117,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                                 "No criteria found. Please add criteria first.",
                               );
                               await Future.delayed(
-                                const Duration(seconds: 2),
+                                const Duration(seconds: 1),
                               ); // Show toast for 2 seconds
                               openCriteriaDialog(
                                 context,

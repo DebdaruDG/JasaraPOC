@@ -3,20 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
-import '../../providers/criteria_provider.dart';
-import '../../widgets/utils/app_palette.dart';
-import '../../widgets/utils/app_textStyles.dart';
-import '../../widgets/utils/app_text_field.dart';
-import '../../widgets/utils/app_toast.dart';
+import '../providers/criteria_provider.dart';
+import '../widgets/utils/app_palette.dart';
+import '../widgets/utils/app_textStyles.dart';
+import '../widgets/utils/app_text_field.dart';
+import '../widgets/utils/app_toast.dart';
 
-class ControlPanelPage extends StatefulWidget {
-  const ControlPanelPage({super.key});
+class CriteriasList extends StatefulWidget {
+  const CriteriasList({super.key});
 
   @override
-  State<ControlPanelPage> createState() => _ControlPanelPageState();
+  State<CriteriasList> createState() => _CriteriasListState();
 }
 
-class _ControlPanelPageState extends State<ControlPanelPage> {
+class _CriteriasListState extends State<CriteriasList> {
   final List<CriteriaData> _criteriaList = [];
 
   void _addCriteria(CriteriaData data) {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../views/user/home_page.dart';
+import '../views/add_rfi_flow.dart';
 
 void showAddRFIModal(BuildContext context) {
   showDialog(

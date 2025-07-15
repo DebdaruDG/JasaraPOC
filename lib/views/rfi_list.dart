@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../widgets/add_rfi_document_modal.dart';
-import '../../widgets/generic_data_table.dart';
-import '../../widgets/popup_action_menu.dart';
-import '../../widgets/utils/app_button.dart';
-import '../../widgets/utils/app_palette.dart';
+import '../widgets/add_rfi_document_modal.dart';
+import '../widgets/generic_data_table.dart';
+import '../widgets/popup_action_menu.dart';
+import '../widgets/utils/app_button.dart';
+import '../widgets/utils/app_palette.dart';
 
 class RFIListPage extends StatelessWidget {
   const RFIListPage({super.key});
