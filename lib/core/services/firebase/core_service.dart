@@ -3,13 +3,15 @@ import 'dart:developer' as console;
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../models/criteria_model.dart';
+import '../../../models/evaluate_assessment_firebase_model.dart';
+import 'firebase_collections.dart';
 
 class FirebaseService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Collection 1: criteria_pdfs
   static CollectionReference get criteriaPdfs =>
-      _firestore.collection('criteria_pdfs');
+      _firestore.collection(FirebaseCollectionNames.criteriaPDFs);
 
   // This list will hold fetched criteria
 
@@ -72,6 +74,49 @@ class FirebaseService {
       'rfp_pdf': rfpPdf,
       'type_of_work': typeOfWork,
     });
+  }
+
+  static CollectionReference get evaluateAssessment =>
+      _firestore.collection(FirebaseCollectionNames.evaluateAssessment);
+
+  // Add a new document to Evaluate_Assessment_Collection
+  static Future<void> addEvaluateAssessment({
+    required String projectName,
+    required String location,
+    required double budget,
+    required String rfiPdfBase64,
+    required List<EvaluateResult> evaluationResults,
+  }) async {
+    try {
+      final payload = {
+        'project_name': projectName,
+        'location': location,
+        'budget': budget,
+        'rfi_pdf': rfiPdfBase64,
+        'evaluation_results': evaluationResults.map((e) => e.toMap()).toList(),
+      };
+      await evaluateAssessment.add(payload);
+      console.log('Added evaluation assessment successfully.');
+    } catch (e) {
+      console.log('Error adding evaluation assessment: $e');
+    }
+  }
+
+  // Fetch all documents from Evaluate_Assessment_Collection
+  static Future<List<EvaluateAssessmentModel>>
+  fetchEvaluateAssessments() async {
+    try {
+      final snapshot = await evaluateAssessment.get();
+      return snapshot.docs.map((doc) {
+        return EvaluateAssessmentModel.fromDoc(
+          doc.id,
+          doc.data() as Map<String, dynamic>,
+        );
+      }).toList();
+    } catch (e) {
+      console.log('Error fetching assessments: $e');
+      return [];
+    }
   }
 
   // Optional: Get all documents
