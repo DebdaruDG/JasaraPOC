@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../../providers/add_rfi_provider.dart';
 import '../../providers/criteria_provider.dart';
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_palette.dart';
@@ -48,65 +49,14 @@ class FileService {
   }
 }
 
-class HomePageProvider extends ChangeNotifier {
-  final Map<String, TextEditingController> _controllers = {
-    'opportunityCode': TextEditingController(),
-    'opportunityName': TextEditingController(),
-    'date': TextEditingController(),
-    'proposalManager': TextEditingController(),
-    'description': TextEditingController(),
-    'projectType': TextEditingController(),
-    'clientName': TextEditingController(),
-    'clientType': TextEditingController(),
-    'relationship': TextEditingController(),
-    'submissionDate': TextEditingController(),
-    'biddingCriteria': TextEditingController(),
-    'isTargeted': TextEditingController(),
-    'comments': TextEditingController(),
-    'project_name': TextEditingController(),
-    'budget': TextEditingController(),
-    'location': TextEditingController(),
-  };
-
-  String? _finalDecision;
-  html.File? _uploadedFile;
-  bool _isDragOver = false;
-
-  Map<String, TextEditingController> get controllers => _controllers;
-  String? get finalDecision => _finalDecision;
-  html.File? get uploadedFile => _uploadedFile;
-  bool get isDragOver => _isDragOver;
-
-  void setFinalDecision(String? value) {
-    _finalDecision = value;
-    notifyListeners();
-  }
-
-  Future<void> setUploadedFile(html.File? file) async {
-    _uploadedFile = file;
-    notifyListeners();
-  }
-
-  void setDragOver(bool value) {
-    _isDragOver = value;
-    notifyListeners();
-  }
-
-  void disposeControllers() {
-    for (var controller in _controllers.values) {
-      controller.dispose();
-    }
-  }
-}
-
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class AddRFIDocumentPage extends StatefulWidget {
+  const AddRFIDocumentPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AddRFIDocumentPage> createState() => _AddRFIDocumentPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 600;
@@ -193,6 +143,7 @@ class _HomePageState extends State<HomePage> {
 
                             await criteriaProvider
                                 .fetchCriteriaList(); // Ensure criteria list is fetched
+                            criteriaProvider.criteriaListResponse;
                             if (criteriaProvider.criteriaListResponse.isEmpty) {
                               JasaraToast.error(
                                 context,

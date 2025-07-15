@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/app_state_provider.dart';
 import '../views/admin/control_panel_page.dart';
-import '../views/user/home_page.dart';
+import '../views/user/rfi_list.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});
@@ -15,7 +15,7 @@ class AppWrapper extends StatelessWidget {
     return Scaffold(
       // Earlier App bar, which i have commented out now, i am shifting it to the dashboard wrapper section.
       // appBar: buildRoleBasedAppBar(context, isUser),
-      body: isUser ? const HomePage() : const ControlPanelPage(),
+      body: isUser ? RFIListPage() : const ControlPanelPage(),
     );
   }
 }

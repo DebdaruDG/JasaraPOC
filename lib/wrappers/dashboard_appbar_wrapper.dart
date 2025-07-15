@@ -21,7 +21,7 @@ class DashboardAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            isUser ? 'User View' : 'Admin Control Panel',
+            isUser ? 'RFI' : 'Criterias',
             style: JasaraTextStyles.primaryText500.copyWith(
               fontSize: 20,
               color: JasaraPalette.dark1,
