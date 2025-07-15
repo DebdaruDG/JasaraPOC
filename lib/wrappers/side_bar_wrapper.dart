@@ -1,5 +1,6 @@
 // widgets/sidebar.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
 import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 
@@ -28,30 +29,22 @@ class Sidebar extends StatelessWidget {
       width: isCollapsed ? 70 : 220,
       decoration: BoxDecoration(
         color: JasaraPalette.primary,
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(60),
-          // bottomRight: Radius.circular(60),
-        ),
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(60)),
       ),
       child: Column(
         children: [
           /// Logo/Header
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: MediaQuery.of(context).size.height * 0.1,
+            ),
             child:
                 isCollapsed
-                    ? Image.asset('assets/images/logo_icon.png', height: 30)
+                    ? jasaraSVGLogo(40)
                     : Row(
-                      children: [
-                        Image.asset('assets/images/logo_icon.png', height: 30),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Jasara',
-                          style: JasaraTextStyles.primaryText500.copyWith(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+                      mainAxisSize: MainAxisSize.min,
+                      children: [jasaraSVGLogo(40)],
                     ),
           ),
 
@@ -125,4 +118,10 @@ class Sidebar extends StatelessWidget {
       ),
     );
   }
+
+  Widget jasaraSVGLogo(double height) => SvgPicture.asset(
+    'assets/logos/logo.svg',
+    height: height,
+    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+  );
 }
