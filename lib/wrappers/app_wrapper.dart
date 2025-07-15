@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/app_state_provider.dart';
+import '../views/admin/control_panel_page.dart';
+import '../views/user/home_page.dart';
+
+class AppWrapper extends StatelessWidget {
+  const AppWrapper({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final appState = context.watch<AppStateProvider>();
+    final isUser = appState.currentScreen == AppScreen.user;
+    return Scaffold(
+      // Earlier App bar, which i have commented out now, i am shifting it to the dashboard wrapper section.
+      // appBar: buildRoleBasedAppBar(context, isUser),
+      body: isUser ? const HomePage() : const ControlPanelPage(),
+    );
+  }
+}

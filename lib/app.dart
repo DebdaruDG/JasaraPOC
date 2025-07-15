@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'app_wrapper.dart';
+import 'wrappers/dashboard_wrapper.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AppWrapper(),
+      home: DashboardWrapper(),
     );
   }
 }
