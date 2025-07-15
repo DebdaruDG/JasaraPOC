@@ -8,21 +8,15 @@ class RFIResultIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        CircularPercentIndicator(
-          radius: 20.0,
-          lineWidth: 3.0,
-          animation: true,
-          percent: rfi.percentage / 100,
-          center: Text("${rfi.percentage}%"),
-          progressColor: rfi.progressColor,
-          backgroundColor: Colors.grey[300]!,
-          circularStrokeCap: CircularStrokeCap.round,
-        ),
-      ],
+    return CircularPercentIndicator(
+      radius: 20.0,
+      lineWidth: 3.0,
+      animation: true,
+      percent: rfi.percentage / 100,
+      center: Text("${rfi.percentage}%"),
+      progressColor: rfi.progressColor,
+      backgroundColor: Colors.grey[300]!,
+      circularStrokeCap: CircularStrokeCap.round,
     );
   }
 }

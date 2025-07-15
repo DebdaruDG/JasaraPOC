@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/rfi_model.dart';
+import '../widgets/generic_data_table.dart';
+import '../widgets/popup_action_menu.dart';
 import '../widgets/rfi_data_table.dart';
+import '../widgets/rfi_result_indicator.dart';
 import '../widgets/rfi_stat_card.dart';
 import '../models/rfi_stat_model.dart';
 import '../widgets/add_rfi_document_modal.dart';
@@ -141,9 +144,32 @@ class RFIListPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-
-            /// RFI Table
-            RFIDataTable(rfis: rfis),
+            GenericDataTable(
+              columnTitles: const [
+                'Project',
+                'AI Comments',
+                'RFI Files',
+                'Result',
+                'Actions',
+              ],
+              rowData:
+                  rfis.map((item) {
+                    return [
+                      Text(item.title),
+                      Text(item.comment),
+                      Text(
+                        item.fileName,
+                        style: const TextStyle(color: Colors.blue),
+                      ),
+                      RFIResultIndicator(rfi: item),
+                      PopupActionMenu(
+                        onEdit: () => debugPrint('Edit: ${item.title}'),
+                        onArchive: () => debugPrint('Archive: ${item.title}'),
+                        onDelete: () => debugPrint('Delete: ${item.title}'),
+                      ),
+                    ];
+                  }).toList(),
+            ),
           ],
         ),
       ),

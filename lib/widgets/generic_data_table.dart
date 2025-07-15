@@ -12,10 +12,11 @@ class GenericDataTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final columnCount = columnTitles.length;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalWidth = constraints.maxWidth;
-        final columnCount = columnTitles.length;
         final columnWidth = totalWidth / columnCount;
 
         return SingleChildScrollView(
@@ -24,13 +25,29 @@ class GenericDataTable extends StatelessWidget {
             constraints: BoxConstraints(minWidth: totalWidth),
             child: DataTable(
               headingRowColor: WidgetStateProperty.all(Colors.grey.shade200),
+              horizontalMargin: 0,
+              columnSpacing: 0,
+              dataRowMinHeight: 60,
+              dataRowMaxHeight: 72,
+              headingTextStyle: const TextStyle(
+                fontWeight: FontWeight.w600,
+                fontSize: 14,
+              ),
               columns:
                   columnTitles
                       .map(
                         (title) => DataColumn(
                           label: SizedBox(
                             width: columnWidth,
-                            child: Text(title),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: Text(
+                                title,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
                           ),
                         ),
                       )
@@ -38,16 +55,19 @@ class GenericDataTable extends StatelessWidget {
               rows:
                   rowData
                       .map(
-                        (cells) => DataRow(
+                        (rowCells) => DataRow(
                           cells:
-                              cells
-                                  .asMap()
-                                  .entries
+                              rowCells
                                   .map(
-                                    (entry) => DataCell(
+                                    (cell) => DataCell(
                                       SizedBox(
                                         width: columnWidth,
-                                        child: entry.value,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                          ),
+                                          child: cell,
+                                        ),
                                       ),
                                     ),
                                   )
