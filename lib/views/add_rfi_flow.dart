@@ -13,7 +13,6 @@ import '../widgets/utils/app_palette.dart';
 import '../widgets/utils/app_textStyles.dart';
 import '../widgets/utils/app_text_field.dart';
 import '../widgets/utils/app_toast.dart';
-import 'criterias_list.dart';
 import 'assessment_page.dart';
 
 class AddRFIDocumentPage extends StatefulWidget {
@@ -119,9 +118,9 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                               await Future.delayed(
                                 const Duration(seconds: 1),
                               ); // Show toast for 2 seconds
-                              openCriteriaDialog(
-                                context,
-                              ); // Open the criteria dialog
+                              // openCriteriaDialog(
+                              //   context,
+                              // ); // Open the criteria dialog
                               return;
                             }
                             if (provider.uploadedFile == null) {

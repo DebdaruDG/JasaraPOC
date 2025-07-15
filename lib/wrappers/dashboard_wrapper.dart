@@ -27,7 +27,7 @@ class _DashboardWrapperState extends State<DashboardWrapper> {
     final sidebarItems = [
       SidebarItemModel(
         icon: Icons.checklist,
-        label: 'Criteria',
+        label: "Criteria's",
         isSelected: currentScreen == AppScreen.criterias,
         onTap: () {
           appState.switchScreen(AppScreen.criterias);
