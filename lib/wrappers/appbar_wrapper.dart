@@ -6,13 +6,13 @@ import '../widgets/utils/app_palette.dart';
 import '../widgets/utils/app_textStyles.dart';
 import '../widgets/utils/app_button.dart'; // Assuming CustomButton2 is defined here
 
-AppBar buildRoleBasedAppBar(BuildContext context, bool isUser) {
+AppBar buildRoleBasedAppBar(BuildContext context, bool isRfi) {
   return AppBar(
-    backgroundColor: isUser ? JasaraPalette.accent : JasaraPalette.primary,
+    backgroundColor: isRfi ? JasaraPalette.accent : JasaraPalette.primary,
     title: Text(
-      isUser ? 'User View' : 'Admin Control Panel',
+      isRfi ? 'User View' : 'Admin Control Panel',
       style: JasaraTextStyles.primaryText500.copyWith(
-        color: isUser ? JasaraPalette.dark1 : JasaraPalette.white,
+        color: isRfi ? JasaraPalette.dark1 : JasaraPalette.white,
         fontSize: 20,
       ),
     ),
@@ -21,25 +21,24 @@ AppBar buildRoleBasedAppBar(BuildContext context, bool isUser) {
         padding: const EdgeInsets.all(8.0),
         child: CustomButton2(
           onPressed: () {
-            final newScreen = isUser ? AppScreen.admin : AppScreen.user;
+            final newScreen = isRfi ? AppScreen.criterias : AppScreen.rfi;
             context.read<AppStateProvider>().switchScreen(newScreen);
           },
           label: '',
-          backgroundColor:
-              isUser ? JasaraPalette.primary : JasaraPalette.accent,
-          borderColor: isUser ? JasaraPalette.primary : JasaraPalette.accent,
+          backgroundColor: isRfi ? JasaraPalette.primary : JasaraPalette.accent,
+          borderColor: isRfi ? JasaraPalette.primary : JasaraPalette.accent,
           customWidget: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 Icons.swap_horiz,
-                color: isUser ? JasaraPalette.white : JasaraPalette.dark1,
+                color: isRfi ? JasaraPalette.white : JasaraPalette.dark1,
               ),
               const SizedBox(width: 8),
               Text(
-                'Switch to ${isUser ? 'Admin' : 'User'}',
+                'Switch to ${isRfi ? 'Admin' : 'User'}',
                 style: TextStyle(
-                  color: isUser ? JasaraPalette.white : JasaraPalette.dark2,
+                  color: isRfi ? JasaraPalette.white : JasaraPalette.dark2,
                   fontSize: 14,
                 ),
               ),

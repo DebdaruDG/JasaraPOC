@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum AppScreen { user, admin }
+enum AppScreen { rfi, criterias }
 
 class AppStateProvider extends ChangeNotifier {
-  AppScreen _currentScreen = AppScreen.user;
+  AppScreen _currentScreen = AppScreen.rfi;
 
   AppScreen get currentScreen => _currentScreen;
 

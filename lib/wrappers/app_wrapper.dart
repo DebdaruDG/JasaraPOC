@@ -11,11 +11,11 @@ class AppWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppStateProvider>();
-    final isUser = appState.currentScreen == AppScreen.user;
+    final isRfi = appState.currentScreen == AppScreen.rfi;
     return Scaffold(
       // Earlier App bar, which i have commented out now, i am shifting it to the dashboard wrapper section.
       // appBar: buildRoleBasedAppBar(context, isUser),
-      body: isUser ? RFIListPage() : const ControlPanelPage(),
+      body: isRfi ? RFIListPage() : const ControlPanelPage(),
     );
   }
 }

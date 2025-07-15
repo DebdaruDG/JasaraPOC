@@ -29,10 +29,29 @@ class RFIListPage extends StatelessWidget {
           children: [
             Align(
               alignment: Alignment.centerRight,
-              child: CustomButton2(
-                label: "+ Add RFI",
-                backgroundColor: JasaraPalette.primary,
-                onPressed: () => showAddRFIModal(context),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  double screenWidth = constraints.maxWidth;
+
+                  double buttonWidth;
+                  if (screenWidth < 600) {
+                    // Mobile view
+                    buttonWidth = 140;
+                  } else if (screenWidth < 1024) {
+                    // Tablet view
+                    buttonWidth = 180;
+                  } else {
+                    // Desktop / Web view
+                    buttonWidth = 220;
+                  }
+
+                  return CustomButton2(
+                    label: "+ New RFI",
+                    width: buttonWidth,
+                    backgroundColor: JasaraPalette.primary,
+                    onPressed: () => showAddRFIModal(context),
+                  );
+                },
               ),
             ),
             const SizedBox(height: 24),

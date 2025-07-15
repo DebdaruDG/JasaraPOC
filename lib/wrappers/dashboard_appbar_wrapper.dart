@@ -11,7 +11,7 @@ class DashboardAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppStateProvider>();
-    final isUser = appState.currentScreen == AppScreen.user;
+    final isRfi = appState.currentScreen == AppScreen.rfi;
 
     return Container(
       height: 60,
@@ -21,10 +21,11 @@ class DashboardAppBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            isUser ? 'RFI' : 'Criterias',
+            isRfi ? 'RFI' : 'Criterias',
             style: JasaraTextStyles.primaryText500.copyWith(
-              fontSize: 20,
+              fontSize: 28,
               color: JasaraPalette.dark1,
+              fontWeight: FontWeight.w600,
             ),
           ),
           SizedBox(
