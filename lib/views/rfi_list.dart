@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import '../models/rfi_model.dart';
+import '../widgets/rfi_data_table.dart';
 import '../widgets/rfi_stat_card.dart';
 import '../models/rfi_stat_model.dart';
 import '../widgets/add_rfi_document_modal.dart';
-import '../widgets/generic_data_table.dart';
-import '../widgets/popup_action_menu.dart';
 import '../widgets/utils/app_button.dart';
 import '../widgets/utils/app_palette.dart';
 
@@ -48,15 +48,31 @@ class RFIListPage extends StatelessWidget {
       ),
     ];
 
-    final List<Map<String, String>> dummyData = [
-      {
-        'title': 'Model Accuracy',
-        'instruction': 'Evaluate AI model accuracy...',
-      },
-      {
-        'title': 'Data Pipeline Efficiency',
-        'instruction': 'Assess pipeline performance...',
-      },
+    final List<RFIModel> rfis = [
+      RFIModel(
+        title: 'Tower Crane Safety',
+        comment: 'AI detected optimal safety standards across all criteria.',
+        fileName: 'crane_report.pdf',
+        fileUrl: 'assets/docs/crane_report.pdf',
+        percentage: 92,
+        result: 'GO',
+      ),
+      RFIModel(
+        title: 'Concrete Mix Consistency',
+        comment: 'Minor inconsistency in batch 3. Suggested retest.',
+        fileName: 'batch_analysis.xlsx',
+        fileUrl: 'assets/docs/batch_analysis.xlsx',
+        percentage: 85,
+        result: 'GO',
+      ),
+      RFIModel(
+        title: 'Scaffolding Load Test',
+        comment: 'Load capacity below safe threshold. Adjustments required.',
+        fileName: 'scaffold_test.pdf',
+        fileUrl: 'assets/docs/scaffold_test.pdf',
+        percentage: 42,
+        result: 'NO GO',
+      ),
     ];
 
     return Scaffold(
@@ -127,34 +143,7 @@ class RFIListPage extends StatelessWidget {
             const SizedBox(height: 24),
 
             /// RFI Table
-            GenericDataTable(
-              columnTitles: const [
-                'Project',
-                'AI Comments',
-                'RFI Files',
-                'Actions',
-              ],
-              rowData:
-                  dummyData.map((item) {
-                    return [
-                      Text(item['title']!),
-                      Text(item['instruction']!),
-                      const Row(
-                        children: [
-                          Icon(Icons.picture_as_pdf, size: 16),
-                          SizedBox(width: 4),
-                          Text("Uploads"),
-                        ],
-                      ),
-                      PopupActionMenu(
-                        onEdit: () => debugPrint('Edit: ${item['title']}'),
-                        onArchive:
-                            () => debugPrint('Archive: ${item['title']}'),
-                        onDelete: () => debugPrint('Delete: ${item['title']}'),
-                      ),
-                    ];
-                  }).toList(),
-            ),
+            RFIDataTable(rfis: rfis),
           ],
         ),
       ),
