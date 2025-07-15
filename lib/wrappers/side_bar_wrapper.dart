@@ -30,7 +30,7 @@ class Sidebar extends StatelessWidget {
         color: JasaraPalette.primary,
         borderRadius: const BorderRadius.only(
           topRight: Radius.circular(60),
-          bottomRight: Radius.circular(60),
+          // bottomRight: Radius.circular(60),
         ),
       ),
       child: Column(
@@ -55,15 +55,17 @@ class Sidebar extends StatelessWidget {
                     ),
           ),
 
-          /// Sidebar Items
+          const Spacer(),
+
           ...items.map(
             (item) => Container(
+              padding: const EdgeInsets.all(12),
               decoration:
                   item.isSelected
                       ? BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.horizontal(
-                          right: Radius.circular(50),
+                          left: Radius.circular(50),
                         ),
                       )
                       : null,
@@ -78,9 +80,12 @@ class Sidebar extends StatelessWidget {
                         ? null
                         : Text(
                           item.label,
-                          style: TextStyle(
+                          style: JasaraTextStyles.primaryText500.copyWith(
                             color:
-                                item.isSelected ? Colors.black : Colors.white,
+                                item.isSelected
+                                    ? JasaraPalette.dark1
+                                    : JasaraPalette.background,
+                            fontSize: 20,
                           ),
                         ),
                 onTap: item.onTap,
