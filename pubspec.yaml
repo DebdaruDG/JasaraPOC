@@ -32,6 +32,7 @@ flutter:
   assets:
     - assets/
     - assets/logos/
+    - assets/logos/jasara_small_icon.svg
     - assets/logos/logo.svg
     - assets/fonts/Urbanist/
     - assets/fonts/

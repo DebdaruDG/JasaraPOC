@@ -26,7 +26,7 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: isCollapsed ? 70 : 220,
+      width: isCollapsed ? 110 : 220,
       decoration: BoxDecoration(
         color: JasaraPalette.primary,
         borderRadius: const BorderRadius.only(topRight: Radius.circular(60)),
@@ -41,7 +41,7 @@ class Sidebar extends StatelessWidget {
             ),
             child:
                 isCollapsed
-                    ? jasaraSVGLogo(40)
+                    ? jasaraIconSVGLogo(40)
                     : Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [jasaraSVGLogo(40)],
@@ -53,12 +53,16 @@ class Sidebar extends StatelessWidget {
           ...items.map(
             (item) => Container(
               padding: const EdgeInsets.all(12),
+              margin: const EdgeInsets.only(left: 12),
               decoration:
                   item.isSelected
                       ? BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.horizontal(
-                          left: Radius.circular(50),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(100), // outer top-left curve
+                          bottomLeft: Radius.circular(100),
+                          topRight: Radius.circular(0), // inner corner
+                          bottomRight: Radius.circular(0), // inner corner
                         ),
                       )
                       : null,
@@ -124,4 +128,10 @@ class Sidebar extends StatelessWidget {
     height: height,
     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
   );
+  Widget jasaraIconSVGLogo(double height) => SvgPicture.asset(
+    'assets/logos/jasara_small_icon.svg',
+    height: height,
+    colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+  );
+  // .svg
 }
