@@ -107,7 +107,15 @@ class RFIListPage extends StatelessWidget {
                   }
 
                   return CustomButton2(
-                    label: "+ New RFI",
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 6.0),
+                      child: Icon(
+                        Icons.add,
+                        color: JasaraPalette.background,
+                        size: 20,
+                      ),
+                    ),
+                    label: "New RFI",
                     width: buttonWidth,
                     backgroundColor: JasaraPalette.primary,
                     onPressed: () => showAddRFIModal(context),

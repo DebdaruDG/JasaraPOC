@@ -14,6 +14,7 @@ class CustomButton2 extends StatelessWidget {
   final Color? borderColor;
   final double? borderWidth;
   final Widget? customWidget; // prefer for icons
+  final Widget? prefixIcon; // prefer for icons
 
   const CustomButton2({
     super.key,
@@ -28,6 +29,7 @@ class CustomButton2 extends StatelessWidget {
     this.customWidget,
     this.borderColor,
     this.borderWidth,
+    this.prefixIcon,
   });
 
   @override
@@ -52,15 +54,21 @@ class CustomButton2 extends StatelessWidget {
           child: Center(
             child:
                 customWidget ??
-                Text(
-                  label,
-                  style:
-                      textStyle ??
-                      const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    if (prefixIcon != null) prefixIcon!,
+                    Text(
+                      label,
+                      style:
+                          textStyle ??
+                          const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ],
                 ),
           ),
         ),
