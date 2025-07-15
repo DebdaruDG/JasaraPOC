@@ -117,7 +117,7 @@ class Sidebar extends StatelessWidget {
           ),
 
           ProfileTile(
-            name: 'Frankie Sullivan',
+            name: 'F. Sullivan',
             title: '@Frankie',
             imageUrl:
                 'assets/images/download.jpeg', // replace with real URL or Asset
