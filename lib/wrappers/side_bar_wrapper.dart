@@ -5,6 +5,7 @@ import 'package:jasara_poc/widgets/utils/app_palette.dart';
 import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 
 import '../models/sidebarItemModel.dart';
+import '../widgets/profile_tile.dart';
 
 class Sidebar extends StatelessWidget {
   final bool isCollapsed;
@@ -26,9 +27,9 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: isCollapsed ? 110 : 220,
+      width: isCollapsed ? 70 : 220,
       decoration: BoxDecoration(
-        color: JasaraPalette.primary,
+        color: JasaraPalette.primary.withOpacity(0.7),
         borderRadius: const BorderRadius.only(topRight: Radius.circular(60)),
       ),
       child: Column(
@@ -93,18 +94,35 @@ class Sidebar extends StatelessWidget {
           const Spacer(),
 
           /// Role Switch
-          ListTile(
-            leading: const Icon(Icons.swap_horiz, color: Colors.white),
-            title:
-                isCollapsed
-                    ? null
-                    : Text(
-                      'Switch to ${isUser ? 'Admin' : 'User'}',
-                      style: JasaraTextStyles.primaryText500.copyWith(
-                        color: JasaraPalette.background,
+          Container(
+            margin: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: JasaraPalette.teal,
+              borderRadius: BorderRadius.all(Radius.circular(12)),
+            ),
+            child: ListTile(
+              leading: const Icon(Icons.swap_horiz, color: Colors.white),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+              title:
+                  isCollapsed
+                      ? null
+                      : Text(
+                        'Switch to ${isUser ? 'Admin' : 'User'}',
+                        style: JasaraTextStyles.primaryText500.copyWith(
+                          color: JasaraPalette.background,
+                        ),
                       ),
-                    ),
-            onTap: onRoleSwitch,
+              onTap: onRoleSwitch,
+            ),
+          ),
+
+          ProfileTile(
+            name: 'Frankie Sullivan',
+            title: '@Frankie',
+            imageUrl:
+                'assets/images/download.jpeg', // replace with real URL or Asset
+            isCollapsed: false,
+            onTap: () => print('Profile clicked'),
           ),
 
           /// Collapse Toggle

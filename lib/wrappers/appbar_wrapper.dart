@@ -27,22 +27,25 @@ AppBar buildRoleBasedAppBar(BuildContext context, bool isRfi) {
           label: '',
           backgroundColor: isRfi ? JasaraPalette.primary : JasaraPalette.accent,
           borderColor: isRfi ? JasaraPalette.primary : JasaraPalette.accent,
-          customWidget: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.swap_horiz,
-                color: isRfi ? JasaraPalette.white : JasaraPalette.dark1,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Switch to ${isRfi ? 'Admin' : 'User'}',
-                style: TextStyle(
-                  color: isRfi ? JasaraPalette.white : JasaraPalette.dark2,
-                  fontSize: 14,
+          customWidget: Container(
+            color: JasaraPalette.teal,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.swap_horiz,
+                  color: isRfi ? JasaraPalette.white : JasaraPalette.dark1,
                 ),
-              ),
-            ],
+                const SizedBox(width: 8),
+                Text(
+                  'Switch to ${isRfi ? 'Admin' : 'User'}',
+                  style: TextStyle(
+                    color: isRfi ? JasaraPalette.white : JasaraPalette.dark2,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

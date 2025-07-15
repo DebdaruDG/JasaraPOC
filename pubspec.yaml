@@ -37,6 +37,8 @@ flutter:
     - assets/logos/logo.svg
     - assets/fonts/Urbanist/
     - assets/fonts/
+    - assets/images/
+    - assets/images/download.jpeg
     - assets/fonts/Urbanist/static/
     
   fonts:

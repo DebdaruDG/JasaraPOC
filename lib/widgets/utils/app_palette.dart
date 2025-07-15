@@ -13,4 +13,6 @@ class JasaraPalette {
   static const Color yellow = Colors.yellow; // #57636c
   static const Color darkYellow = Color.fromARGB(255, 215, 195, 16); // #57636c
   static const Color red = Colors.red; // #57636c
+  static const Color teal = Colors.teal; // #57636c
+  static const Color tealAccent = Colors.tealAccent; // #57636c
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../models/rfi_model.dart';
 import '../widgets/generic_data_table.dart';
 import '../widgets/popup_action_menu.dart';
-import '../widgets/rfi_data_table.dart';
 import '../widgets/rfi_result_indicator.dart';
 import '../widgets/rfi_stat_card.dart';
 import '../models/rfi_stat_model.dart';
@@ -30,8 +29,8 @@ class RFIListPage extends StatelessWidget {
         value: '122',
         icon: Icons.check_circle,
         gradientColors: [
-          JasaraPalette.green.withOpacity(0.4),
-          JasaraPalette.green,
+          JasaraPalette.teal.withOpacity(0.4),
+          JasaraPalette.teal,
         ],
       ),
       RFIStatModel(

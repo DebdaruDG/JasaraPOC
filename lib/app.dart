@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AI Assessment Demo',
+      title: 'Jasara - RFI Assessment',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Urbanist',
