@@ -44,10 +44,7 @@ class RFIListPage extends StatelessWidget {
         label: 'Need Review',
         value: '1',
         icon: Icons.help,
-        gradientColors: [
-          JasaraPalette.yellow.withOpacity(0.65),
-          JasaraPalette.yellow.withOpacity(0.95),
-        ],
+        gradientColors: [JasaraPalette.yellow, JasaraPalette.darkYellow],
       ),
     ];
 
@@ -69,16 +66,26 @@ class RFIListPage extends StatelessWidget {
         child: Column(
           children: [
             /// Stats Row
-            SizedBox(
-              height: 120,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
-                itemCount: stats.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 16),
-                itemBuilder: (context, index) {
-                  return RFIStatCard(stat: stats[index]);
-                },
-              ),
+            /// Stats Responsive Layout (2x2 on mobile/tablet)
+            LayoutBuilder(
+              builder: (context, constraints) {
+                double width = constraints.maxWidth;
+                int crossAxisCount = width < 1024 ? 2 : 4;
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: stats.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: crossAxisCount,
+                    mainAxisExtent: 120,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                  ),
+                  itemBuilder:
+                      (context, index) => RFIStatCard(stat: stats[index]),
+                );
+              },
             ),
 
             const SizedBox(height: 24),
