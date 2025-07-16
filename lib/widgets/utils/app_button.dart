@@ -58,17 +58,15 @@ class CustomButton2 extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (prefixIcon != null) prefixIcon!,
-                    Flexible(
-                      child: Text(
-                        label,
-                        style:
-                            textStyle ??
-                            const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                      ),
+                    Text(
+                      label,
+                      style:
+                          textStyle ??
+                          const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                     ),
                   ],
                 ),
