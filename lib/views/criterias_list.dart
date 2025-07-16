@@ -274,6 +274,7 @@ class _CriteriasListState extends State<CriteriasList> {
                   }
 
                   return GenericDataTable(
+                    columnFlexes: [3, 3, 2, 1],
                     columnTitles: const [
                       'Title',
                       'Instructions',

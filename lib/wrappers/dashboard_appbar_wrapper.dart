@@ -17,7 +17,7 @@ class DashboardAppBar extends StatelessWidget {
 
     return Container(
       height: 100,
-      color: JasaraPalette.scaffoldBackground,
+      color: JasaraPalette.greyShade100,
       child: Container(
         margin: const EdgeInsets.only(left: 40, right: 40),
         child: Row(

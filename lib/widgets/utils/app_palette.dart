@@ -20,4 +20,5 @@ class JasaraPalette {
   static const Color aquaGreen = Color(0xFF08C0B0); // #08c0b0
   static const Color skyBlue = Color(0xFF2D7AE7); // #2d7ae7
   static const Color scaffoldBackground = Color(0xFFF9F9F9);
+  static Color greyShade100 = Colors.grey.shade100;
 }

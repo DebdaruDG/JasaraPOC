@@ -52,12 +52,12 @@ class Sidebar extends StatelessWidget {
 
           ...items.map(
             (item) => Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.only(left: 12),
               decoration:
                   item.isSelected
                       ? BoxDecoration(
-                        color: JasaraPalette.scaffoldBackground,
+                        color: Colors.grey.shade100,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(100), // outer top-left curve
                           bottomLeft: Radius.circular(100),

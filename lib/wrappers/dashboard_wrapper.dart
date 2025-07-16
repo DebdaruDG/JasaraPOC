@@ -45,7 +45,7 @@ class _DashboardWrapperState extends State<DashboardWrapper> {
     ];
 
     return Scaffold(
-      backgroundColor: JasaraPalette.scaffoldBackground,
+      backgroundColor: JasaraPalette.greyShade100,
       body: Row(
         children: [
           Sidebar(

@@ -70,7 +70,7 @@ class RFIListPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: JasaraPalette.greyShade100,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 45.0),
         child: Column(
