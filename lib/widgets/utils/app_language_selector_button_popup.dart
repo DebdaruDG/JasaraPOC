@@ -16,11 +16,15 @@ class LanguageSelectorButton extends StatelessWidget {
       color: JasaraPalette.scaffoldBackground,
       offset: const Offset(0, 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      icon: const CircleAvatar(
-        radius: 18,
-        backgroundImage: AssetImage(
-          'assets/images/flags/english_language.jpeg',
-        ), // 🇬🇧
+      icon: ClipOval(
+        child: SizedBox(
+          width: 36,
+          height: 36,
+          child: Image.asset(
+            'assets/images/flags/english_language.jpeg',
+            fit: BoxFit.cover,
+          ),
+        ),
       ),
       onSelected: onLanguageSelected,
       itemBuilder:
@@ -29,10 +33,14 @@ class LanguageSelectorButton extends StatelessWidget {
               value: 'en',
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage(
-                      'assets/images/flags/english_language.jpeg',
+                  ClipOval(
+                    child: SizedBox(
+                      width: 36,
+                      height: 36,
+                      child: Image.asset(
+                        'assets/images/flags/english_language.jpeg',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -44,10 +52,14 @@ class LanguageSelectorButton extends StatelessWidget {
               value: 'ar',
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 20,
-                    backgroundImage: AssetImage(
-                      'assets/images/flags/arabic_language_flag.png',
+                  ClipOval(
+                    child: SizedBox(
+                      width: 36,
+                      height: 36,
+                      child: Image.asset(
+                        'assets/images/flags/arabic_language_flag.png',
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 8),
