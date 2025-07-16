@@ -235,11 +235,11 @@ class _CriteriasListState extends State<CriteriasList> {
                   double buttonWidth;
 
                   if (screenWidth < 600) {
-                    buttonWidth = 140;
+                    buttonWidth = 100;
                   } else if (screenWidth < 1024) {
-                    buttonWidth = 180;
+                    buttonWidth = 140;
                   } else {
-                    buttonWidth = 220;
+                    buttonWidth = 180;
                   }
 
                   return CustomButton2(
