@@ -11,7 +11,7 @@ class Sidebar extends StatelessWidget {
   final VoidCallback toggleCollapse;
   final List<SidebarItemModel> items;
   final VoidCallback onRoleSwitch;
-  final bool isUser;
+  final bool isRfi;
 
   const Sidebar({
     super.key,
@@ -19,7 +19,7 @@ class Sidebar extends StatelessWidget {
     required this.toggleCollapse,
     required this.items,
     required this.onRoleSwitch,
-    required this.isUser,
+    required this.isRfi,
   });
 
   @override
@@ -34,10 +34,13 @@ class Sidebar extends StatelessWidget {
       child: Column(
         children: [
           /// Logo/Header
-          Padding(
+          Container(
             padding: EdgeInsets.symmetric(
               horizontal: 16.0,
               vertical: MediaQuery.of(context).size.height * 0.1125,
+            ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(32)),
             ),
             child:
                 isCollapsed
@@ -50,94 +53,109 @@ class Sidebar extends StatelessWidget {
 
           const Spacer(flex: 1),
 
-          ...items.map(
-            (item) => Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(left: 12),
-              decoration:
-                  item.isSelected
-                      ? BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(100), // outer top-left curve
-                          bottomLeft: Radius.circular(100),
-                          topRight: Radius.circular(0), // inner corner
-                          bottomRight: Radius.circular(0), // inner corner
-                        ),
-                      )
-                      : null,
-              child: ListTile(
-                contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                leading: Icon(
-                  item.icon,
-                  color:
-                      item.isSelected
-                          ? Colors.black
-                          : JasaraPalette.scaffoldBackground,
+          // Criteria + RFI
+          Container(
+            child: Column(
+              children: [
+                ...items.map(
+                  (item) => Container(
+                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.only(left: 12),
+                    decoration:
+                        item.isSelected
+                            ? BoxDecoration(
+                              color: Colors.grey.shade100,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(
+                                  100,
+                                ), // outer top-left curve
+                                bottomLeft: Radius.circular(100),
+                                topRight: Radius.circular(0), // inner corner
+                                bottomRight: Radius.circular(0), // inner corner
+                              ),
+                            )
+                            : null,
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+                      leading: Icon(
+                        item.icon,
+                        color:
+                            item.isSelected
+                                ? Colors.black
+                                : JasaraPalette.scaffoldBackground,
+                      ),
+                      title:
+                          isCollapsed
+                              ? null
+                              : Text(
+                                item.label,
+                                style: JasaraTextStyles.primaryText500.copyWith(
+                                  color:
+                                      item.isSelected
+                                          ? JasaraPalette.dark1
+                                          : JasaraPalette.scaffoldBackground,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      onTap: item.onTap,
+                    ),
+                  ),
                 ),
-                title:
-                    isCollapsed
-                        ? null
-                        : Text(
-                          item.label,
-                          style: JasaraTextStyles.primaryText500.copyWith(
-                            color:
-                                item.isSelected
-                                    ? JasaraPalette.dark1
-                                    : JasaraPalette.scaffoldBackground,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                onTap: item.onTap,
-              ),
+              ],
             ),
           ),
 
           const Spacer(flex: 2),
 
-          /// Role Switch
+          // Profile + Switch to admin button
           Container(
-            margin: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: JasaraPalette.teal,
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-            ),
-            child: ListTile(
-              leading: const Icon(Icons.swap_horiz, color: Colors.white),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              title:
-                  isCollapsed
-                      ? null
-                      : Text(
-                        'Switch to ${isUser ? 'Admin' : 'User'}',
-                        style: JasaraTextStyles.primaryText500.copyWith(
-                          color: JasaraPalette.background,
-                        ),
-                      ),
-              onTap: onRoleSwitch,
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: JasaraPalette.teal,
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                  child: ListTile(
+                    leading: const Icon(Icons.swap_horiz, color: Colors.white),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                    title:
+                        isCollapsed
+                            ? null
+                            : Text(
+                              'Switch to ${isRfi ? 'Admin' : 'User'}',
+                              style: JasaraTextStyles.primaryText500.copyWith(
+                                color: JasaraPalette.background,
+                              ),
+                            ),
+                    onTap: onRoleSwitch,
+                  ),
+                ),
+                ProfileTile(
+                  name: 'F. Sullivan',
+                  title: '@Frankie',
+                  imageUrl:
+                      'assets/images/download.jpeg', // replace with real URL or Asset
+                  isCollapsed: false,
+                  onTap: () => print('Profile clicked'),
+                ),
+
+                /// Collapse Toggle
+                IconButton(
+                  icon: Icon(
+                    isCollapsed
+                        ? Icons.keyboard_arrow_right
+                        : Icons.keyboard_arrow_left,
+                    color: Colors.white,
+                  ),
+                  onPressed: toggleCollapse,
+                ),
+              ],
             ),
           ),
 
-          ProfileTile(
-            name: 'F. Sullivan',
-            title: '@Frankie',
-            imageUrl:
-                'assets/images/download.jpeg', // replace with real URL or Asset
-            isCollapsed: false,
-            onTap: () => print('Profile clicked'),
-          ),
-
-          /// Collapse Toggle
-          IconButton(
-            icon: Icon(
-              isCollapsed
-                  ? Icons.keyboard_arrow_right
-                  : Icons.keyboard_arrow_left,
-              color: Colors.white,
-            ),
-            onPressed: toggleCollapse,
-          ),
           const SizedBox(height: 16),
         ],
       ),

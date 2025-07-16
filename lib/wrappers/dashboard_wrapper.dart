@@ -56,7 +56,7 @@ class _DashboardWrapperState extends State<DashboardWrapper> {
               });
             },
             items: sidebarItems,
-            isUser: isRfi,
+            isRfi: isRfi,
             onRoleSwitch: () {
               final newScreen = isRfi ? AppScreen.criterias : AppScreen.rfi;
               context.read<AppStateProvider>().switchScreen(newScreen);
