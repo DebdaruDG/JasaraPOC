@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/sidebarItemModel.dart';
 import '../providers/app_state_provider.dart';
+import '../widgets/utils/app_palette.dart';
 import 'app_wrapper.dart';
 import 'dashboard_appbar_wrapper.dart';
 import 'side_bar_wrapper.dart';
@@ -44,6 +45,7 @@ class _DashboardWrapperState extends State<DashboardWrapper> {
     ];
 
     return Scaffold(
+      backgroundColor: JasaraPalette.scaffoldBackground,
       body: Row(
         children: [
           Sidebar(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import '../models/rfi_model.dart';
 import '../widgets/generic_data_table.dart';
 import '../widgets/popup_action_menu.dart';
@@ -69,9 +70,9 @@ class RFIListPage extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey.shade100,
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 45.0),
         child: Column(
           children: [
             /// Stats Row
@@ -108,11 +109,11 @@ class RFIListPage extends StatelessWidget {
                   double buttonWidth;
 
                   if (screenWidth < 600) {
-                    buttonWidth = 140;
+                    buttonWidth = 85;
                   } else if (screenWidth < 1024) {
-                    buttonWidth = 180;
+                    buttonWidth = 105;
                   } else {
-                    buttonWidth = 220;
+                    buttonWidth = 125;
                   }
 
                   return CustomButton2(
@@ -121,10 +122,16 @@ class RFIListPage extends StatelessWidget {
                       child: Icon(
                         Icons.add,
                         color: JasaraPalette.background,
-                        size: 20,
+                        size: 24,
                       ),
                     ),
                     label: "New RFI",
+                    textStyle: JasaraTextStyles.primaryText500.copyWith(
+                      color: JasaraPalette.background,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16,
+                    ),
+                    height: 50,
                     width: buttonWidth,
                     backgroundColor: JasaraPalette.indigoBlue,
                     onPressed: () => showAddRFIModal(context),
@@ -134,31 +141,37 @@ class RFIListPage extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-            GenericDataTable(
-              columnTitles: const [
-                'Project',
-                'AI Comments',
-                'RFI Files',
-                'Result',
-                '',
-              ],
-              rowData:
-                  rfis.map((item) {
-                    return [
-                      Text(item.title),
-                      Text(item.comment),
-                      Text(
-                        item.fileName,
-                        style: const TextStyle(color: Colors.blue),
-                      ),
-                      RFIResultIndicator(rfi: item),
-                      PopupActionMenu(
-                        onEdit: () => debugPrint('Edit: ${item.title}'),
-                        onArchive: () => debugPrint('Archive: ${item.title}'),
-                        onDelete: () => debugPrint('Delete: ${item.title}'),
-                      ),
-                    ];
-                  }).toList(),
+            Container(
+              decoration: BoxDecoration(
+                color: JasaraPalette.white,
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              child: GenericDataTable(
+                columnTitles: const [
+                  'Project',
+                  'AI Comments',
+                  'RFI Files',
+                  'Result',
+                  '',
+                ],
+                rowData:
+                    rfis.map((item) {
+                      return [
+                        Text(item.title),
+                        Text(item.comment),
+                        Text(
+                          item.fileName,
+                          style: const TextStyle(color: Colors.blue),
+                        ),
+                        RFIResultIndicator(rfi: item),
+                        PopupActionMenu(
+                          onEdit: () => debugPrint('Edit: ${item.title}'),
+                          onArchive: () => debugPrint('Archive: ${item.title}'),
+                          onDelete: () => debugPrint('Delete: ${item.title}'),
+                        ),
+                      ];
+                    }).toList(),
+              ),
             ),
           ],
         ),

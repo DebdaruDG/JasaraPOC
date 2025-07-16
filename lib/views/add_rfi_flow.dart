@@ -49,7 +49,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
           ];
 
           return Scaffold(
-            backgroundColor: JasaraPalette.background,
+            backgroundColor: JasaraPalette.scaffoldBackground.withOpacity(0.25),
             body: SingleChildScrollView(
               padding: const EdgeInsets.all(16.0),
               child: Form(

@@ -14,37 +14,42 @@ class DashboardAppBar extends StatelessWidget {
     final isRfi = appState.currentScreen == AppScreen.rfi;
 
     return Container(
-      height: 80,
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-      color: JasaraPalette.white,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            isRfi ? 'RFI' : 'Criterias',
-            style: JasaraTextStyles.primaryText500.copyWith(
-              fontSize: 28,
-              color: JasaraPalette.dark1,
-              fontWeight: FontWeight.w600,
+      height: 100,
+      color: JasaraPalette.scaffoldBackground,
+      child: Container(
+        margin: const EdgeInsets.only(left: 40, right: 40),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              isRfi ? 'RFI' : 'Criteria',
+              style: JasaraTextStyles.primaryText500.copyWith(
+                fontSize: 38,
+                color: JasaraPalette.dark1,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.5,
+              ),
             ),
-          ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * 0.125,
-            child: TextField(
-              decoration: InputDecoration(
-                suffixIcon: const Icon(Icons.search),
-                hintText: 'Search something here...',
-                hintStyle: JasaraTextStyles.primaryText400,
-                filled: true,
-                fillColor: JasaraPalette.charcoalGrey.withOpacity(0.1),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.135,
+              child: TextField(
+                decoration: InputDecoration(
+                  suffixIcon: const Icon(Icons.search),
+                  hintText: 'Search something here...',
+                  hintStyle: JasaraTextStyles.primaryText400.copyWith(
+                    fontSize: 13,
+                  ),
+                  filled: true,
+                  fillColor: JasaraPalette.grey.withOpacity(0.1),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

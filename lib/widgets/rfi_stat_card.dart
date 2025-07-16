@@ -12,6 +12,7 @@ class RFIStatCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
+      height: 120,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: stat.gradientColors,
@@ -29,35 +30,33 @@ class RFIStatCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(stat.icon, color: JasaraPalette.background, size: 32),
+          Icon(stat.icon, color: JasaraPalette.background, size: 46),
           const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    stat.label,
-                    style: JasaraTextStyles.primaryText500.copyWith(
-                      fontSize: 14,
-                      color: JasaraPalette.background,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  stat.value,
-                  style: const TextStyle(
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerRight,
+                child: Text(
+                  stat.label,
+                  style: JasaraTextStyles.primaryText500.copyWith(
+                    fontSize: 18,
                     color: JasaraPalette.background,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
                   ),
                 ),
-              ],
-            ),
+              ),
+              Text(
+                stat.value,
+                style: const TextStyle(
+                  color: JasaraPalette.background,
+                  fontSize: 34,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ],
       ),

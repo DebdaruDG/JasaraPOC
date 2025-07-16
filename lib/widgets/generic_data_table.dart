@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 
+import 'utils/app_palette.dart';
+
 class GenericDataTable extends StatelessWidget {
   final List<String> columnTitles;
   final List<List<Widget>> rowData;
+  final Color headingRowColor;
 
   const GenericDataTable({
     super.key,
     required this.columnTitles,
     required this.rowData,
+    this.headingRowColor = JasaraPalette.white,
+    // Colors.grey.shade200
   });
 
   @override
@@ -24,7 +29,10 @@ class GenericDataTable extends StatelessWidget {
           child: ConstrainedBox(
             constraints: BoxConstraints(minWidth: totalWidth),
             child: DataTable(
-              headingRowColor: WidgetStateProperty.all(Colors.grey.shade200),
+              headingRowColor: WidgetStateProperty.all(headingRowColor),
+              border: TableBorder.symmetric(
+                borderRadius: BorderRadius.circular(12),
+              ),
               horizontalMargin: 0,
               columnSpacing: 0,
               dataRowMinHeight: 60,

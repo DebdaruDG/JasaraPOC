@@ -57,7 +57,7 @@ class Sidebar extends StatelessWidget {
               decoration:
                   item.isSelected
                       ? BoxDecoration(
-                        color: Colors.white,
+                        color: JasaraPalette.scaffoldBackground,
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(100), // outer top-left curve
                           bottomLeft: Radius.circular(100),
@@ -70,7 +70,10 @@ class Sidebar extends StatelessWidget {
                 contentPadding: EdgeInsets.symmetric(horizontal: 16),
                 leading: Icon(
                   item.icon,
-                  color: item.isSelected ? Colors.black : Colors.white,
+                  color:
+                      item.isSelected
+                          ? Colors.black
+                          : JasaraPalette.scaffoldBackground,
                 ),
                 title:
                     isCollapsed
@@ -81,7 +84,7 @@ class Sidebar extends StatelessWidget {
                             color:
                                 item.isSelected
                                     ? JasaraPalette.dark1
-                                    : JasaraPalette.background,
+                                    : JasaraPalette.scaffoldBackground,
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
