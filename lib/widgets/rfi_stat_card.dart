@@ -30,7 +30,7 @@ class RFIStatCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(stat.icon, color: JasaraPalette.background, size: 46),
+          Icon(stat.icon, color: JasaraPalette.background, size: 44),
           const SizedBox(width: 12),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +52,7 @@ class RFIStatCard extends StatelessWidget {
                 stat.value,
                 style: const TextStyle(
                   color: JasaraPalette.background,
-                  fontSize: 34,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                 ),
               ),

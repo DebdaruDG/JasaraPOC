@@ -52,7 +52,7 @@ class Sidebar extends StatelessWidget {
 
           ...items.map(
             (item) => Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               margin: const EdgeInsets.only(left: 12),
               decoration:
                   item.isSelected
