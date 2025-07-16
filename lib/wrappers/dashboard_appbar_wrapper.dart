@@ -14,8 +14,8 @@ class DashboardAppBar extends StatelessWidget {
     final isRfi = appState.currentScreen == AppScreen.rfi;
 
     return Container(
-      height: 60,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      height: 80,
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
       color: JasaraPalette.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
