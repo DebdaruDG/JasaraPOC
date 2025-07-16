@@ -9,8 +9,8 @@ class RFIResultIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CircularPercentIndicator(
-      radius: 20.0,
-      lineWidth: 3.0,
+      radius: 25.0,
+      lineWidth: 5.0,
       animation: true,
       percent: rfi.percentage / 100,
       center: Text("${rfi.percentage}%"),

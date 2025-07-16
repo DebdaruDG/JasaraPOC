@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-
 import 'utils/app_palette.dart';
 
 class GenericDataTable extends StatelessWidget {
   final List<String> columnTitles;
   final List<List<Widget>> rowData;
+  final List<double>? columnFlexes; // ✅ Optional parameter
   final Color headingRowColor;
+  final TextAlign? headerTextAlign;
 
   const GenericDataTable({
     super.key,
     required this.columnTitles,
     required this.rowData,
+    this.columnFlexes, // ✅ Not required
     this.headingRowColor = JasaraPalette.white,
-    // Colors.grey.shade200
+    this.headerTextAlign,
   });
 
   @override
@@ -22,7 +24,11 @@ class GenericDataTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalWidth = constraints.maxWidth;
-        final columnWidth = totalWidth / columnCount;
+
+        // ✅ If custom flexes provided, use them
+        final defaultFlexes = List<double>.filled(columnCount, 1);
+        final usedFlexes = columnFlexes ?? defaultFlexes;
+        final totalFlex = usedFlexes.fold(0, (a, b) => int.parse('${a + b}'));
 
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -41,48 +47,42 @@ class GenericDataTable extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontSize: 14,
               ),
-              columns:
-                  columnTitles
-                      .map(
-                        (title) => DataColumn(
-                          label: SizedBox(
-                            width: columnWidth,
+              columns: List.generate(columnCount, (index) {
+                final colWidth = (usedFlexes[index] / totalFlex) * totalWidth;
+                return DataColumn(
+                  label: SizedBox(
+                    width: colWidth,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: Text(
+                        columnTitles[index],
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              rows:
+                  rowData.map((rowCells) {
+                    return DataRow(
+                      cells: List.generate(rowCells.length, (index) {
+                        final colWidth =
+                            (usedFlexes[index] / totalFlex) * totalWidth;
+                        return DataCell(
+                          SizedBox(
+                            width: colWidth,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                               ),
-                              child: Text(
-                                title,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              child: Center(child: rowCells[index]),
                             ),
                           ),
-                        ),
-                      )
-                      .toList(),
-              rows:
-                  rowData
-                      .map(
-                        (rowCells) => DataRow(
-                          cells:
-                              rowCells
-                                  .map(
-                                    (cell) => DataCell(
-                                      SizedBox(
-                                        width: columnWidth,
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 8,
-                                          ),
-                                          child: cell,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                        ),
-                      )
-                      .toList(),
+                        );
+                      }),
+                    );
+                  }).toList(),
             ),
           ),
         );

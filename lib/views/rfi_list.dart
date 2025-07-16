@@ -143,10 +143,12 @@ class RFIListPage extends StatelessWidget {
             const SizedBox(height: 24),
             Container(
               decoration: BoxDecoration(
-                color: JasaraPalette.white,
+                color: JasaraPalette.scaffoldBackground,
+                backgroundBlendMode: BlendMode.clear,
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: GenericDataTable(
+                columnFlexes: [1, 3, 2, 2, 1],
                 columnTitles: const [
                   'Project',
                   'AI Comments',
@@ -157,8 +159,8 @@ class RFIListPage extends StatelessWidget {
                 rowData:
                     rfis.map((item) {
                       return [
-                        Text(item.title),
-                        Text(item.comment),
+                        Text(item.title, textAlign: TextAlign.center),
+                        Text(item.comment, textAlign: TextAlign.center),
                         Text(
                           item.fileName,
                           style: const TextStyle(color: Colors.blue),
