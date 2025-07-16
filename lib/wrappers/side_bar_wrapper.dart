@@ -27,10 +27,10 @@ class Sidebar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      width: isCollapsed ? 70 : 220,
+      width: isCollapsed ? 70 : 300,
       decoration: BoxDecoration(
         color: JasaraPalette.indigoBlue,
-        borderRadius: const BorderRadius.only(topRight: Radius.circular(60)),
+        borderRadius: const BorderRadius.only(topRight: Radius.circular(80)),
       ),
       child: Column(
         children: [
@@ -38,14 +38,14 @@ class Sidebar extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: 16.0,
-              vertical: MediaQuery.of(context).size.height * 0.1,
+              vertical: MediaQuery.of(context).size.height * 0.1125,
             ),
             child:
                 isCollapsed
-                    ? jasaraIconSVGLogo(40)
+                    ? jasaraIconSVGLogo(45)
                     : Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: [jasaraSVGLogo(40)],
+                      children: [jasaraSVGLogo(45)],
                     ),
           ),
 
