@@ -1,6 +1,8 @@
 // notification_bell_button.dart
 import 'package:flutter/material.dart';
 
+import 'app_palette.dart';
+
 class NotificationBellButton extends StatelessWidget {
   final List<String> notifications;
 
@@ -9,19 +11,24 @@ class NotificationBellButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
+      color: JasaraPalette.scaffoldBackground,
       tooltip: "Notifications",
       offset: const Offset(0, 10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
-          const Icon(Icons.notifications, size: 28, color: Colors.black87),
+          const Icon(
+            Icons.notifications_outlined,
+            size: 36,
+            color: JasaraPalette.dark1,
+          ),
           if (notifications.isNotEmpty)
             Positioned(
-              right: -2,
+              right: 0,
               top: -2,
               child: Container(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(6),
                 decoration: const BoxDecoration(
                   color: Colors.purple,
                   shape: BoxShape.circle,

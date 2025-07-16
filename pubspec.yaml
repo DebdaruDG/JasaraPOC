@@ -38,6 +38,9 @@ flutter:
     - assets/fonts/Urbanist/
     - assets/fonts/
     - assets/images/
+    - assets/images/flags/
+    - assets/images/flags/arabic_language_flag.png
+    - assets/images/flags/english_language.jpeg
     - assets/images/download.jpeg
     - assets/fonts/Urbanist/static/
     
