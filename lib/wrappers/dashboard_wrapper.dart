@@ -26,15 +26,15 @@ class _DashboardWrapperState extends State<DashboardWrapper> {
 
     final sidebarItems = [
       SidebarItemModel(
-        icon: Icons.checklist,
-        label: "Criteria's",
+        icon: Icons.home,
+        label: "Criteria",
         isSelected: currentScreen == AppScreen.criterias,
         onTap: () {
           appState.switchScreen(AppScreen.criterias);
         },
       ),
       SidebarItemModel(
-        icon: Icons.article,
+        icon: Icons.description,
         label: 'RFI',
         isSelected: currentScreen == AppScreen.rfi,
         onTap: () {

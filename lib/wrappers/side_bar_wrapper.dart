@@ -1,4 +1,3 @@
-// widgets/sidebar.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
@@ -49,11 +48,11 @@ class Sidebar extends StatelessWidget {
                     ),
           ),
 
-          const Spacer(),
+          const Spacer(flex: 1),
 
           ...items.map(
             (item) => Container(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(16),
               margin: const EdgeInsets.only(left: 12),
               decoration:
                   item.isSelected
@@ -83,7 +82,8 @@ class Sidebar extends StatelessWidget {
                                 item.isSelected
                                     ? JasaraPalette.dark1
                                     : JasaraPalette.background,
-                            fontSize: 20,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                 onTap: item.onTap,
@@ -91,7 +91,7 @@ class Sidebar extends StatelessWidget {
             ),
           ),
 
-          const Spacer(),
+          const Spacer(flex: 2),
 
           /// Role Switch
           Container(
@@ -151,5 +151,4 @@ class Sidebar extends StatelessWidget {
     height: height,
     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
   );
-  // .svg
 }
