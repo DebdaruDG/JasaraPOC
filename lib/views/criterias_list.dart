@@ -14,7 +14,6 @@ import '../models/rfi_stat_model.dart';
 import '../widgets/utils/app_button.dart';
 import '../widgets/utils/app_text_field.dart';
 import '../widgets/utils/app_toast.dart';
-// import 'dart:html' as html;
 
 class CriteriasList extends StatefulWidget {
   const CriteriasList({super.key});
@@ -162,9 +161,9 @@ class _CriteriasListState extends State<CriteriasList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: JasaraPalette.white,
+      backgroundColor: Colors.grey.shade100,
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 45.0),
         child: Column(
           children: [
             LayoutBuilder(
@@ -252,6 +251,7 @@ class _CriteriasListState extends State<CriteriasList> {
                       ),
                     ),
                     label: "Add Criteria",
+                    height: 50,
                     width: buttonWidth,
                     backgroundColor: JasaraPalette.indigoBlue,
                     onPressed: () => _openCriteriaDialog(),
@@ -260,44 +260,51 @@ class _CriteriasListState extends State<CriteriasList> {
               ),
             ),
             const SizedBox(height: 24),
-            Consumer<CriteriaProvider>(
-              builder: (context, criteriaVM, _) {
-                final list = criteriaVM.criteriaListResponse;
+            Container(
+              decoration: BoxDecoration(
+                color: JasaraPalette.white,
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              child: Consumer<CriteriaProvider>(
+                builder: (context, criteriaVM, _) {
+                  final list = criteriaVM.criteriaListResponse;
 
-                if (list.isEmpty) {
-                  return const Center(child: Text("No Criteria Added Yet"));
-                }
+                  if (list.isEmpty) {
+                    return const Center(child: Text("No Criteria Added Yet"));
+                  }
 
-                return GenericDataTable(
-                  columnTitles: const [
-                    'Title',
-                    'Instructions',
-                    'Supporting Files',
-                    '',
-                  ],
-                  rowData:
-                      list.map((item) {
-                        return [
-                          Text(item.title),
-                          Text(
-                            item.textInstructions,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            'file_01.png, file_02.png',
-                            style: const TextStyle(color: Colors.blue),
-                          ),
-                          PopupActionMenu(
-                            onEdit: () => {},
-                            onArchive:
-                                () => debugPrint('Archive: ${item.title}'),
-                            onDelete: () => debugPrint('Delete: ${item.title}'),
-                          ),
-                        ];
-                      }).toList(),
-                );
-              },
+                  return GenericDataTable(
+                    columnTitles: const [
+                      'Title',
+                      'Instructions',
+                      'Supporting Files',
+                      '',
+                    ],
+                    rowData:
+                        list.map((item) {
+                          return [
+                            Text(item.title),
+                            Text(
+                              item.textInstructions,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'file_01.png, file_02.png',
+                              style: const TextStyle(color: Colors.blue),
+                            ),
+                            PopupActionMenu(
+                              onEdit: () => {},
+                              onArchive:
+                                  () => debugPrint('Archive: ${item.title}'),
+                              onDelete:
+                                  () => debugPrint('Delete: ${item.title}'),
+                            ),
+                          ];
+                        }).toList(),
+                  );
+                },
+              ),
             ),
           ],
         ),
