@@ -55,12 +55,25 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Attach the RFP/RFI Document",
-                    style: JasaraTextStyles.primaryText500.copyWith(
-                      fontSize: 22,
-                      color: JasaraPalette.dark2,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Attach the RFP/RFI Document",
+                        style: JasaraTextStyles.primaryText500.copyWith(
+                          fontSize: 22,
+                          color: JasaraPalette.dark2,
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => Navigator.pop(context),
+                        child: Icon(
+                          Icons.cancel,
+                          color: Colors.redAccent,
+                          size: 24,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   _buildFileUploadField(context, provider),
