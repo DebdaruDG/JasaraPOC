@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'utils/app_palette.dart';
+
 class PopupActionMenu extends StatelessWidget {
   final VoidCallback onEdit;
   final VoidCallback onArchive;
@@ -16,6 +18,7 @@ class PopupActionMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.more_vert),
+      color: JasaraPalette.scaffoldBackground,
       onSelected: (value) {
         switch (value) {
           case 'edit':

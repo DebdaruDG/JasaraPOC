@@ -148,7 +148,7 @@ class RFIListPage extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(12)),
               ),
               child: GenericDataTable(
-                columnFlexes: [1, 3, 2, 2, 1],
+                columnFlexes: [1, 5, 2, 2, 1],
                 columnTitles: const [
                   'Project',
                   'AI Comments',
