@@ -178,7 +178,7 @@ class _CriteriasListState extends State<CriteriasList> {
                     value: '108',
                     icon: Icons.list,
                     gradientColors: [
-                      JasaraPalette.primary.withOpacity(0.5),
+                      JasaraPalette.indigoBlue,
                       JasaraPalette.primary,
                     ],
                   ),
@@ -187,8 +187,8 @@ class _CriteriasListState extends State<CriteriasList> {
                     value: '78',
                     icon: Icons.check_circle,
                     gradientColors: [
-                      JasaraPalette.teal.withOpacity(0.4),
-                      JasaraPalette.teal,
+                      JasaraPalette.aquaGreen,
+                      JasaraPalette.skyBlue,
                     ],
                   ),
                   RFIStatModel(
@@ -196,8 +196,8 @@ class _CriteriasListState extends State<CriteriasList> {
                     value: '30',
                     icon: Icons.cancel,
                     gradientColors: [
-                      JasaraPalette.red.withOpacity(0.4),
-                      JasaraPalette.red.withOpacity(0.75),
+                      JasaraPalette.primary,
+                      JasaraPalette.indigoBlue,
                     ],
                   ),
                   RFIStatModel(
@@ -205,8 +205,8 @@ class _CriteriasListState extends State<CriteriasList> {
                     value: '12',
                     icon: Icons.archive,
                     gradientColors: [
-                      JasaraPalette.yellow,
-                      JasaraPalette.darkYellow,
+                      JasaraPalette.skyBlue,
+                      JasaraPalette.aquaGreen,
                     ],
                   ),
                 ];
@@ -253,7 +253,7 @@ class _CriteriasListState extends State<CriteriasList> {
                     ),
                     label: "Add Criteria",
                     width: buttonWidth,
-                    backgroundColor: JasaraPalette.primary,
+                    backgroundColor: JasaraPalette.indigoBlue,
                     onPressed: () => _openCriteriaDialog(),
                   );
                 },
@@ -273,7 +273,7 @@ class _CriteriasListState extends State<CriteriasList> {
                     'Title',
                     'Instructions',
                     'Supporting Files',
-                    'Actions',
+                    '',
                   ],
                   rowData:
                       list.map((item) {

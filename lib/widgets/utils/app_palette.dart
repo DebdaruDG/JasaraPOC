@@ -15,4 +15,8 @@ class JasaraPalette {
   static const Color red = Colors.red; // #57636c
   static const Color teal = Colors.teal; // #57636c
   static const Color tealAccent = Colors.tealAccent; // #57636c
+
+  static const Color indigoBlue = Color(0xFF2E359E); // #2e359e
+  static const Color aquaGreen = Color(0xFF08C0B0); // #08c0b0
+  static const Color skyBlue = Color(0xFF2D7AE7); // #2d7ae7
 }

@@ -29,7 +29,7 @@ class Sidebar extends StatelessWidget {
       duration: const Duration(milliseconds: 300),
       width: isCollapsed ? 70 : 220,
       decoration: BoxDecoration(
-        color: JasaraPalette.primary.withOpacity(0.7),
+        color: JasaraPalette.indigoBlue,
         borderRadius: const BorderRadius.only(topRight: Radius.circular(60)),
       ),
       child: Column(

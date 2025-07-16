@@ -19,34 +19,25 @@ class RFIListPage extends StatelessWidget {
         label: 'RFIs Assessed',
         value: '152',
         icon: Icons.fact_check,
-        gradientColors: [
-          JasaraPalette.primary.withOpacity(0.5),
-          JasaraPalette.primary,
-        ],
+        gradientColors: [JasaraPalette.indigoBlue, JasaraPalette.primary],
       ),
       RFIStatModel(
         label: 'Go',
         value: '122',
         icon: Icons.check_circle,
-        gradientColors: [
-          JasaraPalette.teal.withOpacity(0.4),
-          JasaraPalette.teal,
-        ],
+        gradientColors: [JasaraPalette.aquaGreen, JasaraPalette.skyBlue],
       ),
       RFIStatModel(
         label: 'No Go',
         value: '30',
         icon: Icons.cancel,
-        gradientColors: [
-          JasaraPalette.red.withOpacity(0.4),
-          JasaraPalette.red.withOpacity(0.75),
-        ],
+        gradientColors: [JasaraPalette.primary, JasaraPalette.indigoBlue],
       ),
       RFIStatModel(
         label: 'Need Review',
         value: '1',
         icon: Icons.help,
-        gradientColors: [JasaraPalette.yellow, JasaraPalette.darkYellow],
+        gradientColors: [JasaraPalette.skyBlue, JasaraPalette.aquaGreen],
       ),
     ];
 
@@ -135,7 +126,7 @@ class RFIListPage extends StatelessWidget {
                     ),
                     label: "New RFI",
                     width: buttonWidth,
-                    backgroundColor: JasaraPalette.primary,
+                    backgroundColor: JasaraPalette.indigoBlue,
                     onPressed: () => showAddRFIModal(context),
                   );
                 },
@@ -149,7 +140,7 @@ class RFIListPage extends StatelessWidget {
                 'AI Comments',
                 'RFI Files',
                 'Result',
-                'Actions',
+                '',
               ],
               rowData:
                   rfis.map((item) {
