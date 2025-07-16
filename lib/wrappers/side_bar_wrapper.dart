@@ -6,6 +6,99 @@ import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import '../models/sidebarItemModel.dart';
 import '../widgets/profile_tile.dart';
 
+class _CollapsedSidebarItem extends StatelessWidget {
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+  final bool isSelected;
+
+  const _CollapsedSidebarItem({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Material(
+          color: isSelected ? Colors.grey.shade100 : Colors.transparent,
+          shape: const CircleBorder(),
+          child: InkWell(
+            onTap: onTap,
+            customBorder: const CircleBorder(),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Icon(
+                icon,
+                color:
+                    isSelected
+                        ? Colors.black
+                        : JasaraPalette.scaffoldBackground,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ExpandedSidebarItem extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool isSelected;
+
+  const _ExpandedSidebarItem({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.isSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(8),
+      margin: const EdgeInsets.only(left: 12),
+      decoration:
+          isSelected
+              ? BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(100),
+                  bottomLeft: Radius.circular(100),
+                ),
+              )
+              : null,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+        leading: Icon(
+          icon,
+          color: isSelected ? Colors.black : JasaraPalette.scaffoldBackground,
+        ),
+        title: Text(
+          label,
+          style: JasaraTextStyles.primaryText500.copyWith(
+            color:
+                isSelected
+                    ? JasaraPalette.dark1
+                    : JasaraPalette.scaffoldBackground,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
 class Sidebar extends StatelessWidget {
   final bool isCollapsed;
   final VoidCallback toggleCollapse;
@@ -57,51 +150,21 @@ class Sidebar extends StatelessWidget {
           Container(
             child: Column(
               children: [
-                ...items.map(
-                  (item) => Container(
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.only(left: 12),
-                    decoration:
-                        item.isSelected
-                            ? BoxDecoration(
-                              color: Colors.grey.shade100,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(
-                                  100,
-                                ), // outer top-left curve
-                                bottomLeft: Radius.circular(100),
-                                topRight: Radius.circular(0), // inner corner
-                                bottomRight: Radius.circular(0), // inner corner
-                              ),
-                            )
-                            : null,
-                    child: ListTile(
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                      leading: Icon(
-                        item.icon,
-                        color:
-                            item.isSelected
-                                ? Colors.black
-                                : JasaraPalette.scaffoldBackground,
-                      ),
-                      title:
-                          isCollapsed
-                              ? null
-                              : Text(
-                                item.label,
-                                style: JasaraTextStyles.primaryText500.copyWith(
-                                  color:
-                                      item.isSelected
-                                          ? JasaraPalette.dark1
-                                          : JasaraPalette.scaffoldBackground,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                      onTap: item.onTap,
-                    ),
-                  ),
-                ),
+                ...items.map((item) {
+                  return isCollapsed
+                      ? _CollapsedSidebarItem(
+                        icon: item.icon,
+                        tooltip: item.label,
+                        onTap: item.onTap,
+                        isSelected: item.isSelected,
+                      )
+                      : _ExpandedSidebarItem(
+                        icon: item.icon,
+                        label: item.label,
+                        onTap: item.onTap,
+                        isSelected: item.isSelected,
+                      );
+                }),
               ],
             ),
           ),
@@ -133,12 +196,13 @@ class Sidebar extends StatelessWidget {
                     onTap: onRoleSwitch,
                   ),
                 ),
+
                 ProfileTile(
                   name: 'F. Sullivan',
                   title: '@Frankie',
                   imageUrl:
                       'assets/images/download.jpeg', // replace with real URL or Asset
-                  isCollapsed: false,
+                  isCollapsed: isCollapsed,
                   onTap: () => print('Profile clicked'),
                 ),
 
