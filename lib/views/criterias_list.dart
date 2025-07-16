@@ -175,7 +175,7 @@ class _CriteriasListState extends State<CriteriasList> {
                   RFIStatModel(
                     label: 'Total Criteria',
                     value: '108',
-                    icon: Icons.list,
+                    icon: Icons.list_alt,
                     gradientColors: [
                       JasaraPalette.indigoBlue,
                       JasaraPalette.primary,
@@ -193,7 +193,7 @@ class _CriteriasListState extends State<CriteriasList> {
                   RFIStatModel(
                     label: 'Inactive Criteria',
                     value: '30',
-                    icon: Icons.cancel,
+                    icon: Icons.remove_circle,
                     gradientColors: [
                       JasaraPalette.primary,
                       JasaraPalette.indigoBlue,
