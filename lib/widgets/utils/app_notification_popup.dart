@@ -1,6 +1,4 @@
-// notification_bell_button.dart
 import 'package:flutter/material.dart';
-
 import 'app_palette.dart';
 
 class NotificationBellButton extends StatelessWidget {
@@ -20,7 +18,7 @@ class NotificationBellButton extends StatelessWidget {
         children: [
           const Icon(
             Icons.notifications_outlined,
-            size: 36,
+            size: 32,
             color: JasaraPalette.dark1,
           ),
           if (notifications.isNotEmpty)
@@ -28,7 +26,7 @@ class NotificationBellButton extends StatelessWidget {
               right: 0,
               top: -2,
               child: Container(
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
                 decoration: const BoxDecoration(
                   color: Colors.purple,
                   shape: BoxShape.circle,
