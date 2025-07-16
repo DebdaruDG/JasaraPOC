@@ -29,11 +29,12 @@ class DashboardAppBar extends StatelessWidget {
             ),
           ),
           SizedBox(
-            width: 300,
+            width: MediaQuery.of(context).size.width * 0.125,
             child: TextField(
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
+                suffixIcon: const Icon(Icons.search),
                 hintText: 'Search something here...',
+                hintStyle: JasaraTextStyles.primaryText400,
                 filled: true,
                 fillColor: JasaraPalette.charcoalGrey.withOpacity(0.1),
                 border: OutlineInputBorder(

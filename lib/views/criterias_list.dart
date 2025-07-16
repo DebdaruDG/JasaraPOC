@@ -162,7 +162,7 @@ class _CriteriasListState extends State<CriteriasList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: JasaraPalette.background,
+      backgroundColor: JasaraPalette.white,
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
