@@ -131,56 +131,77 @@ class _CriteriasListState extends State<CriteriasList> {
                 ],
               ),
             ),
+            actionsAlignment: MainAxisAlignment.center,
             actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("Cancel"),
-              ),
-              ElevatedButton(
-                onPressed: () async {
-                  final criteriaName = data.criteriaController.text.trim();
-                  final textInstruction =
-                      data.instructionController.text.trim();
+              Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: JasaraPalette.red,
+                        foregroundColor: JasaraPalette.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text("Cancel"),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final criteriaName =
+                            data.criteriaController.text.trim();
+                        final textInstruction =
+                            data.instructionController.text.trim();
 
-                  if (criteriaName.isEmpty || textInstruction.isEmpty) {
-                    JasaraToast.error(context, "Please fill all fields.");
-                    return;
-                  }
+                        if (criteriaName.isEmpty || textInstruction.isEmpty) {
+                          JasaraToast.error(context, "Please fill all fields.");
+                          return;
+                        }
 
-                  final provider = Provider.of<CriteriaProvider>(
-                    context,
-                    listen: false,
-                  );
+                        final provider = Provider.of<CriteriaProvider>(
+                          context,
+                          listen: false,
+                        );
 
-                  try {
-                    await provider.createCriteriaBE(
-                      criteriaName,
-                      textInstruction,
-                      pdf1: data.files[0],
-                      pdf2: data.files[1],
-                      pdf3: data.files[2],
-                    );
-                    await JasaraToast.success(
-                      context,
-                      "Criteria added successfully!",
-                    );
+                        try {
+                          await provider.createCriteriaBE(
+                            criteriaName,
+                            textInstruction,
+                            pdf1: data.files[0],
+                            pdf2: data.files[1],
+                            pdf3: data.files[2],
+                          );
+                          await JasaraToast.success(
+                            context,
+                            "Criteria added successfully!",
+                          );
 
-                    if (editIndex != null) {
-                      setState(() => _criteriaList[editIndex] = data);
-                    } else {
-                      _addCriteria(data);
-                    }
-                    Navigator.pop(context);
-                  } catch (e) {
-                    console.log('errors - $e');
-                    JasaraToast.error(context, "Something went wrong!");
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: JasaraPalette.primary,
-                  foregroundColor: JasaraPalette.white,
-                ),
-                child: const Text("Save"),
+                          if (editIndex != null) {
+                            setState(() => _criteriaList[editIndex] = data);
+                          } else {
+                            _addCriteria(data);
+                          }
+                          Navigator.pop(context);
+                        } catch (e) {
+                          console.log('errors - $e');
+                          JasaraToast.error(context, "Something went wrong!");
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: JasaraPalette.teal,
+                        foregroundColor: JasaraPalette.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text("Save"),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
