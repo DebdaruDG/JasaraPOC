@@ -15,6 +15,7 @@ class CustomButton2 extends StatelessWidget {
   final double? borderWidth;
   final Widget? customWidget; // prefer for icons
   final Widget? prefixIcon; // prefer for icons
+  final Widget? suffixIcon; // prefer for icons
 
   const CustomButton2({
     super.key,
@@ -30,6 +31,7 @@ class CustomButton2 extends StatelessWidget {
     this.borderColor,
     this.borderWidth,
     this.prefixIcon,
+    this.suffixIcon,
   });
 
   @override
@@ -68,6 +70,7 @@ class CustomButton2 extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                     ),
+                    if (suffixIcon != null) suffixIcon!,
                   ],
                 ),
           ),

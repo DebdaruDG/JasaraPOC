@@ -46,15 +46,28 @@ class _CriteriasListState extends State<CriteriasList> {
       context: context,
       builder:
           (context) => AlertDialog(
-            backgroundColor: const Color.fromARGB(255, 240, 247, 221),
+            backgroundColor: JasaraPalette.white,
             contentPadding: const EdgeInsets.all(16),
-            title: Text(
-              editIndex == null ? 'Add Criteria' : 'Update Criteria',
-              style: JasaraTextStyles.primaryText500.copyWith(
-                fontSize: 20,
-                color: JasaraPalette.dark2,
-                fontWeight: FontWeight.w700,
-              ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  editIndex == null ? 'Add Criteria' : 'Update Criteria',
+                  style: JasaraTextStyles.primaryText500.copyWith(
+                    fontSize: 20,
+                    color: JasaraPalette.dark2,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(
+                    Icons.cancel_outlined,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                ),
+              ],
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -76,9 +89,22 @@ class _CriteriasListState extends State<CriteriasList> {
                         horizontal: 16.0,
                         vertical: 12.0,
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                        borderSide: BorderSide(
+                          color: JasaraPalette.charcoalGrey,
+                          width: 1.0,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16.0),
+                        borderSide: BorderSide(
+                          color: JasaraPalette.grey,
+                          width: 1.0,
+                        ),
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(16.0),
-                        borderSide: BorderSide.none,
                       ),
                     ),
                   ),
