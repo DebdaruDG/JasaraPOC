@@ -44,9 +44,9 @@ class AppTextField extends StatelessWidget {
           horizontal: 16.0,
           vertical: 12.0,
         ),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6.0)),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.0),
+          borderRadius: BorderRadius.circular(6.0),
           borderSide: const BorderSide(
             color: JasaraPalette.charcoalGrey,
             width: 1,

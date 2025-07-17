@@ -48,6 +48,9 @@ class _CriteriasListState extends State<CriteriasList> {
           (context) => AlertDialog(
             backgroundColor: JasaraPalette.white,
             contentPadding: const EdgeInsets.all(16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16.0),
+            ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -74,7 +77,7 @@ class _CriteriasListState extends State<CriteriasList> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AppTextField(
-                    label: "Criteria (max 1000 chars)",
+                    label: "Title",
                     controller: data.criteriaController,
                   ),
                   const SizedBox(height: 12),
@@ -97,7 +100,7 @@ class _CriteriasListState extends State<CriteriasList> {
                         ),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.0),
+                        borderRadius: BorderRadius.circular(6.0),
                         borderSide: BorderSide(
                           color: JasaraPalette.grey,
                           width: 1.0,
