@@ -45,165 +45,260 @@ class _CriteriasListState extends State<CriteriasList> {
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            backgroundColor: JasaraPalette.white,
-            contentPadding: const EdgeInsets.all(16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  editIndex == null ? 'Add Criteria' : 'Update Criteria',
-                  style: JasaraTextStyles.primaryText500.copyWith(
-                    fontSize: 20,
-                    color: JasaraPalette.dark2,
-                    fontWeight: FontWeight.w700,
-                  ),
+          (context) => StatefulBuilder(
+            builder: (BuildContext context, StateSetter dialogSetState) {
+              return AlertDialog(
+                backgroundColor: JasaraPalette.white,
+                contentPadding: const EdgeInsets.all(16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: Icon(
-                    Icons.cancel_outlined,
-                    color: Colors.red,
-                    size: 20,
-                  ),
-                ),
-              ],
-            ),
-            content: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppTextField(
-                    label: "Title",
-                    controller: data.criteriaController,
-                  ),
-                  const SizedBox(height: 12),
-                  TextFormField(
-                    controller: data.instructionController,
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                      labelText: "Text Instructions (max 2500 chars)",
-                      filled: true,
-                      fillColor: JasaraPalette.white,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16.0,
-                        vertical: 12.0,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: BorderSide(
-                          color: JasaraPalette.charcoalGrey,
-                          width: 1.0,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6.0),
-                        borderSide: BorderSide(
-                          color: JasaraPalette.grey,
-                          width: 1.0,
-                        ),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16.0),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      editIndex == null ? 'Add Criteria' : 'Update Criteria',
+                      style: JasaraTextStyles.primaryText500.copyWith(
+                        fontSize: 20,
+                        color: JasaraPalette.dark2,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: List.generate(3, (fileIndex) {
-                      return Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                          child: _buildFilePicker(
-                            label: "Instructions PDF ${fileIndex + 1}",
-                            file: data.files[fileIndex],
-                            onFilePicked: (file) {
-                              setState(() => data.files[fileIndex] = file);
-                            },
+                    InkWell(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(
+                        Icons.cancel_outlined,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                    ),
+                  ],
+                ),
+                content: SizedBox(
+                  width: 600, // Larger dialog width
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppTextField(
+                          label: "Title",
+                          controller: data.criteriaController,
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          controller: data.instructionController,
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                            labelText: "Text Instructions (max 2500 chars)",
+                            filled: true,
+                            fillColor: JasaraPalette.white,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 12.0,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: BorderSide(
+                                color: JasaraPalette.charcoalGrey,
+                                width: 1.0,
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: BorderSide(
+                                color: JasaraPalette.grey,
+                                width: 1.0,
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16.0),
+                            ),
                           ),
                         ),
-                      );
-                    }),
-                  ),
-                ],
-              ),
-            ),
-            actionsAlignment: MainAxisAlignment.center,
-            actions: [
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: JasaraPalette.red,
-                        foregroundColor: JasaraPalette.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                        const SizedBox(height: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Display list of attached files
+                            if (data.files.any((file) => file != null))
+                              Wrap(
+                                spacing: 8.0,
+                                runSpacing: 8.0,
+                                children:
+                                    data.files
+                                        .asMap()
+                                        .entries
+                                        .where((entry) => entry.value != null)
+                                        .map((entry) {
+                                          final index = entry.key;
+                                          final file = entry.value!;
+                                          return Chip(
+                                            label: Text(
+                                              file.path.split("/").last,
+                                              style:
+                                                  JasaraTextStyles
+                                                      .primaryText400,
+                                            ),
+                                            deleteIcon: const Icon(
+                                              Icons.close,
+                                              size: 18,
+                                              color: Colors.red,
+                                            ),
+                                            onDeleted: () {
+                                              dialogSetState(() {
+                                                data.files[index] = null;
+                                              });
+                                            },
+                                            backgroundColor:
+                                                JasaraPalette.white,
+                                            side: BorderSide(
+                                              color: JasaraPalette.primary
+                                                  .withOpacity(0.4),
+                                            ),
+                                          );
+                                        })
+                                        .toList(),
+                              ),
+                            const SizedBox(height: 8),
+                            // Attach Supporting Files button
+                            SizedBox(
+                              width: double.infinity,
+                              child: CustomButton2(
+                                label: "Attach Supporting Files",
+                                prefixIcon: const Icon(
+                                  Icons.attach_file,
+                                  color: JasaraPalette.white,
+                                  size: 20,
+                                ),
+                                backgroundColor: JasaraPalette.indigoBlue,
+                                onPressed: () async {
+                                  if (data.files
+                                          .where((file) => file != null)
+                                          .length >=
+                                      3) {
+                                    JasaraToast.error(
+                                      context,
+                                      "Maximum 3 files allowed.",
+                                    );
+                                    return;
+                                  }
+                                  final result = await FilePicker.platform
+                                      .pickFiles(
+                                        type: FileType.custom,
+                                        allowedExtensions: ['pdf'],
+                                        withData: false,
+                                      );
+                                  if (result != null &&
+                                      result.files.single.size <= 500 * 1024) {
+                                    final path = result.files.single.path;
+                                    if (path != null) {
+                                      dialogSetState(() {
+                                        // Find the first null slot in files list
+                                        final index = data.files.indexWhere(
+                                          (file) => file == null,
+                                        );
+                                        if (index != -1) {
+                                          data.files[index] = File(path);
+                                        }
+                                      });
+                                    }
+                                  } else if (result != null) {
+                                    JasaraToast.error(
+                                      context,
+                                      "File size exceeds 500KB limit.",
+                                    );
+                                  }
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text("Cancel"),
+                      ],
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final criteriaName =
-                            data.criteriaController.text.trim();
-                        final textInstruction =
-                            data.instructionController.text.trim();
-
-                        if (criteriaName.isEmpty || textInstruction.isEmpty) {
-                          JasaraToast.error(context, "Please fill all fields.");
-                          return;
-                        }
-
-                        final provider = Provider.of<CriteriaProvider>(
-                          context,
-                          listen: false,
-                        );
-
-                        try {
-                          await provider.createCriteriaBE(
-                            criteriaName,
-                            textInstruction,
-                            pdf1: data.files[0],
-                            pdf2: data.files[1],
-                            pdf3: data.files[2],
-                          );
-                          await JasaraToast.success(
-                            context,
-                            "Criteria added successfully!",
-                          );
-
-                          if (editIndex != null) {
-                            setState(() => _criteriaList[editIndex] = data);
-                          } else {
-                            _addCriteria(data);
-                          }
-                          Navigator.pop(context);
-                        } catch (e) {
-                          console.log('errors - $e');
-                          JasaraToast.error(context, "Something went wrong!");
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: JasaraPalette.teal,
-                        foregroundColor: JasaraPalette.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                ),
+                actionsAlignment: MainAxisAlignment.center,
+                actions: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: JasaraPalette.red,
+                            foregroundColor: JasaraPalette.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text("Cancel"),
                         ),
                       ),
-                      child: const Text("Save"),
-                    ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final criteriaName =
+                                data.criteriaController.text.trim();
+                            final textInstruction =
+                                data.instructionController.text.trim();
+
+                            if (criteriaName.isEmpty ||
+                                textInstruction.isEmpty) {
+                              JasaraToast.error(
+                                context,
+                                "Please fill all fields.",
+                              );
+                              return;
+                            }
+
+                            final provider = Provider.of<CriteriaProvider>(
+                              context,
+                              listen: false,
+                            );
+
+                            try {
+                              await provider.createCriteriaBE(
+                                criteriaName,
+                                textInstruction,
+                                pdf1: data.files[0],
+                                pdf2: data.files[1],
+                                pdf3: data.files[2],
+                              );
+                              await JasaraToast.success(
+                                context,
+                                "Criteria added successfully!",
+                              );
+
+                              if (editIndex != null) {
+                                setState(() => _criteriaList[editIndex] = data);
+                              } else {
+                                _addCriteria(data);
+                              }
+                              Navigator.pop(context);
+                            } catch (e) {
+                              console.log('errors - $e');
+                              JasaraToast.error(
+                                context,
+                                "Something went wrong!",
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: JasaraPalette.teal,
+                            foregroundColor: JasaraPalette.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          child: const Text("Save"),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
-              ),
-            ],
+              );
+            },
           ),
     );
   }
