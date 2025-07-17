@@ -8,6 +8,7 @@ import 'providers/assessment_page_provider.dart';
 import 'providers/assessment_provider.dart';
 import 'app.dart';
 import 'providers/criteria_provider.dart';
+import 'providers/screen_switch_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 🛠 Needed before async ops
@@ -21,6 +22,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => CriteriaProvider()),
         ChangeNotifierProvider(create: (_) => AssessmentProvider()),
         ChangeNotifierProvider(create: (_) => HomePageProvider()),
+        ChangeNotifierProvider(create: (_) => ScreenSwitchProvider()),
       ],
       child: const MyApp(),
     ),

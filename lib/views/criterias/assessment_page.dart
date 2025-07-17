@@ -1,3 +1,4 @@
+import 'dart:developer' as console;
 import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
@@ -23,22 +24,26 @@ class _AssessmentPageState extends State<AssessmentPage> {
   @override
   void initState() {
     super.initState();
-    final criteriaVM = Provider.of<CriteriaProvider>(context, listen: false);
-    final assessmentVM = Provider.of<AssessmentProvider>(
-      context,
-      listen: false,
-    );
-    Future.delayed(Duration.zero, () async {
-      await assessmentVM.clearEvaluateResponses();
-      await criteriaVM.fetchCriteriaList();
-      for (var item in criteriaVM.criteriaListResponse) {
-        assessmentVM.evaluateBE(
-          widget.formJson ?? {},
-          item.assistantId,
-          widget.file!,
-        );
-      }
-    });
+    try {
+      final criteriaVM = Provider.of<CriteriaProvider>(context, listen: false);
+      final assessmentVM = Provider.of<AssessmentProvider>(
+        context,
+        listen: false,
+      );
+      Future.delayed(Duration.zero, () async {
+        await assessmentVM.clearEvaluateResponses();
+        await criteriaVM.fetchCriteriaList();
+        for (var item in criteriaVM.criteriaListResponse) {
+          assessmentVM.evaluateBE(
+            widget.formJson ?? {},
+            item.assistantId,
+            widget.file!,
+          );
+        }
+      });
+    } catch (exc) {
+      console.log('exc - $exc');
+    }
   }
 
   @override
