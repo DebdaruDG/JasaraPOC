@@ -204,8 +204,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                       final path = result.files.single.path;
                                       final originalName =
                                           result.files.single.name;
-                                      if (path != null &&
-                                          originalName != null) {
+                                      if (path != null) {
                                         dialogSetState(() {
                                           // Find the first null slot in files list
                                           final index = data.files.indexWhere(

@@ -34,7 +34,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
       create: (_) => HomePageProvider(),
       child: Consumer<HomePageProvider>(
         builder: (context, provider, _) {
-          final fields = [
+          final threeFields = [
             AppTextField(
               label: "Project Name",
               controller: provider.controllers['project_name']!,
@@ -46,6 +46,62 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
             AppTextField(
               label: "Budget",
               controller: provider.controllers['budget']!,
+            ),
+          ];
+
+          // New thirteen fields
+          final thirteenFields = [
+            AppTextField(
+              label: "Opportunity Code",
+              controller: provider.controllers['opportunityCode']!,
+            ),
+            AppTextField(
+              label: "Opportunity Name",
+              controller: provider.controllers['opportunityName']!,
+            ),
+            AppTextField(
+              label: "Date",
+              controller: provider.controllers['date']!,
+            ),
+            AppTextField(
+              label: "Proposal Manager",
+              controller: provider.controllers['proposalManager']!,
+            ),
+            AppTextField(
+              label: "Brief Description of Work",
+              controller: provider.controllers['description']!,
+            ),
+            AppTextField(
+              label: "Project Type",
+              controller: provider.controllers['projectType']!,
+            ),
+            AppTextField(
+              label: "Client Name",
+              controller: provider.controllers['clientName']!,
+            ),
+            AppTextField(
+              label: "Client Type",
+              controller: provider.controllers['clientType']!,
+            ),
+            AppTextField(
+              label: "Relationship with Client",
+              controller: provider.controllers['relationship']!,
+            ),
+            AppTextField(
+              label: "Submission Date",
+              controller: provider.controllers['submissionDate']!,
+            ),
+            AppTextField(
+              label: "Bidding Criteria",
+              controller: provider.controllers['biddingCriteria']!,
+            ),
+            AppTextField(
+              label: "Is it a Targeted Proposal?",
+              controller: provider.controllers['isTargeted']!,
+            ),
+            AppTextField(
+              label: "Comments",
+              controller: provider.controllers['comments']!,
             ),
           ];
 
@@ -89,12 +145,13 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                   Wrap(
                     spacing: 16,
                     runSpacing: 16,
+                    alignment: WrapAlignment.spaceBetween,
                     children:
-                        fields.map((field) {
+                        thirteenFields.map((field) {
                           return SizedBox(
                             width:
                                 isWide
-                                    ? MediaQuery.of(context).size.width * 0.35
+                                    ? MediaQuery.of(context).size.width * 0.3
                                     : double.infinity,
                             child: field,
                           );
@@ -177,7 +234,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
   ) {
     return SizedBox(
       width: double.infinity, // Ensure it takes available width
-      height: 150, // Set a minimum height to ensure hit-testable area
+      height: 120, // Set a minimum height to ensure hit-testable area
       child: DragTarget<Object>(
         onWillAcceptWithDetails: (details) {
           provider.setDragOver(true);
