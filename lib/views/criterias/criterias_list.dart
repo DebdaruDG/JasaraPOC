@@ -134,7 +134,8 @@ class _CriteriasListState extends State<CriteriasList> {
                                           final file = entry.value!;
                                           return Chip(
                                             label: Text(
-                                              file.path.split("/").last,
+                                              data.fileNames[index] ??
+                                                  file.path.split("/").last,
                                               style:
                                                   JasaraTextStyles
                                                       .primaryText400,
@@ -147,6 +148,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                             onDeleted: () {
                                               dialogSetState(() {
                                                 data.files[index] = null;
+                                                data.fileNames[index] = null;
                                               });
                                             },
                                             backgroundColor:
@@ -191,14 +193,35 @@ class _CriteriasListState extends State<CriteriasList> {
                                   if (result != null &&
                                       result.files.single.size <= 500 * 1024) {
                                     final path = result.files.single.path;
-                                    if (path != null) {
+                                    final originalName =
+                                        result.files.single.name;
+                                    if (path != null && originalName != null) {
                                       dialogSetState(() {
                                         // Find the first null slot in files list
                                         final index = data.files.indexWhere(
                                           (file) => file == null,
                                         );
                                         if (index != -1) {
+                                          // Check for duplicate file names and append counter if needed
+                                          String displayName = originalName;
+                                          int counter = 1;
+                                          final existingNames =
+                                              data.fileNames
+                                                  .where((name) => name != null)
+                                                  .toList();
+                                          while (existingNames.contains(
+                                            displayName,
+                                          )) {
+                                            final nameWithoutExtension =
+                                                originalName.split('.').first;
+                                            final extension =
+                                                originalName.split('.').last;
+                                            displayName =
+                                                '$nameWithoutExtension ($counter).$extension';
+                                            counter++;
+                                          }
                                           data.files[index] = File(path);
+                                          data.fileNames[index] = displayName;
                                         }
                                       });
                                     }
@@ -507,6 +530,7 @@ class CriteriaData {
   final TextEditingController criteriaController = TextEditingController();
   final TextEditingController instructionController = TextEditingController();
   final List<File?> files = [null, null, null];
+  final List<String?> fileNames = [null, null, null];
 
   void dispose() {
     criteriaController.dispose();
