@@ -75,7 +75,9 @@ class _CriteriasListState extends State<CriteriasList> {
                   ],
                 ),
                 content: SizedBox(
-                  width: 600, // Larger dialog width
+                  width:
+                      MediaQuery.of(context).size.width /
+                      2.5, // Larger dialog width
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -141,7 +143,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                                       .primaryText400,
                                             ),
                                             deleteIcon: const Icon(
-                                              Icons.close,
+                                              Icons.delete,
                                               size: 18,
                                               color: Colors.red,
                                             ),
@@ -162,76 +164,87 @@ class _CriteriasListState extends State<CriteriasList> {
                                         .toList(),
                               ),
                             const SizedBox(height: 8),
-                            // Attach Supporting Files button
+                            // Attach Supporting Files button with wider appearance
                             SizedBox(
                               width: double.infinity,
-                              child: CustomButton2(
-                                label: "Attach Supporting Files",
-                                prefixIcon: const Icon(
-                                  Icons.attach_file,
-                                  color: JasaraPalette.white,
-                                  size: 20,
-                                ),
-                                backgroundColor: JasaraPalette.indigoBlue,
-                                onPressed: () async {
-                                  if (data.files
-                                          .where((file) => file != null)
-                                          .length >=
-                                      3) {
-                                    JasaraToast.error(
-                                      context,
-                                      "Maximum 3 files allowed.",
-                                    );
-                                    return;
-                                  }
-                                  final result = await FilePicker.platform
-                                      .pickFiles(
-                                        type: FileType.custom,
-                                        allowedExtensions: ['pdf'],
-                                        withData: false,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                ), // Add padding to emphasize width
+                                child: CustomButton2(
+                                  label: "Attach Supporting Files",
+                                  prefixIcon: const Icon(
+                                    Icons.attach_file,
+                                    color: JasaraPalette.white,
+                                    size: 20,
+                                  ),
+                                  backgroundColor: JasaraPalette.indigoBlue,
+                                  height:
+                                      50, // Increased height for visual emphasis
+                                  onPressed: () async {
+                                    if (data.files
+                                            .where((file) => file != null)
+                                            .length >=
+                                        3) {
+                                      JasaraToast.error(
+                                        context,
+                                        "Maximum 3 files allowed.",
                                       );
-                                  if (result != null &&
-                                      result.files.single.size <= 500 * 1024) {
-                                    final path = result.files.single.path;
-                                    final originalName =
-                                        result.files.single.name;
-                                    if (path != null && originalName != null) {
-                                      dialogSetState(() {
-                                        // Find the first null slot in files list
-                                        final index = data.files.indexWhere(
-                                          (file) => file == null,
-                                        );
-                                        if (index != -1) {
-                                          // Check for duplicate file names and append counter if needed
-                                          String displayName = originalName;
-                                          int counter = 1;
-                                          final existingNames =
-                                              data.fileNames
-                                                  .where((name) => name != null)
-                                                  .toList();
-                                          while (existingNames.contains(
-                                            displayName,
-                                          )) {
-                                            final nameWithoutExtension =
-                                                originalName.split('.').first;
-                                            final extension =
-                                                originalName.split('.').last;
-                                            displayName =
-                                                '$nameWithoutExtension ($counter).$extension';
-                                            counter++;
-                                          }
-                                          data.files[index] = File(path);
-                                          data.fileNames[index] = displayName;
-                                        }
-                                      });
+                                      return;
                                     }
-                                  } else if (result != null) {
-                                    JasaraToast.error(
-                                      context,
-                                      "File size exceeds 500KB limit.",
-                                    );
-                                  }
-                                },
+                                    final result = await FilePicker.platform
+                                        .pickFiles(
+                                          type: FileType.custom,
+                                          allowedExtensions: ['pdf'],
+                                          withData: false,
+                                        );
+                                    if (result != null &&
+                                        result.files.single.size <=
+                                            500 * 1024) {
+                                      final path = result.files.single.path;
+                                      final originalName =
+                                          result.files.single.name;
+                                      if (path != null &&
+                                          originalName != null) {
+                                        dialogSetState(() {
+                                          // Find the first null slot in files list
+                                          final index = data.files.indexWhere(
+                                            (file) => file == null,
+                                          );
+                                          if (index != -1) {
+                                            // Check for duplicate file names and append counter if needed
+                                            String displayName = originalName;
+                                            int counter = 1;
+                                            final existingNames =
+                                                data.fileNames
+                                                    .where(
+                                                      (name) => name != null,
+                                                    )
+                                                    .toList();
+                                            while (existingNames.contains(
+                                              displayName,
+                                            )) {
+                                              final nameWithoutExtension =
+                                                  originalName.split('.').first;
+                                              final extension =
+                                                  originalName.split('.').last;
+                                              displayName =
+                                                  '$nameWithoutExtension ($counter).$extension';
+                                              counter++;
+                                            }
+                                            data.files[index] = File(path);
+                                            data.fileNames[index] = displayName;
+                                          }
+                                        });
+                                      }
+                                    } else if (result != null) {
+                                      JasaraToast.error(
+                                        context,
+                                        "File size exceeds 500KB limit.",
+                                      );
+                                    }
+                                  },
+                                ),
                               ),
                             ),
                           ],
