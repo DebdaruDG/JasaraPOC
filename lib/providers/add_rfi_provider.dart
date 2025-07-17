@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'dart:html' as html;
 
@@ -21,22 +22,26 @@ class HomePageProvider extends ChangeNotifier {
     'location': TextEditingController(),
   };
 
-  String? _finalDecision;
-  html.File? _uploadedFile;
+  html.File? _uploadedFileHtml;
+  File? _uploadedFile;
+  String? _uploadedFileName;
   bool _isDragOver = false;
 
   Map<String, TextEditingController> get controllers => _controllers;
-  String? get finalDecision => _finalDecision;
-  html.File? get uploadedFile => _uploadedFile;
+  File? get uploadedFile => _uploadedFile;
+  html.File? get uploadedFileHtml => _uploadedFileHtml;
+  String? get uploadedFileName => _uploadedFileName;
   bool get isDragOver => _isDragOver;
 
   void setFinalDecision(String? value) {
-    _finalDecision = value;
+    // Preserved for compatibility, though unused in current context
     notifyListeners();
   }
 
-  Future<void> setUploadedFile(html.File? file) async {
-    _uploadedFile = file;
+  void setUploadedFile(html.File? fileHtml, File? fileIo, [String? fileName]) {
+    _uploadedFileHtml = fileHtml;
+    _uploadedFile = fileIo;
+    _uploadedFileName = fileName;
     notifyListeners();
   }
 
