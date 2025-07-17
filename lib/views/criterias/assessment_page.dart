@@ -3,12 +3,12 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/response/evaluate_response_model.dart';
-import '../providers/assessment_page_provider.dart';
-import '../providers/assessment_provider.dart';
-import '../providers/criteria_provider.dart';
-import '../widgets/utils/app_palette.dart';
-import '../widgets/utils/app_textStyles.dart';
+import '../../models/response/evaluate_response_model.dart';
+import '../../providers/assessment_page_provider.dart';
+import '../../providers/assessment_provider.dart';
+import '../../providers/criteria_provider.dart';
+import '../../widgets/utils/app_palette.dart';
+import '../../widgets/utils/app_textStyles.dart';
 
 class AssessmentPage extends StatefulWidget {
   final html.File? file;

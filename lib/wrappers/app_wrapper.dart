@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/app_state_provider.dart';
-import '../views/criterias_list.dart';
-import '../views/rfi_list.dart';
+import '../views/criterias/criterias_list.dart';
+import '../views/rfis/rfi_list.dart';
 
 class AppWrapper extends StatelessWidget {
   const AppWrapper({super.key});

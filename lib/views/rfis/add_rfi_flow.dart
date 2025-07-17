@@ -6,15 +6,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../core/services/file_service.dart';
-import '../providers/add_rfi_provider.dart';
-import '../providers/criteria_provider.dart';
-import '../widgets/utils/app_button.dart';
-import '../widgets/utils/app_palette.dart';
-import '../widgets/utils/app_textStyles.dart';
-import '../widgets/utils/app_text_field.dart';
-import '../widgets/utils/app_toast.dart';
-import 'assessment_page.dart';
+import '../../core/services/file_service.dart';
+import '../../providers/add_rfi_provider.dart';
+import '../../providers/criteria_provider.dart';
+import '../../widgets/utils/app_button.dart';
+import '../../widgets/utils/app_palette.dart';
+import '../../widgets/utils/app_textStyles.dart';
+import '../../widgets/utils/app_text_field.dart';
+import '../../widgets/utils/app_toast.dart';
+import '../criterias/assessment_page.dart';
 
 class AddRFIDocumentPage extends StatefulWidget {
   const AddRFIDocumentPage({super.key});

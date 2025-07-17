@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../views/add_rfi_flow.dart';
+import '../views/rfis/add_rfi_flow.dart';
 import 'utils/app_palette.dart';
 
 void showAddRFIModal(BuildContext context) {

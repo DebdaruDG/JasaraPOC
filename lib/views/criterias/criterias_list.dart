@@ -4,16 +4,16 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/criteria_provider.dart';
-import '../widgets/utils/app_palette.dart';
-import '../widgets/utils/app_textStyles.dart';
-import '../widgets/generic_data_table.dart';
-import '../widgets/popup_action_menu.dart';
-import '../widgets/rfi_stat_card.dart';
-import '../models/rfi_stat_model.dart';
-import '../widgets/utils/app_button.dart';
-import '../widgets/utils/app_text_field.dart';
-import '../widgets/utils/app_toast.dart';
+import '../../providers/criteria_provider.dart';
+import '../../widgets/utils/app_palette.dart';
+import '../../widgets/utils/app_textStyles.dart';
+import '../../widgets/generic_data_table.dart';
+import '../../widgets/popup_action_menu.dart';
+import '../../widgets/rfi_stat_card.dart';
+import '../../models/rfi_stat_model.dart';
+import '../../widgets/utils/app_button.dart';
+import '../../widgets/utils/app_text_field.dart';
+import '../../widgets/utils/app_toast.dart';
 
 class CriteriasList extends StatefulWidget {
   const CriteriasList({super.key});
