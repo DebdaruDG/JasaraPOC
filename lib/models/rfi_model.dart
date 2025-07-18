@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/utils/app_palette.dart';
+
 class RFIModel {
   final String title;
   final String comment;
@@ -18,9 +20,9 @@ class RFIModel {
   });
 
   Color get progressColor {
-    if (result == 'GO') return Colors.teal;
-    if (result == 'NO GO') return Colors.red;
-    return Colors.amber;
+    if (result == 'GO') return JasaraPalette.go;
+    if (result == 'NO GO') return JasaraPalette.noGo;
+    return JasaraPalette.review;
   }
 
   String get resultLabel {
