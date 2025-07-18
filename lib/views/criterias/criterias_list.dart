@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/services/firebase/core_service.dart';
 import '../../providers/criteria_provider.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
@@ -501,8 +502,66 @@ class _CriteriasListState extends State<CriteriasList> {
                               onEdit: () => {},
                               onArchive:
                                   () => debugPrint('Archive: ${item.title}'),
-                              onDelete:
-                                  () => debugPrint('Delete: ${item.title}'),
+                              onDelete: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder:
+                                      (_) => AlertDialog(
+                                        title: const Text('Delete Criteria'),
+                                        content: const Text(
+                                          'Are you sure you want to delete this criteria?',
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.pop(
+                                                  context,
+                                                  false,
+                                                ),
+                                            child: const Text('Cancel'),
+                                          ),
+                                          TextButton(
+                                            onPressed:
+                                                () => Navigator.pop(
+                                                  context,
+                                                  true,
+                                                ),
+                                            child: const Text(
+                                              'Delete',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                );
+
+                                if (confirm == true) {
+                                  try {
+                                    await FirebaseService.deleteCriteria(
+                                      item.docId ?? '',
+                                    );
+
+                                    /// ✅ Refresh API after deletion
+                                    await Provider.of<CriteriaProvider>(
+                                      context,
+                                      listen: false,
+                                    ).fetchCriteriaList();
+
+                                    JasaraToast.success(
+                                      context,
+                                      "Criteria deleted successfully.",
+                                    );
+                                  } catch (e) {
+                                    console.log("Error deleting: $e");
+                                    JasaraToast.error(
+                                      context,
+                                      "Failed to delete the criteria.",
+                                    );
+                                  }
+                                }
+                              },
                             ),
                           ];
                         }).toList(),

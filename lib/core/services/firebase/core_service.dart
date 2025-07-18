@@ -119,6 +119,15 @@ class FirebaseService {
     }
   }
 
+  static Future<void> deleteCriteria(String documentId) async {
+    try {
+      await criteriaPdfs.doc(documentId).delete();
+      console.log('Criteria with ID $documentId deleted successfully.');
+    } catch (e) {
+      console.log('Error deleting criteria: $e');
+    }
+  }
+
   // Optional: Get all documents
   static Stream<QuerySnapshot> getCriteriaStream() {
     return criteriaPdfs.snapshots();
