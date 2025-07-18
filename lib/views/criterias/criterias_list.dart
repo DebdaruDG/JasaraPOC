@@ -53,31 +53,44 @@ class _CriteriasListState extends State<CriteriasList> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.0),
                 ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                title: Column(
                   children: [
-                    Text(
-                      editIndex == null ? 'Add Criteria' : 'Update Criteria',
-                      style: JasaraTextStyles.primaryText500.copyWith(
-                        fontSize: 20,
-                        color: JasaraPalette.dark2,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          editIndex == null
+                              ? 'Add Criteria'
+                              : 'Update Criteria',
+                          style: JasaraTextStyles.primaryText500.copyWith(
+                            fontSize: 20,
+                            color: JasaraPalette.dark2,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: Icon(
+                            Icons.cancel_outlined,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                        ),
+                      ],
                     ),
-                    InkWell(
-                      onTap: () => Navigator.pop(context),
-                      child: Icon(
-                        Icons.cancel_outlined,
-                        color: Colors.red,
-                        size: 20,
-                      ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.65,
+                      margin: const EdgeInsets.only(top: 12),
+                      height: 0.6,
+                      color: JasaraPalette.dark1,
                     ),
                   ],
                 ),
-                content: SizedBox(
+                content: Container(
                   width:
                       MediaQuery.of(context).size.width /
                       2.5, // Larger dialog width
+                  margin: const EdgeInsets.all(12),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -257,76 +270,84 @@ class _CriteriasListState extends State<CriteriasList> {
                   Row(
                     children: [
                       Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: JasaraPalette.red,
-                            foregroundColor: JasaraPalette.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                        child: SizedBox(
+                          height: 45,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: JasaraPalette.red,
+                              foregroundColor: JasaraPalette.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                             ),
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("Cancel"),
                           ),
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text("Cancel"),
                         ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            final criteriaName =
-                                data.criteriaController.text.trim();
-                            final textInstruction =
-                                data.instructionController.text.trim();
+                        child: SizedBox(
+                          height: 45,
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              final criteriaName =
+                                  data.criteriaController.text.trim();
+                              final textInstruction =
+                                  data.instructionController.text.trim();
 
-                            if (criteriaName.isEmpty ||
-                                textInstruction.isEmpty) {
-                              JasaraToast.error(
-                                context,
-                                "Please fill all fields.",
-                              );
-                              return;
-                            }
-
-                            final provider = Provider.of<CriteriaProvider>(
-                              context,
-                              listen: false,
-                            );
-
-                            try {
-                              await provider.createCriteriaBE(
-                                criteriaName,
-                                textInstruction,
-                                pdf1: data.files[0],
-                                pdf2: data.files[1],
-                                pdf3: data.files[2],
-                              );
-                              await JasaraToast.success(
-                                context,
-                                "Criteria added successfully!",
-                              );
-
-                              if (editIndex != null) {
-                                setState(() => _criteriaList[editIndex] = data);
-                              } else {
-                                _addCriteria(data);
+                              if (criteriaName.isEmpty ||
+                                  textInstruction.isEmpty) {
+                                JasaraToast.error(
+                                  context,
+                                  "Please fill all fields.",
+                                );
+                                return;
                               }
-                              Navigator.pop(context);
-                            } catch (e) {
-                              console.log('errors - $e');
-                              JasaraToast.error(
+
+                              final provider = Provider.of<CriteriaProvider>(
                                 context,
-                                "Something went wrong!",
+                                listen: false,
                               );
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: JasaraPalette.teal,
-                            foregroundColor: JasaraPalette.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+
+                              try {
+                                await provider.createCriteriaBE(
+                                  criteriaName,
+                                  textInstruction,
+                                  pdf1: data.files[0],
+                                  pdf2: data.files[1],
+                                  pdf3: data.files[2],
+                                );
+                                await JasaraToast.success(
+                                  context,
+                                  "Criteria added successfully!",
+                                );
+
+                                if (editIndex != null) {
+                                  setState(
+                                    () => _criteriaList[editIndex] = data,
+                                  );
+                                } else {
+                                  _addCriteria(data);
+                                }
+                                Navigator.pop(context);
+                              } catch (e) {
+                                console.log('errors - $e');
+                                JasaraToast.error(
+                                  context,
+                                  "Something went wrong!",
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: JasaraPalette.teal,
+                              foregroundColor: JasaraPalette.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
                             ),
+                            child: const Text("Save"),
                           ),
-                          child: const Text("Save"),
                         ),
                       ),
                     ],

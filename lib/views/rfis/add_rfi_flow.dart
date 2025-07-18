@@ -183,24 +183,36 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                             bottom: 16,
                             top: 16,
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
                             children: [
-                              Text(
-                                "Please upload the RFP Document and fill the form below",
-                                style: JasaraTextStyles.primaryText500.copyWith(
-                                  fontSize: 20,
-                                  color: JasaraPalette.dark2,
-                                  fontWeight: FontWeight.w700,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Please upload the RFP Document and fill the form below",
+                                    style: JasaraTextStyles.primaryText500
+                                        .copyWith(
+                                          fontSize: 20,
+                                          color: JasaraPalette.dark2,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                  ),
+                                  InkWell(
+                                    onTap: () => Navigator.pop(context),
+                                    child: Icon(
+                                      Icons.cancel_outlined,
+                                      color: Colors.redAccent,
+                                      size: 24,
+                                    ),
+                                  ),
+                                ],
                               ),
-                              InkWell(
-                                onTap: () => Navigator.pop(context),
-                                child: Icon(
-                                  Icons.cancel,
-                                  color: Colors.redAccent,
-                                  size: 24,
-                                ),
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.65,
+                                margin: const EdgeInsets.only(top: 12),
+                                height: 0.6,
+                                color: JasaraPalette.dark1,
                               ),
                             ],
                           ),
