@@ -26,4 +26,8 @@ class JasaraPalette {
   static const Color noGo = Color(0xFFF44336); // #f44336
   static const Color go = Color(0xFF00C4AD); // #00c4ad
   static const Color review = Color(0xFFFFA500); // #ffa500
+
+  static const Color pinkishRed = Color(0xFFF46A6A); // #f46a6a
+  static const Color mintGreen = Color(0xFF00C4AC); // #00c4ac
+  static const Color oceanBlue = Color(0xFF2F74ED); // #2f74ed
 }

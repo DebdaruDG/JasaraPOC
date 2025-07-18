@@ -183,87 +183,97 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                             bottom: 16,
                             top: 16,
                           ),
-                          child: Column(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Please upload the RFP Document and fill the form below",
-                                    style: JasaraTextStyles.primaryText500
-                                        .copyWith(
-                                          fontSize: 20,
-                                          color: JasaraPalette.dark2,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                  ),
-                                  InkWell(
-                                    onTap: () => Navigator.pop(context),
-                                    child: Icon(
-                                      Icons.cancel_outlined,
-                                      color: Colors.redAccent,
-                                      size: 24,
-                                    ),
-                                  ),
-                                ],
+                              Text(
+                                "AI Assessment Page",
+                                style: JasaraTextStyles.primaryText500.copyWith(
+                                  fontSize: 20,
+                                  color: JasaraPalette.dark2,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.65,
-                                margin: const EdgeInsets.only(top: 12),
-                                height: 0.6,
-                                color: JasaraPalette.dark1,
+                              InkWell(
+                                onTap: () => Navigator.pop(context),
+                                child: Icon(
+                                  Icons.close,
+                                  color: JasaraPalette.dark1,
+                                  size: 24,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 16),
                         _buildFileUploadField(context, provider),
                         const SizedBox(height: 24),
-                        Wrap(
-                          spacing: 16,
-                          runSpacing: 16,
-                          alignment: WrapAlignment.center,
+                        Column(
                           children: [
-                            ...provider.controllers.keys
-                                .where((key) => key != 'opportunityCode')
-                                .map((key) {
-                                  return SizedBox(
-                                    width:
-                                        isWide
-                                            ? MediaQuery.of(
-                                                  context,
-                                                ).size.width *
-                                                0.3
-                                            : double.infinity,
-                                    child: AppTextField(
-                                      label: key
-                                          .replaceAllMapped(
-                                            RegExp(r'(?<=[a-z])([A-Z])'),
-                                            (Match m) => ' ${m[1]}',
-                                          )
-                                          .split(' ')
-                                          .map(
-                                            (word) =>
-                                                word[0].toUpperCase() +
-                                                word.substring(1),
-                                          )
-                                          .join(' '),
-                                      controller: provider.controllers[key]!,
-                                    ),
-                                  );
-                                })
-                                .toList(),
+                            _buildDoubleFieldRow(
+                              context,
+                              provider,
+                              'opportunityCode',
+                              'opportunityName',
+                              isWide,
+                            ),
+                            _buildDoubleFieldRow(
+                              context,
+                              provider,
+                              'date',
+                              'proposalManager',
+                              isWide,
+                            ),
+                            _buildDoubleFieldRow(
+                              context,
+                              provider,
+                              'description',
+                              'projectType',
+                              isWide,
+                            ),
+                            _buildDoubleFieldRow(
+                              context,
+                              provider,
+                              'clientName',
+                              'clientType',
+                              isWide,
+                            ),
+                            _buildDoubleFieldRow(
+                              context,
+                              provider,
+                              'relationship',
+                              'submissionDate',
+                              isWide,
+                            ),
+                            _buildDoubleFieldRow(
+                              context,
+                              provider,
+                              'biddingCriteria',
+                              'isTargeted',
+                              isWide,
+                            ),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              child: AppTextField(
+                                label: "Comments",
+                                controller: provider.controllers['comments']!,
+                                maxLines: 3,
+                              ),
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 32),
+                        const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             CustomButton2(
                               label: "Submit",
-                              backgroundColor: JasaraPalette.teal,
-                              width: MediaQuery.of(context).size.width * 0.6125,
+                              prefixIcon: Icon(
+                                Icons.send,
+                                color: JasaraPalette.background,
+                                size: 24,
+                              ),
+                              backgroundColor: JasaraPalette.go,
+                              width: MediaQuery.of(context).size.width * 0.63,
                               onPressed: () async {
                                 await criteriaProvider.fetchCriteriaList();
 
@@ -386,6 +396,56 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
     );
   }
 
+  Widget _buildDoubleFieldRow(
+    BuildContext context,
+    HomePageProvider provider,
+    String leftKey,
+    String rightKey,
+    bool isWide,
+  ) {
+    final width =
+        isWide ? MediaQuery.of(context).size.width * 0.3 : double.infinity;
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: SizedBox(
+              width: width,
+              child: AppTextField(
+                label: _formatLabel(leftKey),
+                controller: provider.controllers[leftKey]!,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: SizedBox(
+              width: width,
+              child: AppTextField(
+                label: _formatLabel(rightKey),
+                controller: provider.controllers[rightKey]!,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatLabel(String key) {
+    return key
+        .replaceAllMapped(
+          RegExp(r'(?<=[a-z])([A-Z])'),
+          (match) => ' ${match.group(1)}',
+        )
+        .split(' ')
+        .map((word) => word[0].toUpperCase() + word.substring(1))
+        .join(' ');
+  }
+
   Widget _buildFileUploadField(
     BuildContext context,
     HomePageProvider provider,
@@ -393,6 +453,14 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(
+          "Please fill the RFP Document and fill the form below.",
+          style: JasaraTextStyles.primaryText500.copyWith(
+            fontSize: 14,
+            color: JasaraPalette.dark1,
+          ),
+        ),
+        const SizedBox(height: 16),
         if (provider.uploadedFile != null || provider.uploadedFileHtml != null)
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
@@ -415,66 +483,66 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
           ),
         SizedBox(
           width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: CustomButton2(
-              label:
-                  provider.uploadedFile == null &&
-                          provider.uploadedFileHtml == null
-                      ? "Upload RFP Document"
-                      : "Replace RFP Document",
-              prefixIcon: const Icon(
-                Icons.attach_file,
+          child: CustomButton2(
+            label:
+                provider.uploadedFile == null &&
+                        provider.uploadedFileHtml == null
+                    ? "Upload RFP Document"
+                    : "Replace RFP Document",
+            prefixIcon: Padding(
+              padding: const EdgeInsets.only(right: 6.0),
+              child: const Icon(
+                Icons.cloud_upload,
                 color: JasaraPalette.white,
                 size: 20,
               ),
-              backgroundColor: JasaraPalette.indigoBlue,
-              height: 50,
-              onPressed:
-                  provider.uploadedFile == null &&
-                          provider.uploadedFileHtml == null
-                      ? () async {
-                        final result = await FilePicker.platform.pickFiles(
-                          type: FileType.custom,
-                          allowedExtensions: ['pdf'],
-                          withData: true,
-                        );
-                        if (result != null &&
-                            result.files.single.size <= 500 * 1024) {
-                          final name = result.files.single.name;
-                          if (kIsWeb) {
-                            final bytes = result.files.single.bytes;
-                            if (bytes != null) {
-                              final htmlFile = html.File([bytes], name);
-                              provider.setUploadedFile(htmlFile, null, name);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("PDF uploaded successfully"),
-                                ),
-                              );
-                            }
-                          } else {
-                            final path = result.files.single.path;
-                            if (path != null) {
-                              final ioFile = File(path);
-                              provider.setUploadedFile(null, ioFile, name);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text("PDF uploaded successfully"),
-                                ),
-                              );
-                            }
+            ),
+            backgroundColor: JasaraPalette.oceanBlue,
+            height: 50,
+            onPressed:
+                provider.uploadedFile == null &&
+                        provider.uploadedFileHtml == null
+                    ? () async {
+                      final result = await FilePicker.platform.pickFiles(
+                        type: FileType.custom,
+                        allowedExtensions: ['pdf'],
+                        withData: true,
+                      );
+                      if (result != null &&
+                          result.files.single.size <= 500 * 1024) {
+                        final name = result.files.single.name;
+                        if (kIsWeb) {
+                          final bytes = result.files.single.bytes;
+                          if (bytes != null) {
+                            final htmlFile = html.File([bytes], name);
+                            provider.setUploadedFile(htmlFile, null, name);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("PDF uploaded successfully"),
+                              ),
+                            );
                           }
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("File size exceeds 500KB limit"),
-                            ),
-                          );
+                          final path = result.files.single.path;
+                          if (path != null) {
+                            final ioFile = File(path);
+                            provider.setUploadedFile(null, ioFile, name);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("PDF uploaded successfully"),
+                              ),
+                            );
+                          }
                         }
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("File size exceeds 500KB limit"),
+                          ),
+                        );
                       }
-                      : null,
-            ),
+                    }
+                    : null,
           ),
         ),
       ],

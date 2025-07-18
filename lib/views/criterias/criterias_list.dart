@@ -72,25 +72,19 @@ class _CriteriasListState extends State<CriteriasList> {
                         InkWell(
                           onTap: () => Navigator.pop(context),
                           child: Icon(
-                            Icons.cancel_outlined,
-                            color: Colors.red,
+                            Icons.close,
+                            color: JasaraPalette.dark1,
                             size: 20,
                           ),
                         ),
                       ],
                     ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.65,
-                      margin: const EdgeInsets.only(top: 12),
-                      height: 0.6,
-                      color: JasaraPalette.dark1,
-                    ),
                   ],
                 ),
                 content: Container(
                   width:
-                      MediaQuery.of(context).size.width /
-                      2.5, // Larger dialog width
+                      MediaQuery.of(context).size.width *
+                      0.4, // Larger dialog width
                   margin: const EdgeInsets.all(12),
                   child: SingleChildScrollView(
                     child: Column(
@@ -103,7 +97,7 @@ class _CriteriasListState extends State<CriteriasList> {
                         const SizedBox(height: 12),
                         TextFormField(
                           controller: data.instructionController,
-                          maxLines: 5,
+                          maxLines: 10,
                           decoration: InputDecoration(
                             labelText: "Text Instructions (max 2500 chars)",
                             filled: true,
@@ -182,84 +176,74 @@ class _CriteriasListState extends State<CriteriasList> {
                             const SizedBox(height: 8),
                             // Attach Supporting Files button with wider appearance
                             SizedBox(
-                              width: double.infinity,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                ), // Add padding to emphasize width
-                                child: CustomButton2(
-                                  label: "Attach Supporting Files",
-                                  prefixIcon: const Icon(
-                                    Icons.attach_file,
-                                    color: JasaraPalette.white,
-                                    size: 20,
-                                  ),
-                                  backgroundColor: JasaraPalette.indigoBlue,
-                                  height:
-                                      50, // Increased height for visual emphasis
-                                  onPressed: () async {
-                                    if (data.files
-                                            .where((file) => file != null)
-                                            .length >=
-                                        3) {
-                                      JasaraToast.error(
-                                        context,
-                                        "Maximum 3 files allowed.",
-                                      );
-                                      return;
-                                    }
-                                    final result = await FilePicker.platform
-                                        .pickFiles(
-                                          type: FileType.custom,
-                                          allowedExtensions: ['pdf'],
-                                          withData:
-                                              true, // Ensure bytes are available for web
-                                        );
-                                    if (result != null &&
-                                        result.files.single.size <=
-                                            500 * 1024) {
-                                      final platformFile = result.files.single;
-                                      dialogSetState(() {
-                                        // Find the first null slot in files list
-                                        final index = data.files.indexWhere(
-                                          (file) => file == null,
-                                        );
-                                        if (index != -1) {
-                                          // Check for duplicate file names and append counter if needed
-                                          String displayName =
-                                              platformFile.name;
-                                          int counter = 1;
-                                          final existingNames =
-                                              data.fileNames
-                                                  .where((name) => name != null)
-                                                  .toList();
-                                          while (existingNames.contains(
-                                            displayName,
-                                          )) {
-                                            final nameWithoutExtension =
-                                                platformFile.name
-                                                    .split('.')
-                                                    .first;
-                                            final extension =
-                                                platformFile.name
-                                                    .split('.')
-                                                    .last;
-                                            displayName =
-                                                '$nameWithoutExtension ($counter).$extension';
-                                            counter++;
-                                          }
-                                          data.files[index] = platformFile;
-                                          data.fileNames[index] = displayName;
-                                        }
-                                      });
-                                    } else if (result != null) {
-                                      JasaraToast.error(
-                                        context,
-                                        "File size exceeds 500KB limit.",
-                                      );
-                                    }
-                                  },
+                              child: CustomButton2(
+                                padding: EdgeInsets.zero,
+                                label: "Attach Supporting Files",
+                                prefixIcon: const Icon(
+                                  Icons.insert_drive_file,
+                                  color: JasaraPalette.white,
+                                  size: 20,
                                 ),
+                                backgroundColor: JasaraPalette.oceanBlue,
+                                height:
+                                    50, // Increased height for visual emphasis
+                                onPressed: () async {
+                                  if (data.files
+                                          .where((file) => file != null)
+                                          .length >=
+                                      3) {
+                                    JasaraToast.error(
+                                      context,
+                                      "Maximum 3 files allowed.",
+                                    );
+                                    return;
+                                  }
+                                  final result = await FilePicker.platform
+                                      .pickFiles(
+                                        type: FileType.custom,
+                                        allowedExtensions: ['pdf'],
+                                        withData:
+                                            true, // Ensure bytes are available for web
+                                      );
+                                  if (result != null &&
+                                      result.files.single.size <= 500 * 1024) {
+                                    final platformFile = result.files.single;
+                                    dialogSetState(() {
+                                      // Find the first null slot in files list
+                                      final index = data.files.indexWhere(
+                                        (file) => file == null,
+                                      );
+                                      if (index != -1) {
+                                        String displayName = platformFile.name;
+                                        int counter = 1;
+                                        final existingNames =
+                                            data.fileNames
+                                                .where((name) => name != null)
+                                                .toList();
+                                        while (existingNames.contains(
+                                          displayName,
+                                        )) {
+                                          final nameWithoutExtension =
+                                              platformFile.name
+                                                  .split('.')
+                                                  .first;
+                                          final extension =
+                                              platformFile.name.split('.').last;
+                                          displayName =
+                                              '$nameWithoutExtension ($counter).$extension';
+                                          counter++;
+                                        }
+                                        data.files[index] = platformFile;
+                                        data.fileNames[index] = displayName;
+                                      }
+                                    });
+                                  } else if (result != null) {
+                                    JasaraToast.error(
+                                      context,
+                                      "File size exceeds 500KB limit.",
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -277,14 +261,25 @@ class _CriteriasListState extends State<CriteriasList> {
                           height: 45,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: JasaraPalette.red,
+                              backgroundColor: JasaraPalette.pinkishRed,
                               foregroundColor: JasaraPalette.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
                             onPressed: () => Navigator.pop(context),
-                            child: const Text("Cancel"),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.close,
+                                  size: 24,
+                                  color: JasaraPalette.background,
+                                ),
+                                const SizedBox(width: 5),
+                                const Text("Cancel"),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -343,13 +338,24 @@ class _CriteriasListState extends State<CriteriasList> {
                               }
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: JasaraPalette.teal,
+                              backgroundColor: JasaraPalette.mintGreen,
                               foregroundColor: JasaraPalette.white,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                            child: const Text("Save"),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check,
+                                  size: 24,
+                                  color: JasaraPalette.background,
+                                ),
+                                const SizedBox(width: 5),
+                                const Text("Save"),
+                              ],
+                            ),
                           ),
                         ),
                       ),
