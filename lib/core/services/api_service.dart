@@ -1,9 +1,9 @@
-import 'dart:io';
+import 'dart:html' as html;
 
 class ApiService {
   static Future<Map<String, dynamic>> submitAssessment({
-    required File rfp,
-    required File goNoGo,
+    required html.File rfp,
+    required html.File goNoGo,
   }) async {
     await Future.delayed(Duration(seconds: 2)); // simulate API delay
     return {

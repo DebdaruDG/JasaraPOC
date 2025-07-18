@@ -1,5 +1,3 @@
-import 'dart:developer' as console;
-
 import 'package:flutter/material.dart';
 
 import 'utils/app_palette.dart';
@@ -25,7 +23,6 @@ class ExpandedSidebarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    console.log('label - $label && isSelected - $isSelected');
     return Container(
       padding: const EdgeInsets.all(8),
       margin: const EdgeInsets.only(left: 12),

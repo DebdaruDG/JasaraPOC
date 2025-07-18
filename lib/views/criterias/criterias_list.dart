@@ -150,7 +150,9 @@ class _CriteriasListState extends State<CriteriasList> {
                                           return Chip(
                                             label: Text(
                                               data.fileNames[index] ??
-                                                  file.path.split("/").last,
+                                                  (file.path ?? '')
+                                                      .split("/")
+                                                      .last,
                                               style:
                                                   JasaraTextStyles
                                                       .primaryText400,
@@ -209,46 +211,46 @@ class _CriteriasListState extends State<CriteriasList> {
                                         .pickFiles(
                                           type: FileType.custom,
                                           allowedExtensions: ['pdf'],
-                                          withData: false,
+                                          withData:
+                                              true, // Ensure bytes are available for web
                                         );
                                     if (result != null &&
                                         result.files.single.size <=
                                             500 * 1024) {
-                                      final path = result.files.single.path;
-                                      final originalName =
-                                          result.files.single.name;
-                                      if (path != null) {
-                                        dialogSetState(() {
-                                          // Find the first null slot in files list
-                                          final index = data.files.indexWhere(
-                                            (file) => file == null,
-                                          );
-                                          if (index != -1) {
-                                            // Check for duplicate file names and append counter if needed
-                                            String displayName = originalName;
-                                            int counter = 1;
-                                            final existingNames =
-                                                data.fileNames
-                                                    .where(
-                                                      (name) => name != null,
-                                                    )
-                                                    .toList();
-                                            while (existingNames.contains(
-                                              displayName,
-                                            )) {
-                                              final nameWithoutExtension =
-                                                  originalName.split('.').first;
-                                              final extension =
-                                                  originalName.split('.').last;
-                                              displayName =
-                                                  '$nameWithoutExtension ($counter).$extension';
-                                              counter++;
-                                            }
-                                            data.files[index] = File(path);
-                                            data.fileNames[index] = displayName;
+                                      final platformFile = result.files.single;
+                                      dialogSetState(() {
+                                        // Find the first null slot in files list
+                                        final index = data.files.indexWhere(
+                                          (file) => file == null,
+                                        );
+                                        if (index != -1) {
+                                          // Check for duplicate file names and append counter if needed
+                                          String displayName =
+                                              platformFile.name;
+                                          int counter = 1;
+                                          final existingNames =
+                                              data.fileNames
+                                                  .where((name) => name != null)
+                                                  .toList();
+                                          while (existingNames.contains(
+                                            displayName,
+                                          )) {
+                                            final nameWithoutExtension =
+                                                platformFile.name
+                                                    .split('.')
+                                                    .first;
+                                            final extension =
+                                                platformFile.name
+                                                    .split('.')
+                                                    .last;
+                                            displayName =
+                                                '$nameWithoutExtension ($counter).$extension';
+                                            counter++;
                                           }
-                                        });
-                                      }
+                                          data.files[index] = platformFile;
+                                          data.fileNames[index] = displayName;
+                                        }
+                                      });
                                     } else if (result != null) {
                                       JasaraToast.error(
                                         context,
@@ -562,7 +564,7 @@ class _CriteriasListState extends State<CriteriasList> {
 class CriteriaData {
   final TextEditingController criteriaController = TextEditingController();
   final TextEditingController instructionController = TextEditingController();
-  final List<File?> files = [null, null, null];
+  final List<PlatformFile?> files = [null, null, null];
   final List<String?> fileNames = [null, null, null];
 
   void dispose() {

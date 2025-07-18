@@ -1,5 +1,8 @@
+import 'dart:convert';
+import 'dart:developer' as console;
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import '../core/services/api/api_response.dart';
 import '../core/services/backend/criteria_services.dart';
@@ -24,34 +27,55 @@ class CriteriaProvider extends ChangeNotifier {
   ApiResponse<CriteriaResponse> _responseBodyModel = ApiResponse.loading();
   ApiResponse<CriteriaResponse> get responseBodyModel => _responseBodyModel;
 
+  Future<String?> platformFileToBase64(PlatformFile? file) async {
+    if (file == null) return null;
+    try {
+      final bytes = file.bytes ?? await File(file.path!).readAsBytes();
+      return base64Encode(bytes);
+    } catch (e) {
+      console.log('Error converting PlatformFile to base64: $e');
+      return null;
+    }
+  }
+
   /// ✅ Updated with FirebaseService logic
   Future<void> createCriteriaBE(
     String criteriaName,
     String textInstruction, {
-    File? pdf1,
-    File? pdf2,
-    File? pdf3,
+    PlatformFile? pdf1,
+    PlatformFile? pdf2,
+    PlatformFile? pdf3,
   }) async {
     _responseBodyModel = ApiResponse.loading();
     notifyListeners();
 
+    // ✅ Filter out null PDFs
+    final validPdfs = [pdf1, pdf2, pdf3].whereType<PlatformFile>().toList();
+
     final response = await CriteriaService.createCriteria(
       criteriaName: criteriaName,
       instruction: textInstruction,
+      pdfFiles: validPdfs,
     );
 
+    console.log('response.status - ${response.status}');
+
+    console.log('response.data :- ${response.data}');
     if (response.status == Status.completed && response.data != null) {
       _responseBodyModel = ApiResponse.completed(response.data!);
 
-      // ✅ Add to Firestore after backend returns assistantId
       final assistantId = response.data!.assistantId;
+      String? pdf1Base64 = await platformFileToBase64(pdf1);
+      String? pdf2Base64 = await platformFileToBase64(pdf2);
+      String? pdf3Base64 = await platformFileToBase64(pdf3);
+
       await FirebaseService.addCriteriaPdf(
         assistantId: assistantId,
         title: criteriaName,
         textInstructions: textInstruction,
-        pdf1: pdf1?.path,
-        pdf2: pdf2?.path,
-        pdf3: pdf3?.path,
+        pdf1: pdf1Base64,
+        pdf2: pdf2Base64,
+        pdf3: pdf3Base64,
       );
       await fetchCriteriaList();
     } else {

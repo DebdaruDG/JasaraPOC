@@ -46,11 +46,11 @@ class FirebaseService {
     try {
       final result = await criteriaPdfs.add({
         'assistant_id': assistantId,
+        'text_instructions': textInstructions,
+        'title': title,
         'pdf1': pdf1,
         'pdf2': pdf2,
         'pdf3': pdf3,
-        'text_instructions': textInstructions,
-        'title': title,
       });
       console.log('Criteria added to Firestore: $result');
     } on FirebaseException catch (e) {
