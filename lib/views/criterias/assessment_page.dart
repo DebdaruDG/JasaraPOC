@@ -8,6 +8,7 @@ import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_page_provider.dart';
 import '../../providers/assessment_provider.dart';
 import '../../providers/criteria_provider.dart';
+import '../../providers/screen_switch_provider.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 
@@ -48,91 +49,96 @@ class _AssessmentPageState extends State<AssessmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: JasaraPalette.accent,
-        title: Text(
-          "AI Assessment",
-          style: JasaraTextStyles.primaryText500.copyWith(
-            fontSize: 18,
-            color: JasaraPalette.dark2,
-          ),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: JasaraPalette.dark2),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Consumer2<AssessmentProvider, CriteriaProvider>(
-        builder: (context, assessmentProvider, criteriaProvider, _) {
-          final total = criteriaProvider.criteriaListResponse.length;
-          final completed = assessmentProvider.evaluateResponses.length;
-
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Counter: $completed of $total",
-                      style: JasaraTextStyles.primaryText500.copyWith(
-                        fontSize: 16,
-                        color: JasaraPalette.dark2,
-                      ),
-                    ),
-                    SparkleAnimation(
-                      child: Text(
-                        'Final Score - ${assessmentProvider.averageScore.toStringAsFixed(2)}',
-                        style: JasaraTextStyles.primaryText500.copyWith(
-                          fontSize: 16,
-                          color: JasaraPalette.primary,
-                        ),
-                      ),
-                    ),
-                  ],
+    return Consumer<ScreenSwitchProvider>(
+      builder:
+          (context, screenProvider, child) => Scaffold(
+            appBar: AppBar(
+              backgroundColor: JasaraPalette.accent,
+              title: Text(
+                "AI Assessment",
+                style: JasaraTextStyles.primaryText500.copyWith(
+                  fontSize: 18,
+                  color: JasaraPalette.dark2,
                 ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: total,
-                    itemBuilder: (context, index) {
-                      final criteria =
-                          criteriaProvider.criteriaListResponse[index];
-                      final assistantId = criteria.assistantId;
-
-                      final matchedResponse = assessmentProvider
-                          .evaluateResponses
-                          .firstWhere(
-                            (e) => e.results.any(
-                              (r) => r.assistantId == assistantId,
-                            ),
-                            orElse:
-                                () =>
-                                    EvaluateResponse(document: '', results: []),
-                          );
-
-                      return _buildCriteriaItem(
-                        context,
-                        matchedResponse,
-                        index,
-                        assistantId: assistantId,
-                        criteriaLabel: criteria.title,
-                        isLoading: assessmentProvider.loadingIds.contains(
-                          assistantId,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 16),
-              ],
+              ),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: JasaraPalette.dark2),
+                onPressed: () => screenProvider.toggleAssessment(false),
+              ),
             ),
-          );
-        },
-      ),
+            body: Consumer2<AssessmentProvider, CriteriaProvider>(
+              builder: (context, assessmentProvider, criteriaProvider, _) {
+                final total = criteriaProvider.criteriaListResponse.length;
+                final completed = assessmentProvider.evaluateResponses.length;
+
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Counter: $completed of $total",
+                            style: JasaraTextStyles.primaryText500.copyWith(
+                              fontSize: 16,
+                              color: JasaraPalette.dark2,
+                            ),
+                          ),
+                          SparkleAnimation(
+                            child: Text(
+                              'Final Score - ${assessmentProvider.averageScore.toStringAsFixed(2)}',
+                              style: JasaraTextStyles.primaryText500.copyWith(
+                                fontSize: 16,
+                                color: JasaraPalette.primary,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: total,
+                          itemBuilder: (context, index) {
+                            final criteria =
+                                criteriaProvider.criteriaListResponse[index];
+                            final assistantId = criteria.assistantId;
+
+                            final matchedResponse = assessmentProvider
+                                .evaluateResponses
+                                .firstWhere(
+                                  (e) => e.results.any(
+                                    (r) => r.assistantId == assistantId,
+                                  ),
+                                  orElse:
+                                      () => EvaluateResponse(
+                                        document: '',
+                                        results: [],
+                                      ),
+                                );
+
+                            return _buildCriteriaItem(
+                              context,
+                              matchedResponse,
+                              index,
+                              assistantId: assistantId,
+                              criteriaLabel: criteria.title,
+                              isLoading: assessmentProvider.loadingIds.contains(
+                                assistantId,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
     );
   }
 
