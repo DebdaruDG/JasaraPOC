@@ -30,4 +30,6 @@ class JasaraPalette {
   static const Color pinkishRed = Color(0xFFF46A6A); // #f46a6a
   static const Color mintGreen = Color(0xFF00C4AC); // #00c4ac
   static const Color oceanBlue = Color(0xFF2F74ED); // #2f74ed
+
+  static const Color deepIndigo = Color(0xFF2D359E); // #2d359e ← newly added
 }

@@ -454,7 +454,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Please fill the RFP Document and fill the form below.",
+          "Please upload the RFP Document and fill the form below.",
           style: JasaraTextStyles.primaryText500.copyWith(
             fontSize: 14,
             color: JasaraPalette.dark1,

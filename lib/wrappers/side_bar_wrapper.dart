@@ -40,7 +40,7 @@ class Sidebar extends StatelessWidget {
       width: isCollapsed ? 70 : 300,
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-        color: JasaraPalette.indigoBlue,
+        color: JasaraPalette.deepIndigo,
         borderRadius: const BorderRadius.only(topRight: Radius.circular(80)),
       ),
       child: Container(
@@ -56,7 +56,7 @@ class Sidebar extends StatelessWidget {
                 vertical: MediaQuery.of(context).size.height * 0.1125,
               ),
               decoration: BoxDecoration(
-                color: JasaraPalette.primary,
+                color: JasaraPalette.deepIndigo,
                 borderRadius: BorderRadius.only(
                   bottomRight:
                       isCriteriaSelected ? Radius.circular(80) : Radius.zero,
@@ -74,7 +74,7 @@ class Sidebar extends StatelessWidget {
             ),
             // Criteria + RFI
             Container(
-              decoration: BoxDecoration(color: JasaraPalette.primary),
+              decoration: BoxDecoration(color: JasaraPalette.deepIndigo),
               child: Column(
                 children: [
                   ...items.map((item) {
@@ -103,7 +103,7 @@ class Sidebar extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.4,
               padding: const EdgeInsets.only(top: 100),
               decoration: BoxDecoration(
-                color: JasaraPalette.primary,
+                color: JasaraPalette.deepIndigo,
                 borderRadius: BorderRadius.only(
                   topRight: isRfiSelected ? Radius.circular(80) : Radius.zero,
                 ),
