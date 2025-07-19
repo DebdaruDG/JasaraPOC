@@ -27,6 +27,12 @@ class AssessmentProvider with ChangeNotifier {
   final Set<String> _loadingIds = {};
   Set<String> get loadingIds => _loadingIds;
 
+  int _totalScore = 0;
+  int get totalScore => _totalScore;
+
+  int _scoreCount = 0;
+  int get scoreCount => _scoreCount;
+
   clearEvaluateResponses() {
     _evaluateResponses.clear();
     notifyListeners();
@@ -35,17 +41,14 @@ class AssessmentProvider with ChangeNotifier {
   double get averageScore {
     if (_evaluateResponses.isEmpty) return 0.0;
 
-    int totalScore = 0;
-    int scoreCount = 0;
-
     for (var response in _evaluateResponses) {
       for (var result in response.results) {
-        totalScore += result.score;
-        scoreCount++;
+        _totalScore += result.score;
+        _scoreCount++;
       }
     }
 
-    return scoreCount > 0 ? totalScore / scoreCount : 0.0;
+    return _scoreCount > 0 ? _totalScore / _scoreCount : 0.0;
   }
 
   ApiResponse<EvaluateResponse> _evaluateResponse = ApiResponse.loading();

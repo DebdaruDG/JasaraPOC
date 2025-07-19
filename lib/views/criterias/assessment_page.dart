@@ -4,11 +4,13 @@ import 'dart:html' as html;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/services/api/api_response.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_page_provider.dart';
 import '../../providers/assessment_provider.dart';
 import '../../providers/criteria_provider.dart';
 import '../../providers/screen_switch_provider.dart';
+import '../../widgets/top_score_pie_chart.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 
@@ -52,35 +54,31 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return Consumer<ScreenSwitchProvider>(
       builder:
           (context, screenProvider, child) => Scaffold(
-            appBar: AppBar(
-              backgroundColor: JasaraPalette.accent,
-              title: Text(
-                "AI Assessment",
-                style: JasaraTextStyles.primaryText500.copyWith(
-                  fontSize: 18,
-                  color: JasaraPalette.dark2,
-                ),
-              ),
-              leading: IconButton(
-                icon: const Icon(Icons.arrow_back, color: JasaraPalette.dark2),
-                onPressed: () => screenProvider.toggleAssessment(false),
-              ),
-            ),
             body: Consumer2<AssessmentProvider, CriteriaProvider>(
               builder: (context, assessmentProvider, criteriaProvider, _) {
                 final total = criteriaProvider.criteriaListResponse.length;
                 final completed = assessmentProvider.evaluateResponses.length;
+                final isLoading =
+                    assessmentProvider.evaluateResponse.status !=
+                    Status.completed;
 
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      TopScorePieChart(
+                        criteriaList: criteriaProvider.criteriaListResponse,
+                        evaluateResponses: assessmentProvider.evaluateResponses,
+                        averageScore: assessmentProvider.averageScore,
+                        isLoading: isLoading,
+                      ),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Counter: $completed of $total",
+                            "Evaluating $completed of $total Criterias",
                             style: JasaraTextStyles.primaryText500.copyWith(
                               fontSize: 16,
                               color: JasaraPalette.dark2,
@@ -88,7 +86,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           ),
                           SparkleAnimation(
                             child: Text(
-                              'Final Score - ${assessmentProvider.averageScore.toStringAsFixed(2)}',
+                              'Average Score : ${(assessmentProvider.averageScore / 10).toStringAsFixed(2)}',
                               style: JasaraTextStyles.primaryText500.copyWith(
                                 fontSize: 16,
                                 color: JasaraPalette.primary,
@@ -96,6 +94,21 @@ class _AssessmentPageState extends State<AssessmentPage> {
                             ),
                           ),
                         ],
+                      ),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed:
+                              assessmentProvider.evaluateResponse.status ==
+                                      Status.loading
+                                  ? null
+                                  : () {},
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: JasaraPalette.accent,
+                            foregroundColor: JasaraPalette.dark2,
+                          ),
+                          child: Text('Accept Decision'),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       Expanded(
@@ -132,7 +145,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 16),
                     ],
                   ),
                 );
@@ -155,10 +167,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: JasaraPalette.primary.withOpacity(0.2)),
-        borderRadius: BorderRadius.circular(12),
-      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -198,7 +206,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  "Score: ${hasData ? model.results[0].score.toString() : "--"}",
+                  "Score: ${hasData ? (model.results[0].score / 10).toString() : "--"}",
                   style: JasaraTextStyles.primaryText500.copyWith(
                     fontSize: 14,
                     color: JasaraPalette.primary,
@@ -212,7 +220,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
-  Widget _buildSparkleLoader() {
+  Widget _buildSparkleLoader({Widget? child}) {
     return SizedBox(
       height: 40,
       child: Center(
@@ -224,10 +232,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
               opacity: 0.5 + 0.5 * (1 - (value - 0.5).abs() * 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.auto_awesome, color: JasaraPalette.primary),
-                  SizedBox(width: 8),
-                  Text("Thinking...", style: JasaraTextStyles.primaryText400),
+                children: [
+                  const Icon(Icons.auto_awesome, color: JasaraPalette.primary),
+                  const SizedBox(width: 8),
+                  child ??
+                      const Text(
+                        "Thinking...",
+                        style: JasaraTextStyles.primaryText400,
+                      ),
                 ],
               ),
             );
