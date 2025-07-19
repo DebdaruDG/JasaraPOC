@@ -215,7 +215,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
                       valueColor: AlwaysStoppedAnimation<Color>(
                         JasaraPalette.deepIndigo,
                       ),
-                      color: JasaraPalette.background,
                     ),
                   ),
                 ],
