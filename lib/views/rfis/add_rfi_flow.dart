@@ -17,6 +17,7 @@ import '../../widgets/utils/app_textStyles.dart';
 import '../../widgets/utils/app_text_field.dart';
 import '../../widgets/utils/app_toast.dart';
 import '../../models/response/evaluate_response_model.dart';
+import '../criterias/assessment_page.dart';
 
 class AddRFIDocumentPage extends StatefulWidget {
   const AddRFIDocumentPage({super.key});
@@ -51,124 +52,9 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
               screenProvider.showAssessment
                   ? SizedBox(
                     height: MediaQuery.of(context).size.height * 0.8,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 18,
-                            bottom: 16,
-                            top: 16,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "AI Assessment",
-                                style: JasaraTextStyles.primaryText500.copyWith(
-                                  fontSize: 18,
-                                  color: JasaraPalette.dark2,
-                                ),
-                              ),
-                              InkWell(
-                                onTap:
-                                    () =>
-                                        screenProvider.toggleAssessment(false),
-                                child: Icon(
-                                  Icons.arrow_back,
-                                  color: JasaraPalette.dark2,
-                                  size: 24,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        Consumer2<AssessmentProvider, CriteriaProvider>(
-                          builder: (
-                            context,
-                            assessmentProvider,
-                            criteriaProvider,
-                            _,
-                          ) {
-                            final total =
-                                criteriaProvider.criteriaListResponse.length;
-                            final completed =
-                                assessmentProvider.evaluateResponses.length;
-
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Counter: $completed of $total",
-                                      style: JasaraTextStyles.primaryText500
-                                          .copyWith(
-                                            fontSize: 16,
-                                            color: JasaraPalette.dark2,
-                                          ),
-                                    ),
-                                    SparkleAnimation(
-                                      child: Text(
-                                        'Final Score - ${assessmentProvider.averageScore.toStringAsFixed(2)}',
-                                        style: JasaraTextStyles.primaryText500
-                                            .copyWith(
-                                              fontSize: 16,
-                                              color: JasaraPalette.primary,
-                                            ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 16),
-                                Expanded(
-                                  child: ListView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    itemCount: total,
-                                    itemBuilder: (context, index) {
-                                      final criteria =
-                                          criteriaProvider
-                                              .criteriaListResponse[index];
-                                      final assistantId = criteria.assistantId;
-
-                                      final matchedResponse = assessmentProvider
-                                          .evaluateResponses
-                                          .firstWhere(
-                                            (e) => e.results.any(
-                                              (r) =>
-                                                  r.assistantId == assistantId,
-                                            ),
-                                            orElse:
-                                                () => EvaluateResponse(
-                                                  document: '',
-                                                  results: [],
-                                                ),
-                                          );
-
-                                      return _buildCriteriaItem(
-                                        context,
-                                        matchedResponse,
-                                        index,
-                                        assistantId: assistantId,
-                                        criteriaLabel: criteria.title,
-                                        isLoading: assessmentProvider.loadingIds
-                                            .contains(assistantId),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ],
+                    child: AssessmentPage(
+                      file: screenProvider.file,
+                      formJson: screenProvider.formJson,
                     ),
                   )
                   : Form(
@@ -195,7 +81,11 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () => Navigator.pop(context),
+                                onTap:
+                                    () => {
+                                      Navigator.pop(context),
+                                      screenProvider.toggleAssessment(false),
+                                    },
                                 child: Icon(
                                   Icons.close,
                                   color: JasaraPalette.dark1,
