@@ -251,7 +251,6 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                               'isTargeted',
                               isWide,
                             ),
-                            const SizedBox(height: 16),
                             SizedBox(
                               child: AppTextField(
                                 label: "Comments",
@@ -261,19 +260,22 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 16),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomButton2(
                               label: "Submit",
-                              prefixIcon: Icon(
-                                Icons.send,
-                                color: JasaraPalette.background,
-                                size: 24,
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 5.0),
+                                child: Icon(
+                                  Icons.send,
+                                  color: JasaraPalette.background,
+                                  size: 24,
+                                ),
                               ),
                               backgroundColor: JasaraPalette.go,
-                              width: MediaQuery.of(context).size.width * 0.63,
+                              width: MediaQuery.of(context).size.width * 0.625,
                               onPressed: () async {
                                 await criteriaProvider.fetchCriteriaList();
 

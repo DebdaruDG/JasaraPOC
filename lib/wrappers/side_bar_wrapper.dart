@@ -46,6 +46,7 @@ class Sidebar extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(color: JasaraPalette.background),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             /// Logo/Header
             Container(
@@ -99,68 +100,68 @@ class Sidebar extends StatelessWidget {
             ),
 
             // Profile + Switch to admin button
-            Container(
-              height: MediaQuery.of(context).size.height * 0.4,
-              padding: const EdgeInsets.only(top: 100),
-              decoration: BoxDecoration(
-                color: JasaraPalette.deepIndigo,
-                borderRadius: BorderRadius.only(
-                  topRight: isRfiSelected ? Radius.circular(80) : Radius.zero,
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.only(top: 100),
+                decoration: BoxDecoration(
+                  color: JasaraPalette.deepIndigo,
+                  borderRadius: BorderRadius.only(
+                    topRight: isRfiSelected ? Radius.circular(80) : Radius.zero,
+                  ),
                 ),
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: JasaraPalette.teal,
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: JasaraPalette.teal,
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(
+                          Icons.swap_horiz,
+                          color: Colors.white,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        title:
+                            isCollapsed
+                                ? null
+                                : Text(
+                                  'Switch to ${isRfi ? 'Admin' : 'User'}',
+                                  style: JasaraTextStyles.primaryText500
+                                      .copyWith(
+                                        color: JasaraPalette.background,
+                                      ),
+                                ),
+                        onTap: onRoleSwitch,
+                      ),
                     ),
-                    child: ListTile(
-                      leading: const Icon(
-                        Icons.swap_horiz,
+
+                    ProfileTile(
+                      name: 'F. Sullivan',
+                      title: '@Frankie',
+                      imageUrl:
+                          'assets/images/download.jpeg', // replace with real URL or Asset
+                      isCollapsed: isCollapsed,
+                      onTap: () => console.log('Profile clicked'),
+                    ),
+
+                    /// Collapse Toggle
+                    IconButton(
+                      icon: Icon(
+                        isCollapsed
+                            ? Icons.keyboard_arrow_right
+                            : Icons.keyboard_arrow_left,
                         color: Colors.white,
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                      ),
-                      title:
-                          isCollapsed
-                              ? null
-                              : Text(
-                                'Switch to ${isRfi ? 'Admin' : 'User'}',
-                                style: JasaraTextStyles.primaryText500.copyWith(
-                                  color: JasaraPalette.background,
-                                ),
-                              ),
-                      onTap: onRoleSwitch,
+                      onPressed: toggleCollapse,
                     ),
-                  ),
-
-                  ProfileTile(
-                    name: 'F. Sullivan',
-                    title: '@Frankie',
-                    imageUrl:
-                        'assets/images/download.jpeg', // replace with real URL or Asset
-                    isCollapsed: isCollapsed,
-                    onTap: () => console.log('Profile clicked'),
-                  ),
-
-                  /// Collapse Toggle
-                  IconButton(
-                    icon: Icon(
-                      isCollapsed
-                          ? Icons.keyboard_arrow_right
-                          : Icons.keyboard_arrow_left,
-                      color: Colors.white,
-                    ),
-                    onPressed: toggleCollapse,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-
-            const SizedBox(height: 16),
           ],
         ),
       ),

@@ -20,23 +20,19 @@ class CollapsedSidebarItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Tooltip(
       message: tooltip,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Material(
-          color: isSelected ? Colors.grey.shade100 : Colors.transparent,
-          shape: const CircleBorder(),
-          child: InkWell(
-            onTap: onTap,
-            customBorder: const CircleBorder(),
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Icon(
-                icon,
-                color:
-                    isSelected
-                        ? Colors.black
-                        : JasaraPalette.scaffoldBackground,
-              ),
+      child: Material(
+        color: isSelected ? Colors.grey.shade100 : Colors.transparent,
+        shape: const CircleBorder(),
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            width: double.infinity,
+            child: Icon(
+              icon,
+              color:
+                  isSelected ? Colors.black : JasaraPalette.scaffoldBackground,
             ),
           ),
         ),
