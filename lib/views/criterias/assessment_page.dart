@@ -193,28 +193,33 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ),
           ),
           const SizedBox(height: 8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: SparkleAnimation(
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: JasaraPalette.primary.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Text(
-                  "Score: ${hasData ? (model.results[0].score / 10).toString() : "--"}",
-                  style: JasaraTextStyles.primaryText500.copyWith(
-                    fontSize: 14,
-                    color: JasaraPalette.primary,
+          hasData == false
+              ? Text('--')
+              : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Score: ${((model?.results[0].score ?? 0) / 10).toStringAsFixed(2)} / 10",
+                    style: JasaraTextStyles.primaryText500.copyWith(
+                      fontSize: 14,
+                      color: JasaraPalette.primary,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 6),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: LinearProgressIndicator(
+                      minHeight: 10,
+                      value: (model?.results[0].score ?? 0) / 10,
+                      backgroundColor: JasaraPalette.background,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        JasaraPalette.deepIndigo,
+                      ),
+                      color: JasaraPalette.background,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ),
         ],
       ),
     );
