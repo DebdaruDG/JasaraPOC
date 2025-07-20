@@ -2,6 +2,7 @@ import 'dart:html' as html;
 import 'dart:developer' as console;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../core/services/api/api_client.dart';
 import '../core/services/api/api_response.dart';
 import '../core/services/backend/evaluate_service.dart' as backend;
@@ -10,6 +11,7 @@ import '../models/assessment_result.dart';
 import '../models/evaluate_assessment_firebase_model.dart';
 import '../models/response/evaluate_response_model.dart';
 import '../models/rfi_model.dart';
+import '../widgets/utils/app_toast.dart';
 
 class AssessmentProvider with ChangeNotifier {
   final ApiClient _apiClient = ApiClient();
@@ -141,34 +143,49 @@ class AssessmentProvider with ChangeNotifier {
     }).toList();
   }
 
-  Future<List<RFIModel>> fetchRFIs() async {
+  ApiResponse<List<RFIModel>> _rfis = ApiResponse.loading();
+  ApiResponse<List<RFIModel>> get rfis => _rfis;
+
+  setRfis(ApiResponse<List<RFIModel>> val) {
+    _rfis = val;
+    notifyListeners();
+  }
+
+  fetchRFIs() async {
     try {
+      _rfis = ApiResponse.loading();
       final snapshot = await firebase.EvaluateService.evaluateAssessment.get();
-      return snapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        final id = doc.id; // Use Firebase document ID as unique identifier
-        return RFIModel(
-          title: data['project_name'] as String? ?? 'Unknown Project',
-          comment:
-              (data['evaluation_results'] as List<dynamic>?)
-                  ?.map(
-                    (e) => (e as Map<String, dynamic>)['summary'] as String?,
-                  )
-                  .where((s) => s != null)
-                  .join(', ') ??
-              'AI evaluation summary',
-          fileName:
-              (data['rfi_pdf'] as String?)?.split('/').last ?? 'unknown.pdf',
-          fileUrl: data['rfi_pdf'] as String? ?? '',
-          percentage: _calculatePercentage(
-            data['evaluation_results'] as List<dynamic>?,
-          ),
-          result: data['result'] as String? ?? 'PENDING', // Add result if saved
-          id: id, // Store the document ID
-        );
-      }).toList();
+      final value =
+          snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            final id = doc.id; // Use Firebase document ID as unique identifier
+            return RFIModel(
+              title: data['project_name'] as String? ?? 'Unknown Project',
+              comment:
+                  (data['evaluation_results'] as List<dynamic>?)
+                      ?.map(
+                        (e) =>
+                            (e as Map<String, dynamic>)['summary'] as String?,
+                      )
+                      .where((s) => s != null)
+                      .join(', ') ??
+                  'AI evaluation summary',
+              fileName:
+                  (data['rfi_pdf'] as String?)?.split('/').last ??
+                  'unknown.pdf',
+              fileUrl: data['rfi_pdf'] as String? ?? '',
+              percentage: _calculatePercentage(
+                data['evaluation_results'] as List<dynamic>?,
+              ),
+              result:
+                  data['result'] as String? ?? 'PENDING', // Add result if saved
+              id: id, // Store the document ID
+            );
+          }).toList();
+      setRfis(ApiResponse.completed(value));
     } catch (e) {
       console.log('Fetch RFIs error: $e');
+      setRfis(ApiResponse.completed([]));
       return [];
     }
   }
@@ -203,8 +220,18 @@ class AssessmentProvider with ChangeNotifier {
         .update(data);
   }
 
-  Future<void> deleteRFI(String documentId) async {
-    await firebase.EvaluateService.evaluateAssessment.doc(documentId).delete();
+  Future<void> deleteRFI(BuildContext context, String documentId) async {
+    try {
+      await firebase.EvaluateService.evaluateAssessment
+          .doc(documentId)
+          .delete();
+      JasaraToast.success(context, 'Successfully Deleted the RFI Assessment');
+    } catch (err) {
+      JasaraToast.error(
+        context,
+        'Error Deleting the RFI with document Id - $documentId',
+      );
+    }
   }
 
   Future<void> archiveRFI(String documentId) async {

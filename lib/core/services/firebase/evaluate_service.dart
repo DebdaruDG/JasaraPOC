@@ -64,7 +64,6 @@ class EvaluateService {
   static Future<void> deleteEvaluateRfi(String documentId) async {
     try {
       await evaluateAssessment.doc(documentId).delete();
-      console.log('Deleted evaluate RFI with ID $documentId successfully.');
     } catch (e) {
       console.log('Error deleting evaluate RFI: $e');
     }
