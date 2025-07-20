@@ -103,12 +103,11 @@ class FirebaseService {
   }
 
   // Fetch all documents from Evaluate_Assessment_Collection
-  static Future<List<EvaluateAssessmentModel>>
-  fetchEvaluateAssessments() async {
+  static Future<List<EvaluateRFIModel>> fetchEvaluateAssessments() async {
     try {
       final snapshot = await evaluateAssessment.get();
       return snapshot.docs.map((doc) {
-        return EvaluateAssessmentModel.fromDoc(
+        return EvaluateRFIModel.fromDoc(
           doc.id,
           doc.data() as Map<String, dynamic>,
         );

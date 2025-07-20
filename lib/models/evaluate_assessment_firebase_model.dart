@@ -30,7 +30,7 @@ class EvaluateResult {
   }
 }
 
-class EvaluateAssessmentModel {
+class EvaluateRFIModel {
   final String id;
   final String projectName;
   final String location;
@@ -38,7 +38,7 @@ class EvaluateAssessmentModel {
   final String rfiPdf;
   final List<EvaluateResult> evaluationResults;
 
-  EvaluateAssessmentModel({
+  EvaluateRFIModel({
     required this.id,
     required this.projectName,
     required this.location,
@@ -47,8 +47,8 @@ class EvaluateAssessmentModel {
     required this.evaluationResults,
   });
 
-  factory EvaluateAssessmentModel.fromDoc(String id, Map<String, dynamic> map) {
-    return EvaluateAssessmentModel(
+  factory EvaluateRFIModel.fromDoc(String id, Map<String, dynamic> map) {
+    return EvaluateRFIModel(
       id: id,
       projectName: map['project_name'],
       location: map['location'],
