@@ -26,6 +26,7 @@ class EvaluateService {
         'evaluation_results': evaluationResults.map((e) => e.toMap()).toList(),
         'archived': false,
       };
+      console.log('payload - $payload');
       await evaluateAssessment.add(payload);
       console.log('Added evaluate RFI successfully.');
     } catch (e) {

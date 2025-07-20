@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/utils/app_palette.dart';
 
 class RFIModel {
+  final String id;
   final String title;
   final String comment;
   final String fileName;
@@ -11,6 +12,7 @@ class RFIModel {
   final String result; // 'GO' | 'NO GO' | 'REVIEW'
 
   RFIModel({
+    required this.id,
     required this.title,
     required this.comment,
     required this.fileName,

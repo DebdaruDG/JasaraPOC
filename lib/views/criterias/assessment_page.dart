@@ -6,13 +6,13 @@ import 'package:provider/provider.dart';
 
 import '../../core/services/api/api_response.dart';
 import '../../models/response/evaluate_response_model.dart';
-import '../../providers/assessment_page_provider.dart';
 import '../../providers/assessment_provider.dart';
 import '../../providers/criteria_provider.dart';
 import '../../providers/screen_switch_provider.dart';
 import '../../widgets/top_score_pie_chart.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
+import 'package:uuid/uuid.dart';
 
 class AssessmentPage extends StatefulWidget {
   final html.File? file;
@@ -34,14 +34,34 @@ class _AssessmentPageState extends State<AssessmentPage> {
         listen: false,
       );
       Future.delayed(Duration.zero, () async {
+        await assessmentVM.setCriteriaCount(0);
         await assessmentVM.clearEvaluateResponses();
         await criteriaVM.fetchCriteriaList();
+        await assessmentVM.setCriteriaCount(
+          criteriaVM.criteriaListResponse.length,
+        );
         for (var item in criteriaVM.criteriaListResponse) {
-          assessmentVM.evaluateBE(
+          await assessmentVM.evaluateBE(
             widget.formJson ?? {},
             item.assistantId,
             widget.file!,
           );
+        }
+        // Automatically save once all evaluations are done
+        if (assessmentVM.evaluateResponses.length ==
+            criteriaVM.criteriaListResponse.length) {
+          var uuid = Uuid();
+          await assessmentVM.saveEvaluationAsRFI(
+            id: uuid.v4(),
+            title: 'Evaluation Summary',
+            comment: 'Summary of all criteria evaluations',
+            fileName: widget.file?.name ?? 'evaluation.pdf',
+            fileUrl:
+                'data:application/pdf;base64,${widget.file?.toString() ?? ''}', // Replace with actual base64 or URL
+            percentage: assessmentVM.averageScore,
+            result: assessmentVM.averageScore >= 70 ? 'GO' : 'NO GO',
+          );
+          console.log('Evaluation saved to Firebase');
         }
       });
     } catch (exc) {
@@ -84,13 +104,11 @@ class _AssessmentPageState extends State<AssessmentPage> {
                               color: JasaraPalette.dark2,
                             ),
                           ),
-                          SparkleAnimation(
-                            child: Text(
-                              'Average Score : ${(assessmentProvider.averageScore / 10).toStringAsFixed(2)}',
-                              style: JasaraTextStyles.primaryText500.copyWith(
-                                fontSize: 16,
-                                color: JasaraPalette.primary,
-                              ),
+                          Text(
+                            'Average Score : ${(assessmentProvider.averageScore / 10).toStringAsFixed(2)}',
+                            style: JasaraTextStyles.primaryText500.copyWith(
+                              fontSize: 16,
+                              color: JasaraPalette.primary,
                             ),
                           ),
                         ],

@@ -37,6 +37,7 @@ class EvaluateRFIModel {
   final double budget;
   final String rfiPdf;
   final List<EvaluateResult> evaluationResults;
+  final bool archived;
 
   EvaluateRFIModel({
     required this.id,
@@ -45,6 +46,7 @@ class EvaluateRFIModel {
     required this.budget,
     required this.rfiPdf,
     required this.evaluationResults,
+    required this.archived,
   });
 
   factory EvaluateRFIModel.fromDoc(String id, Map<String, dynamic> map) {
@@ -58,6 +60,7 @@ class EvaluateRFIModel {
           List<Map<String, dynamic>>.from(
             map['evaluation_results'],
           ).map((e) => EvaluateResult.fromMap(e)).toList(),
+      archived: map['archived'],
     );
   }
 

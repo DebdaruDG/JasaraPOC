@@ -21,6 +21,7 @@ dependencies:
   percent_indicator: ^4.2.5
   http_parser: ^4.1.2
   fl_chart: ^1.0.0
+  uuid: ^4.5.1
 
 dev_dependencies:
   flutter_test:

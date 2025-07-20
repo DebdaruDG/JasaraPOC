@@ -1,3 +1,5 @@
+import '../evaluate_assessment_firebase_model.dart';
+
 class EvaluateResponse {
   final String document;
   final List<EvaluateResult> results;
@@ -6,49 +8,19 @@ class EvaluateResponse {
 
   factory EvaluateResponse.fromJson(Map<String, dynamic> json) {
     return EvaluateResponse(
-      document: json['document'],
-      results: List<EvaluateResult>.from(
-        json['results'].map((x) => EvaluateResult.fromJson(x)),
-      ),
+      document: json['document'] as String,
+      results:
+          (json['results'] as List<dynamic>?)
+              ?.map((x) => EvaluateResult.fromMap(x as Map<String, dynamic>))
+              .toList() ??
+          [],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'document': document,
-      'results': results.map((x) => x.toJson()).toList(),
-    };
-  }
-}
-
-class EvaluateResult {
-  final String assistantId;
-  final String criteria;
-  final String summary;
-  final int score;
-
-  EvaluateResult({
-    required this.assistantId,
-    required this.criteria,
-    required this.summary,
-    required this.score,
-  });
-
-  factory EvaluateResult.fromJson(Map<String, dynamic> json) {
-    return EvaluateResult(
-      assistantId: json['assistant_id'],
-      criteria: json['criteria'],
-      summary: json['summary'],
-      score: json['score'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'assistant_id': assistantId,
-      'criteria': criteria,
-      'summary': summary,
-      'score': score,
+      'results': results.map((x) => x.toMap()).toList(),
     };
   }
 }
