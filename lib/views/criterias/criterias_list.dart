@@ -48,7 +48,7 @@ class _CriteriasListState extends State<CriteriasList> {
     final CriteriaData data = initialData ?? CriteriaData();
 
     showDialog(
-      context: context,
+      context: rootContext,
       builder:
           (context) => StatefulBuilder(
             builder: (BuildContext context, StateSetter dialogSetState) {
@@ -74,7 +74,7 @@ class _CriteriasListState extends State<CriteriasList> {
                           ),
                         ),
                         InkWell(
-                          onTap: () => Navigator.pop(context),
+                          onTap: () => Navigator.pop(rootContext),
                           child: Icon(
                             Icons.close,
                             color: JasaraPalette.dark1,
@@ -87,7 +87,7 @@ class _CriteriasListState extends State<CriteriasList> {
                 ),
                 content: Container(
                   width:
-                      MediaQuery.of(context).size.width *
+                      MediaQuery.of(rootContext).size.width *
                       0.4, // Larger dialog width
                   margin: const EdgeInsets.all(12),
                   child: SingleChildScrollView(
@@ -197,7 +197,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                           .length >=
                                       3) {
                                     JasaraToast.error(
-                                      context,
+                                      rootContext,
                                       "Maximum 3 files allowed.",
                                     );
                                     return;
@@ -271,7 +271,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                            onPressed: () => Navigator.pop(context),
+                            onPressed: () => Navigator.pop(rootContext),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -301,14 +301,14 @@ class _CriteriasListState extends State<CriteriasList> {
                               if (criteriaName.isEmpty ||
                                   textInstruction.isEmpty) {
                                 JasaraToast.error(
-                                  context,
+                                  rootContext,
                                   "Please fill all fields.",
                                 );
                                 return;
                               }
 
                               final provider = Provider.of<CriteriaProvider>(
-                                context,
+                                rootContext,
                                 listen: false,
                               );
 
@@ -321,7 +321,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                   pdf3: data.files[2],
                                 );
                                 await JasaraToast.success(
-                                  context,
+                                  rootContext,
                                   "Criteria added successfully!",
                                 );
 
@@ -332,11 +332,11 @@ class _CriteriasListState extends State<CriteriasList> {
                                 } else {
                                   _addCriteria(data);
                                 }
-                                Navigator.pop(context);
+                                Navigator.pop(rootContext);
                               } catch (e) {
                                 console.log('errors - $e');
                                 JasaraToast.error(
-                                  context,
+                                  rootContext,
                                   "Something went wrong!",
                                 );
                               }
