@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:provider/provider.dart';
 import '../../core/services/firebase/core_service.dart';
 import '../../providers/criteria_provider.dart';
@@ -15,6 +16,9 @@ import '../../models/rfi_stat_model.dart';
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_text_field.dart';
 import '../../widgets/utils/app_toast.dart';
+import 'dart:html' as html;
+
+import '../../widgets/view_pdf.dart';
 
 class CriteriasList extends StatefulWidget {
   const CriteriasList({super.key});
@@ -502,10 +506,67 @@ class _CriteriasListState extends State<CriteriasList> {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                  item.files.map((f) => f.name).join(', '),
-                                  style: const TextStyle(color: Colors.blue),
-                                  overflow: TextOverflow.ellipsis,
+                                Wrap(
+                                  spacing: 6,
+                                  runSpacing: 6,
+                                  children:
+                                      item.files.map((f) {
+                                        return Material(
+                                          color: JasaraPalette.greyShade100,
+                                          borderRadius: BorderRadius.circular(
+                                            20,
+                                          ),
+                                          child: InkWell(
+                                            borderRadius: BorderRadius.circular(
+                                              20,
+                                            ),
+                                            onTap: () {
+                                              showPDFViewerDialog(
+                                                context,
+                                                f.name,
+                                                f.base64,
+                                              );
+                                            },
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 10,
+                                                    vertical: 6,
+                                                  ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.picture_as_pdf,
+                                                    size: 18,
+                                                    color: Colors.red,
+                                                  ),
+                                                  const SizedBox(width: 4),
+
+                                                  Flexible(
+                                                    child: Text(
+                                                      f.name,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: const TextStyle(
+                                                        fontSize: 13,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 6),
+                                                  const Icon(
+                                                    Icons.visibility,
+                                                    size: 18,
+                                                    color:
+                                                        JasaraPalette
+                                                            .deepIndigo,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
                                 ),
 
                                 PopupActionMenu(
@@ -594,50 +655,6 @@ class _CriteriasListState extends State<CriteriasList> {
       ),
     );
   }
-
-  Widget _buildFilePicker({
-    required String label,
-    required File? file,
-    required ValueChanged<File?> onFilePicked,
-  }) {
-    return InkWell(
-      onTap: () async {
-        final result = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: ['pdf'],
-          withData: false,
-        );
-        if (result != null && result.files.single.size <= 500 * 1024) {
-          final path = result.files.single.path;
-          if (path != null) {
-            onFilePicked(File(path));
-          }
-        }
-      },
-      child: Container(
-        height: 80,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: JasaraPalette.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: JasaraPalette.primary.withOpacity(0.4)),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.picture_as_pdf, color: Colors.red.shade400),
-            const SizedBox(height: 4),
-            Text(
-              file != null ? file.path.split("/").last : label,
-              style: JasaraTextStyles.primaryText400,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
 
 class CriteriaData {
@@ -650,4 +667,40 @@ class CriteriaData {
     criteriaController.dispose();
     instructionController.dispose();
   }
+}
+
+void showPDFViewerDialog(
+  BuildContext context,
+  String fileName,
+  String base64PDF,
+) {
+  showDialog(
+    context: context,
+    builder:
+        (ctx) => AlertDialog(
+          contentPadding: const EdgeInsets.all(8),
+          insetPadding: const EdgeInsets.all(20),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "$fileName ",
+                style: JasaraTextStyles.primaryText500.copyWith(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(ctx).pop(),
+              ),
+            ],
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: PDFViewerWeb(base64PDF: base64PDF),
+          ),
+        ),
+  );
 }

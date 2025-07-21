@@ -61,11 +61,10 @@ class Sidebar extends StatelessWidget {
                 color: JasaraPalette.deepIndigo,
                 borderRadius: BorderRadius.only(
                   bottomRight:
-                      isRfiSelected
-                          ? Radius.circular(80)
-                          : isCriteriaSelected
-                          ? Radius.circular(80)
-                          : Radius.zero,
+                      // isRfiSelected
+                      //     ? Radius.circular(80)
+                      //     :
+                      isCriteriaSelected ? Radius.circular(80) : Radius.zero,
                   topRight: Radius.circular(120),
                 ),
               ),
