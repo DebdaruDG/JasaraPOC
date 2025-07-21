@@ -12,6 +12,7 @@ import '../../widgets/add_rfi_document_modal.dart';
 import '../../widgets/utils/app_button.dart';
 import 'package:provider/provider.dart';
 import '../../providers/assessment_provider.dart';
+import '../criterias/criterias_list.dart';
 
 class RFIListPage extends StatefulWidget {
   const RFIListPage({super.key});
@@ -158,12 +159,50 @@ class _RFIListPageState extends State<RFIListPage> {
                     ],
                     rowData:
                         (provider.rfis.data ?? []).map((item) {
+                          console.log('item.fileName :- ${item.fileName}');
                           return [
                             Text(item.title, textAlign: TextAlign.center),
                             Text(item.comment, textAlign: TextAlign.center),
-                            Text(
-                              item.fileName,
-                              style: const TextStyle(color: Colors.blue),
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                showPDFViewerDialog(
+                                  context,
+                                  item.fileName,
+                                  item.fileName,
+                                );
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Icons.picture_as_pdf,
+                                      size: 18,
+                                      color: Colors.red,
+                                    ),
+                                    const SizedBox(width: 4),
+
+                                    Flexible(
+                                      child: Text(
+                                        item.fileName,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 13),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
+                                    const Icon(
+                                      Icons.visibility,
+                                      size: 18,
+                                      color: JasaraPalette.deepIndigo,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                             RFIResultIndicator(rfi: item),
                             PopupActionMenu(

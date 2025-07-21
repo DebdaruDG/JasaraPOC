@@ -24,7 +24,9 @@ class CriteriaProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  ApiResponse<CriteriaResponse> _responseBodyModel = ApiResponse.loading();
+  ApiResponse<CriteriaResponse> _responseBodyModel = ApiResponse.completed(
+    null,
+  );
   ApiResponse<CriteriaResponse> get responseBodyModel => _responseBodyModel;
 
   Future<String?> platformFileToBase64(PlatformFile? file) async {

@@ -3,8 +3,6 @@ import 'dart:developer' as console;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
-import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
-
 import '../models/sidebarItemModel.dart';
 import '../widgets/collapsed_sidebar_widget.dart';
 import '../widgets/expanded_sidebar_widget.dart';
@@ -44,144 +42,94 @@ class Sidebar extends StatelessWidget {
         color: JasaraPalette.deepIndigo,
         borderRadius: const BorderRadius.only(topRight: Radius.circular(80)),
       ),
-      child: Container(
-        decoration: BoxDecoration(color: JasaraPalette.background),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            /// Logo/Header
-            Container(
-              width: isCollapsed ? 70 : 300,
-              height: MediaQuery.of(context).size.height * 0.4,
-              padding: EdgeInsets.symmetric(
-                horizontal: 16.0,
-                vertical: MediaQuery.of(context).size.height * 0.1125,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          /// Logo/Header
+          Container(
+            width: isCollapsed ? 70 : 300,
+            height: MediaQuery.of(context).size.height * 0.4,
+            padding: EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: MediaQuery.of(context).size.height * 0.1125,
+            ),
+            decoration: BoxDecoration(
+              color: JasaraPalette.deepIndigo,
+              borderRadius: const BorderRadius.only(
+                topRight: Radius.circular(80),
               ),
+            ),
+            child:
+                isCollapsed
+                    ? jasaraIconSVGLogo(45)
+                    : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [jasaraSVGLogo(45)],
+                    ),
+          ),
+          // Criteria + RFI
+          Container(
+            decoration: BoxDecoration(color: JasaraPalette.deepIndigo),
+            child: Column(
+              children: [
+                ...items.map((item) {
+                  return isCollapsed
+                      ? CollapsedSidebarItem(
+                        icon: item.icon,
+                        tooltip: item.label,
+                        onTap: item.onTap,
+                        isSelected: item.isSelected,
+                      )
+                      : ExpandedSidebarItem(
+                        icon: item.icon,
+                        label: item.label,
+                        onTap: item.onTap,
+                        isSelected: item.isSelected,
+                        isCriteriaSelected: isCriteriaSelected,
+                        isRfiSelected: isRfiSelected,
+                      );
+                }),
+              ],
+            ),
+          ),
+          // Profile + Switch to admin button
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.only(top: 100),
               decoration: BoxDecoration(
                 color: JasaraPalette.deepIndigo,
-                borderRadius: BorderRadius.only(
-                  // bottomRight:
-                  //     isCriteriaSelected && (isCollapsed == false)
-                  //         ? Radius.circular(80)
-                  //         : Radius.zero,
-                  topRight: Radius.circular(120),
+                borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(80),
                 ),
               ),
-              child:
-                  isCollapsed
-                      ? jasaraIconSVGLogo(45)
-                      : Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [jasaraSVGLogo(45)],
-                      ),
-            ),
-            // Criteria + RFI
-            Container(
-              decoration: BoxDecoration(color: JasaraPalette.deepIndigo),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ...items.map((item) {
-                    return isCollapsed
-                        ? CollapsedSidebarItem(
-                          icon: item.icon,
-                          tooltip: item.label,
-                          onTap: item.onTap,
-                          isSelected: item.isSelected,
-                        )
-                        : ExpandedSidebarItem(
-                          icon: item.icon,
-                          label: item.label,
-                          onTap: item.onTap,
-                          isSelected: item.isSelected,
-                          isCriteriaSelected: isCriteriaSelected,
-                          isRfiSelected: isRfiSelected,
-                        );
-                  }),
+                  ProfileTile(
+                    name: 'Abdullah Abu Rasin',
+                    title: '@abdullah',
+                    imageUrl:
+                        'assets/images/profile_image.png', // replace with real URL or Asset
+                    isCollapsed: isCollapsed,
+                    onTap: () => console.log('Profile clicked'),
+                  ),
+
+                  /// Collapse Toggle
+                  IconButton(
+                    icon: Icon(
+                      isCollapsed
+                          ? Icons.keyboard_arrow_right
+                          : Icons.keyboard_arrow_left,
+                      color: Colors.white,
+                    ),
+                    onPressed: toggleCollapse,
+                  ),
                 ],
               ),
             ),
-
-            // Profile + Switch to admin button
-            Expanded(
-              child: Container(
-                padding: const EdgeInsets.only(top: 100),
-                decoration: BoxDecoration(
-                  color: JasaraPalette.deepIndigo,
-                  borderRadius: BorderRadius.only(
-                    // topRight:
-                    //     isRfiSelected && (isCollapsed == false)
-                    //         ? Radius.circular(80)
-                    //         : Radius.zero,
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-
-                  children: [
-                    // Container(
-                    //   margin:
-                    //       isCollapsed == false
-                    //           ? const EdgeInsets.all(12)
-                    //           : const EdgeInsets.symmetric(
-                    //             horizontal: 4,
-                    //             vertical: 12,
-                    //           ),
-                    //   decoration: BoxDecoration(
-                    //     color: JasaraPalette.teal,
-                    //     borderRadius: BorderRadius.all(Radius.circular(12)),
-                    //   ),
-                    //   child: ListTile(
-                    //     titleAlignment: ListTileTitleAlignment.center,
-                    //     contentPadding: const EdgeInsets.symmetric(
-                    //       horizontal: 10,
-                    //     ),
-                    //     title: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.center,
-                    //       crossAxisAlignment: CrossAxisAlignment.center,
-                    //       children: [
-                    //         const Icon(Icons.swap_horiz, color: Colors.white),
-                    //         if (isCollapsed == false)
-                    //           Padding(
-                    //             padding: const EdgeInsets.only(left: 6.0),
-                    //             child: Text(
-                    //               'Switch to ${isRfi ? 'Admin' : 'User'}',
-                    //               style: JasaraTextStyles.primaryText500
-                    //                   .copyWith(
-                    //                     color: JasaraPalette.background,
-                    //                   ),
-                    //             ),
-                    //           ),
-                    //       ],
-                    //     ),
-                    //     onTap: onRoleSwitch,
-                    //   ),
-                    // ),
-                    ProfileTile(
-                      name: 'Abdullah Abu Rasin',
-                      title: '@abdullah',
-                      imageUrl:
-                          'assets/images/profile_image.png', // replace with real URL or Asset
-                      isCollapsed: isCollapsed,
-                      onTap: () => console.log('Profile clicked'),
-                    ),
-
-                    /// Collapse Toggle
-                    IconButton(
-                      icon: Icon(
-                        isCollapsed
-                            ? Icons.keyboard_arrow_right
-                            : Icons.keyboard_arrow_left,
-                        color: Colors.white,
-                      ),
-                      onPressed: toggleCollapse,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -191,6 +139,7 @@ class Sidebar extends StatelessWidget {
     height: height,
     colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
   );
+
   Widget jasaraIconSVGLogo(double height) => SvgPicture.asset(
     'assets/logos/jasara_small_icon.svg',
     height: height,

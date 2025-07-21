@@ -13,7 +13,7 @@ class JasaraToast {
     BuildContext context,
     String message, {
     required Color backgroundColor,
-    Duration duration = const Duration(seconds: 3),
+    Duration duration = const Duration(seconds: 1, milliseconds: 200),
   }) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     scaffoldMessenger.clearSnackBars(); // Clear existing SnackBars
