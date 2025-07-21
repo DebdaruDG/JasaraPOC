@@ -39,18 +39,15 @@ class FirebaseService {
     required String assistantId,
     required String textInstructions,
     required String title,
-    String? pdf1,
-    String? pdf2,
-    String? pdf3,
+    required List<CriteriaFileModel> files,
   }) async {
     try {
       final result = await criteriaPdfs.add({
         'assistant_id': assistantId,
         'text_instructions': textInstructions,
         'title': title,
-        'pdf1': pdf1,
-        'pdf2': pdf2,
-        'pdf3': pdf3,
+        'files': files.map((f) => f.toJson()).toList(),
+        'createdAt': FieldValue.serverTimestamp(),
       });
       console.log('Criteria added to Firestore: $result');
     } on FirebaseException catch (e) {

@@ -40,7 +40,11 @@ class _CriteriasListState extends State<CriteriasList> {
     );
   }
 
-  void _openCriteriaDialog({CriteriaData? initialData, int? editIndex}) {
+  void _openCriteriaDialog({
+    required BuildContext rootContext,
+    CriteriaData? initialData,
+    int? editIndex,
+  }) {
     final CriteriaData data = initialData ?? CriteriaData();
 
     showDialog(
@@ -239,7 +243,7 @@ class _CriteriasListState extends State<CriteriasList> {
                                     });
                                   } else if (result != null) {
                                     JasaraToast.error(
-                                      context,
+                                      rootContext,
                                       "File size exceeds 500KB limit.",
                                     );
                                   }
@@ -464,7 +468,7 @@ class _CriteriasListState extends State<CriteriasList> {
                     height: 50,
                     width: buttonWidth,
                     backgroundColor: JasaraPalette.indigoBlue,
-                    onPressed: () => _openCriteriaDialog(),
+                    onPressed: () => _openCriteriaDialog(rootContext: context),
                   );
                 },
               ),
@@ -479,98 +483,108 @@ class _CriteriasListState extends State<CriteriasList> {
                 builder: (context, criteriaVM, _) {
                   final list = criteriaVM.criteriaListResponse;
 
-                  if (list.isEmpty) {
-                    return const Center(child: Text("No Criteria Added Yet"));
-                  }
+                  return Column(
+                    children: [
+                      GenericDataTable(
+                        columnFlexes: [3, 3, 2, 1],
+                        columnTitles: const [
+                          'Title',
+                          'Instructions',
+                          'Supporting Files',
+                          '',
+                        ],
+                        rowData:
+                            list.map((item) {
+                              return [
+                                Text(item.title),
+                                Text(
+                                  item.textInstructions,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                Text(
+                                  item.files.map((f) => f.name).join(', '),
+                                  style: const TextStyle(color: Colors.blue),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
 
-                  return GenericDataTable(
-                    columnFlexes: [3, 3, 2, 1],
-                    columnTitles: const [
-                      'Title',
-                      'Instructions',
-                      'Supporting Files',
-                      '',
-                    ],
-                    rowData:
-                        list.map((item) {
-                          return [
-                            Text(item.title),
-                            Text(
-                              item.textInstructions,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              'file_01.png, file_02.png',
-                              style: const TextStyle(color: Colors.blue),
-                            ),
-                            PopupActionMenu(
-                              onEdit: () => {},
-                              onArchive:
-                                  () => debugPrint('Archive: ${item.title}'),
-                              onDelete: () async {
-                                final confirm = await showDialog<bool>(
-                                  context: context,
-                                  builder:
-                                      (_) => AlertDialog(
-                                        title: const Text('Delete Criteria'),
-                                        content: const Text(
-                                          'Are you sure you want to delete this criteria?',
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            onPressed:
-                                                () => Navigator.pop(
-                                                  context,
-                                                  false,
-                                                ),
-                                            child: const Text('Cancel'),
-                                          ),
-                                          TextButton(
-                                            onPressed:
-                                                () => Navigator.pop(
-                                                  context,
-                                                  true,
-                                                ),
-                                            child: const Text(
-                                              'Delete',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                              ),
+                                PopupActionMenu(
+                                  onEdit: () => {},
+                                  onArchive:
+                                      () =>
+                                          debugPrint('Archive: ${item.title}'),
+                                  onDelete: () async {
+                                    final confirm = await showDialog<bool>(
+                                      context: context,
+                                      builder:
+                                          (_) => AlertDialog(
+                                            title: const Text(
+                                              'Delete Criteria',
                                             ),
+                                            content: const Text(
+                                              'Are you sure you want to delete this criteria?',
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed:
+                                                    () => Navigator.pop(
+                                                      context,
+                                                      false,
+                                                    ),
+                                                child: const Text('Cancel'),
+                                              ),
+                                              TextButton(
+                                                onPressed:
+                                                    () => Navigator.pop(
+                                                      context,
+                                                      true,
+                                                    ),
+                                                child: const Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
-                                      ),
-                                );
-
-                                if (confirm == true) {
-                                  try {
-                                    await FirebaseService.deleteCriteria(
-                                      item.docId ?? '',
                                     );
 
-                                    /// ✅ Refresh API after deletion
-                                    await Provider.of<CriteriaProvider>(
-                                      context,
-                                      listen: false,
-                                    ).fetchCriteriaList();
+                                    if (confirm == true) {
+                                      try {
+                                        await FirebaseService.deleteCriteria(
+                                          item.docId ?? '',
+                                        );
 
-                                    JasaraToast.success(
-                                      context,
-                                      "Criteria deleted successfully.",
-                                    );
-                                  } catch (e) {
-                                    console.log("Error deleting: $e");
-                                    JasaraToast.error(
-                                      context,
-                                      "Failed to delete the criteria.",
-                                    );
-                                  }
-                                }
-                              },
-                            ),
-                          ];
-                        }).toList(),
+                                        /// ✅ Refresh API after deletion
+                                        await Provider.of<CriteriaProvider>(
+                                          context,
+                                          listen: false,
+                                        ).fetchCriteriaList();
+
+                                        JasaraToast.success(
+                                          context,
+                                          "Criteria deleted successfully.",
+                                        );
+                                      } catch (e) {
+                                        console.log("Error deleting: $e");
+                                        JasaraToast.error(
+                                          context,
+                                          "Failed to delete the criteria.",
+                                        );
+                                      }
+                                    }
+                                  },
+                                ),
+                              ];
+                            }).toList(),
+                      ),
+                      if (list.isEmpty)
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text("No Criteria Added Yet !"),
+                        ),
+                    ],
                   );
                 },
               ),

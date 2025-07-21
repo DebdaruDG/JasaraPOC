@@ -65,17 +65,19 @@ class CriteriaProvider extends ChangeNotifier {
       _responseBodyModel = ApiResponse.completed(response.data!);
 
       final assistantId = response.data!.assistantId;
-      String? pdf1Base64 = await platformFileToBase64(pdf1);
-      String? pdf2Base64 = await platformFileToBase64(pdf2);
-      String? pdf3Base64 = await platformFileToBase64(pdf3);
+      List<CriteriaFileModel> criteriaFiles = [];
+      for (PlatformFile pdf in validPdfs) {
+        String? base64 = await platformFileToBase64(pdf);
+        if (base64 != null) {
+          criteriaFiles.add(CriteriaFileModel(name: pdf.name, base64: base64));
+        }
+      }
 
       await FirebaseService.addCriteriaPdf(
         assistantId: assistantId,
         title: criteriaName,
         textInstructions: textInstruction,
-        pdf1: pdf1Base64,
-        pdf2: pdf2Base64,
-        pdf3: pdf3Base64,
+        files: criteriaFiles,
       );
       await fetchCriteriaList();
     } else {
