@@ -200,7 +200,15 @@ class _AssessmentPageState extends State<AssessmentPage> {
                               assessmentProvider.evaluateResponse.status ==
                                       Status.loading
                                   ? null
-                                  : () {
+                                  : () async {
+                                    final screenSwitchProvider =
+                                        Provider.of<ScreenSwitchProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    screenSwitchProvider.toggleAssessment(
+                                      false,
+                                    );
                                     Navigator.pop(context);
                                   },
                           style: ElevatedButton.styleFrom(

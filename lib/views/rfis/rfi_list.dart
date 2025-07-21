@@ -3,6 +3,7 @@ import 'dart:developer' as console;
 import 'package:flutter/material.dart';
 import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
+import '../../providers/screen_switch_provider.dart';
 import '../../widgets/generic_data_table.dart';
 import '../../widgets/popup_action_menu.dart';
 import '../../widgets/rfi_result_indicator.dart';
@@ -26,7 +27,14 @@ class _RFIListPageState extends State<RFIListPage> {
   void initState() {
     super.initState();
     final provider = Provider.of<AssessmentProvider>(context, listen: false);
-    Future.delayed(Duration.zero, () async => await provider.fetchRFIs());
+    final screenSwitchProvider = Provider.of<ScreenSwitchProvider>(
+      context,
+      listen: false,
+    );
+    Future.delayed(Duration.zero, () async {
+      await provider.fetchRFIs();
+      screenSwitchProvider.toggleAssessment(false);
+    });
   }
 
   @override
