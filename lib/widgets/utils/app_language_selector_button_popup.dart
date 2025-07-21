@@ -57,7 +57,7 @@ class LanguageSelectorButton extends StatelessWidget {
                       width: 36,
                       height: 36,
                       child: Image.asset(
-                        'assets/images/flags/arabic_language_flag.png',
+                        'assets/images/flags/saudi_arabia_flag.png',
                         fit: BoxFit.cover,
                       ),
                     ),

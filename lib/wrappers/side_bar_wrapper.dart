@@ -116,49 +116,50 @@ class Sidebar extends StatelessWidget {
                   ),
                 ),
                 child: Column(
-                  children: [
-                    Container(
-                      margin:
-                          isCollapsed == false
-                              ? const EdgeInsets.all(12)
-                              : const EdgeInsets.symmetric(
-                                horizontal: 4,
-                                vertical: 12,
-                              ),
-                      decoration: BoxDecoration(
-                        color: JasaraPalette.teal,
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                      child: ListTile(
-                        titleAlignment: ListTileTitleAlignment.center,
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                        ),
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            const Icon(Icons.swap_horiz, color: Colors.white),
-                            if (isCollapsed == false)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: Text(
-                                  'Switch to ${isRfi ? 'Admin' : 'User'}',
-                                  style: JasaraTextStyles.primaryText500
-                                      .copyWith(
-                                        color: JasaraPalette.background,
-                                      ),
-                                ),
-                              ),
-                          ],
-                        ),
-                        onTap: onRoleSwitch,
-                      ),
-                    ),
+                  mainAxisAlignment: MainAxisAlignment.end,
 
+                  children: [
+                    // Container(
+                    //   margin:
+                    //       isCollapsed == false
+                    //           ? const EdgeInsets.all(12)
+                    //           : const EdgeInsets.symmetric(
+                    //             horizontal: 4,
+                    //             vertical: 12,
+                    //           ),
+                    //   decoration: BoxDecoration(
+                    //     color: JasaraPalette.teal,
+                    //     borderRadius: BorderRadius.all(Radius.circular(12)),
+                    //   ),
+                    //   child: ListTile(
+                    //     titleAlignment: ListTileTitleAlignment.center,
+                    //     contentPadding: const EdgeInsets.symmetric(
+                    //       horizontal: 10,
+                    //     ),
+                    //     title: Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       crossAxisAlignment: CrossAxisAlignment.center,
+                    //       children: [
+                    //         const Icon(Icons.swap_horiz, color: Colors.white),
+                    //         if (isCollapsed == false)
+                    //           Padding(
+                    //             padding: const EdgeInsets.only(left: 6.0),
+                    //             child: Text(
+                    //               'Switch to ${isRfi ? 'Admin' : 'User'}',
+                    //               style: JasaraTextStyles.primaryText500
+                    //                   .copyWith(
+                    //                     color: JasaraPalette.background,
+                    //                   ),
+                    //             ),
+                    //           ),
+                    //       ],
+                    //     ),
+                    //     onTap: onRoleSwitch,
+                    //   ),
+                    // ),
                     ProfileTile(
                       name: 'Abdullah Abu Rasin',
-                      title: '',
+                      title: '@abdullah',
                       imageUrl:
                           'assets/images/profile_image.png', // replace with real URL or Asset
                       isCollapsed: isCollapsed,

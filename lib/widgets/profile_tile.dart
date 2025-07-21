@@ -39,7 +39,7 @@ class ProfileTile extends StatelessWidget {
             isCollapsed
                 ? null
                 : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
