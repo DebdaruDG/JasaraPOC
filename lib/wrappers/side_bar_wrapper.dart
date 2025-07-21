@@ -61,7 +61,9 @@ class Sidebar extends StatelessWidget {
                 color: JasaraPalette.deepIndigo,
                 borderRadius: BorderRadius.only(
                   bottomRight:
-                      isCriteriaSelected ? Radius.circular(80) : Radius.zero,
+                      isCriteriaSelected && (isCollapsed == false)
+                          ? Radius.circular(80)
+                          : Radius.zero,
                   topRight: Radius.circular(120),
                 ),
               ),
@@ -127,7 +129,10 @@ class Sidebar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: JasaraPalette.deepIndigo,
                   borderRadius: BorderRadius.only(
-                    topRight: isRfiSelected ? Radius.circular(80) : Radius.zero,
+                    topRight:
+                        isRfiSelected && (isCollapsed == false)
+                            ? Radius.circular(80)
+                            : Radius.zero,
                   ),
                 ),
                 child: Column(
