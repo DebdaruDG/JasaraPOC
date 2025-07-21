@@ -40,16 +40,16 @@ class _AssessmentPageState extends State<AssessmentPage> {
         await assessmentVM.setCriteriaCount(
           criteriaVM.criteriaListResponse.length,
         );
+        List<String> descriptions = [];
         for (var item in criteriaVM.criteriaListResponse) {
           await assessmentVM.evaluateBE(
             widget.formJson ?? {},
             item.assistantId,
             widget.file!,
           );
-        }
-        List<String> descriptions = [];
-        for (var item in assessmentVM.evaluateResponses) {
-          descriptions.add(item.results[0].summary);
+          for (var item in assessmentVM.evaluateResponses) {
+            descriptions.add(item.results[0].summary);
+          }
         }
         await assessmentVM.evaluateCriteriaSummary(descriptions);
         if (assessmentVM.evaluateResponses.length ==

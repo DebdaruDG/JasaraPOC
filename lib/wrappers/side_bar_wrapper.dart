@@ -60,10 +60,10 @@ class Sidebar extends StatelessWidget {
               decoration: BoxDecoration(
                 color: JasaraPalette.deepIndigo,
                 borderRadius: BorderRadius.only(
-                  bottomRight:
-                      isCriteriaSelected && (isCollapsed == false)
-                          ? Radius.circular(80)
-                          : Radius.zero,
+                  // bottomRight:
+                  //     isCriteriaSelected && (isCollapsed == false)
+                  //         ? Radius.circular(80)
+                  //         : Radius.zero,
                   topRight: Radius.circular(120),
                 ),
               ),
@@ -109,47 +109,58 @@ class Sidebar extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: JasaraPalette.deepIndigo,
                   borderRadius: BorderRadius.only(
-                    topRight:
-                        isRfiSelected && (isCollapsed == false)
-                            ? Radius.circular(80)
-                            : Radius.zero,
+                    // topRight:
+                    //     isRfiSelected && (isCollapsed == false)
+                    //         ? Radius.circular(80)
+                    //         : Radius.zero,
                   ),
                 ),
                 child: Column(
                   children: [
                     Container(
-                      margin: const EdgeInsets.all(12),
+                      margin:
+                          isCollapsed == false
+                              ? const EdgeInsets.all(12)
+                              : const EdgeInsets.symmetric(
+                                horizontal: 4,
+                                vertical: 12,
+                              ),
                       decoration: BoxDecoration(
                         color: JasaraPalette.teal,
                         borderRadius: BorderRadius.all(Radius.circular(12)),
                       ),
                       child: ListTile(
-                        leading: const Icon(
-                          Icons.swap_horiz,
-                          color: Colors.white,
-                        ),
+                        titleAlignment: ListTileTitleAlignment.center,
                         contentPadding: const EdgeInsets.symmetric(
                           horizontal: 10,
                         ),
-                        title:
-                            isCollapsed
-                                ? null
-                                : Text(
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.swap_horiz, color: Colors.white),
+                            if (isCollapsed == false)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6.0),
+                                child: Text(
                                   'Switch to ${isRfi ? 'Admin' : 'User'}',
                                   style: JasaraTextStyles.primaryText500
                                       .copyWith(
                                         color: JasaraPalette.background,
                                       ),
                                 ),
+                              ),
+                          ],
+                        ),
                         onTap: onRoleSwitch,
                       ),
                     ),
 
                     ProfileTile(
-                      name: 'F. Sullivan',
-                      title: '@Frankie',
+                      name: 'Abdullah Abu Rasin',
+                      title: '',
                       imageUrl:
-                          'assets/images/download.jpeg', // replace with real URL or Asset
+                          'assets/images/profile_image.png', // replace with real URL or Asset
                       isCollapsed: isCollapsed,
                       onTap: () => console.log('Profile clicked'),
                     ),

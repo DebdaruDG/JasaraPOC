@@ -20,7 +20,11 @@ class ProfileTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(12),
+      margin:
+          isCollapsed == false
+              ? const EdgeInsets.all(12)
+              : const EdgeInsets.symmetric(horizontal: 4, vertical: 24),
+      padding: isCollapsed == false ? const EdgeInsets.all(6) : EdgeInsets.zero,
       decoration: BoxDecoration(
         color: JasaraPalette.primary,
         borderRadius: const BorderRadius.all(Radius.circular(12)),
@@ -35,7 +39,8 @@ class ProfileTile extends StatelessWidget {
             isCollapsed
                 ? null
                 : Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
@@ -45,14 +50,15 @@ class ProfileTile extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontSize: 13,
+                    if (title.isNotEmpty)
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          fontSize: 13,
+                        ),
                       ),
-                    ),
                   ],
                 ),
         onTap: onTap,
