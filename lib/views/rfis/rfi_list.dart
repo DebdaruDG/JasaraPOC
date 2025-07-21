@@ -71,172 +71,172 @@ class _RFIListPageState extends State<RFIListPage> {
             gradientColors: [JasaraPalette.skyBlue, JasaraPalette.aquaGreen],
           ),
         ];
-        console.log('provider.provider.rfis.data - ${provider.rfis.data}');
 
         return Scaffold(
           backgroundColor: JasaraPalette.greyShade100,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 45.0),
-            child: Column(
-              children: [
-                LayoutBuilder(
-                  builder: (context, constraints) {
-                    double width = constraints.maxWidth;
-                    int crossAxisCount = width < 1024 ? 2 : 4;
-
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: stats.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        mainAxisExtent: 120,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                      ),
-                      itemBuilder:
-                          (context, index) => RFIStatCard(stat: stats[index]),
-                    );
-                  },
-                ),
-
-                const SizedBox(height: 24),
-
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: LayoutBuilder(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  LayoutBuilder(
                     builder: (context, constraints) {
-                      double screenWidth = constraints.maxWidth;
-                      double buttonWidth;
+                      double width = constraints.maxWidth;
+                      int crossAxisCount = width < 1024 ? 2 : 4;
 
-                      if (screenWidth < 600) {
-                        buttonWidth = 85;
-                      } else if (screenWidth < 1024) {
-                        buttonWidth = 105;
-                      } else {
-                        buttonWidth = 125;
-                      }
-
-                      return CustomButton2(
-                        prefixIcon: Padding(
-                          padding: const EdgeInsets.only(right: 6.0),
-                          child: Icon(
-                            Icons.add,
-                            color: JasaraPalette.background,
-                            size: 24,
-                          ),
+                      return GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: stats.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          mainAxisExtent: 120,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
                         ),
-                        label: "New RFI",
-                        textStyle: JasaraTextStyles.primaryText500.copyWith(
-                          color: JasaraPalette.background,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
-                        ),
-                        height: 50,
-                        width: buttonWidth,
-                        backgroundColor: JasaraPalette.indigoBlue,
-                        onPressed: () => showAddRFIModal(context),
+                        itemBuilder:
+                            (context, index) => RFIStatCard(stat: stats[index]),
                       );
                     },
                   ),
-                ),
 
-                const SizedBox(height: 24),
+                  const SizedBox(height: 24),
 
-                Container(
-                  decoration: BoxDecoration(
-                    color: JasaraPalette.scaffoldBackground,
-                    borderRadius: const BorderRadius.all(Radius.circular(12)),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        double screenWidth = constraints.maxWidth;
+                        double buttonWidth;
+
+                        if (screenWidth < 600) {
+                          buttonWidth = 85;
+                        } else if (screenWidth < 1024) {
+                          buttonWidth = 105;
+                        } else {
+                          buttonWidth = 125;
+                        }
+
+                        return CustomButton2(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(right: 6.0),
+                            child: Icon(
+                              Icons.add,
+                              color: JasaraPalette.background,
+                              size: 24,
+                            ),
+                          ),
+                          label: "New RFI",
+                          textStyle: JasaraTextStyles.primaryText500.copyWith(
+                            color: JasaraPalette.background,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
+                          height: 50,
+                          width: buttonWidth,
+                          backgroundColor: JasaraPalette.indigoBlue,
+                          onPressed: () => showAddRFIModal(context),
+                        );
+                      },
+                    ),
                   ),
-                  child: GenericDataTable(
-                    columnFlexes: [1, 5, 2, 2, 1],
-                    columnTitles: const [
-                      'Project',
-                      'AI Comments',
-                      'RFI Files',
-                      'Result',
-                      '',
-                    ],
-                    rowData:
-                        (provider.rfis.data ?? []).map((item) {
-                          console.log('item.fileName :- ${item.fileName}');
-                          return [
-                            Text(item.title, textAlign: TextAlign.center),
-                            Text(item.comment, textAlign: TextAlign.center),
-                            InkWell(
-                              borderRadius: BorderRadius.circular(20),
-                              onTap: () {
-                                showPDFViewerDialog(
-                                  context,
-                                  item.fileName,
-                                  item.fileName,
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 6,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(
-                                      Icons.picture_as_pdf,
-                                      size: 18,
-                                      color: Colors.red,
-                                    ),
-                                    const SizedBox(width: 4),
 
-                                    Flexible(
-                                      child: Text(
-                                        item.fileName,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: const TextStyle(fontSize: 13),
+                  const SizedBox(height: 24),
+
+                  Container(
+                    decoration: BoxDecoration(
+                      color: JasaraPalette.scaffoldBackground,
+                      borderRadius: const BorderRadius.all(Radius.circular(12)),
+                    ),
+                    child: GenericDataTable(
+                      columnFlexes: [1, 5, 2, 2, 1],
+                      columnTitles: const [
+                        'Project',
+                        'AI Comments',
+                        'RFI Files',
+                        'Result',
+                        '',
+                      ],
+                      rowData:
+                          (provider.rfis.data ?? []).map((item) {
+                            return [
+                              Text(item.title, textAlign: TextAlign.center),
+                              Text(item.comment, textAlign: TextAlign.center),
+                              InkWell(
+                                borderRadius: BorderRadius.circular(20),
+                                onTap: () {
+                                  showPDFViewerDialog(
+                                    context,
+                                    item.fileName,
+                                    item.fileName,
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(
+                                        Icons.picture_as_pdf,
+                                        size: 18,
+                                        color: Colors.red,
                                       ),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    const Icon(
-                                      Icons.visibility,
-                                      size: 18,
-                                      color: JasaraPalette.deepIndigo,
-                                    ),
-                                  ],
+                                      const SizedBox(width: 4),
+
+                                      Flexible(
+                                        child: Text(
+                                          item.fileName,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 13),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
+                                      const Icon(
+                                        Icons.visibility,
+                                        size: 18,
+                                        color: JasaraPalette.deepIndigo,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                            RFIResultIndicator(rfi: item),
-                            PopupActionMenu(
-                              onEdit:
-                                  () => provider.updateRFI(
-                                    documentId: item.fileUrl,
-                                    title: item.title,
-                                    comment: item.comment,
-                                    fileName: item.fileName,
-                                    fileUrl: item.fileUrl,
-                                    percentage: item.percentage.toDouble(),
-                                    result: item.result,
-                                  ),
-                              onArchive:
-                                  () => provider.archiveRFI(item.fileUrl),
-                              onDelete: () async {
-                                await provider.deleteRFI(context, item.id);
-                                Future.delayed(
-                                  Duration.zero,
-                                  () async => await provider.fetchRFIs(),
-                                );
-                                // No need to refresh manually – provider notifies listeners
-                              },
-                            ),
-                          ];
-                        }).toList(),
+                              RFIResultIndicator(rfi: item),
+                              PopupActionMenu(
+                                onEdit:
+                                    () => provider.updateRFI(
+                                      documentId: item.fileUrl,
+                                      title: item.title,
+                                      comment: item.comment,
+                                      fileName: item.fileName,
+                                      fileUrl: item.fileUrl,
+                                      percentage: item.percentage.toDouble(),
+                                      result: item.result,
+                                    ),
+                                onArchive:
+                                    () => provider.archiveRFI(item.fileUrl),
+                                onDelete: () async {
+                                  await provider.deleteRFI(context, item.id);
+                                  Future.delayed(
+                                    Duration.zero,
+                                    () async => await provider.fetchRFIs(),
+                                  );
+                                  // No need to refresh manually – provider notifies listeners
+                                },
+                              ),
+                            ];
+                          }).toList(),
+                    ),
                   ),
-                ),
-                if ((provider.rfis.data ?? []).isEmpty)
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text('Nothing to Show !'),
-                  ),
-              ],
+                  if ((provider.rfis.data ?? []).isEmpty)
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Nothing to Show !'),
+                    ),
+                ],
+              ),
             ),
           ),
         );

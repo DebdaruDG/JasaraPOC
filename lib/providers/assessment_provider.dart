@@ -48,7 +48,10 @@ class AssessmentProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  clearEvaluateResponses() {
+  void clearEvaluateResponses() {
+    console.log(
+      'Clearing evaluateResponses. Previous length: ${_evaluateResponses.length}',
+    );
     _evaluateResponses.clear();
     notifyListeners();
   }
@@ -56,6 +59,8 @@ class AssessmentProvider with ChangeNotifier {
   double get averageScore {
     if (_evaluateResponses.isEmpty) return 0.0;
 
+    _totalScore = 0; // Reset to avoid accumulation
+    _scoreCount = 0;
     for (var response in _evaluateResponses) {
       for (var result in response.results) {
         _totalScore += result.score.toInt();
@@ -66,7 +71,7 @@ class AssessmentProvider with ChangeNotifier {
     return _scoreCount > 0 ? _totalScore / _scoreCount : 0.0;
   }
 
-  ApiResponse<EvaluateResponse> _evaluateResponse = ApiResponse.loading();
+  ApiResponse<EvaluateResponse> _evaluateResponse = ApiResponse.completed(null);
   ApiResponse<EvaluateResponse> get evaluateResponse => _evaluateResponse;
 
   Future<void> evaluateBE(
@@ -74,8 +79,21 @@ class AssessmentProvider with ChangeNotifier {
     String criteriaId,
     html.File file,
   ) async {
+    console.log('evaluateBE called for criteriaId: $criteriaId');
     _loadingIds.add(criteriaId);
     notifyListeners();
+
+    // Check if a response for this criteriaId already exists
+    if (_evaluateResponses.any(
+      (response) =>
+          response.results.any((result) => result.assistantId == criteriaId),
+    )) {
+      _loadingIds.remove(criteriaId);
+      console.log(
+        'Response for criteriaId $criteriaId already exists, skipping evaluation.',
+      );
+      return;
+    }
 
     final response = await backend.EvaluateService.submitEvaluation(
       formJson: formJson,
@@ -84,8 +102,30 @@ class AssessmentProvider with ChangeNotifier {
     );
 
     _loadingIds.remove(criteriaId);
-    if (response.data != null) {
-      _evaluateResponses.add(response.data!);
+    if (response.data != null && response.data!.results.isNotEmpty) {
+      // Explicitly check if the assistantId from response.data.results[0] is not already in _evaluateResponses
+      final newAssistantId = response.data!.results[0].assistantId;
+      if (!_evaluateResponses.any(
+        (existingResponse) => existingResponse.results.any(
+          (result) => result.assistantId == newAssistantId,
+        ),
+      )) {
+        _evaluateResponses.add(response.data!);
+        console.log(
+          'Added response for criteriaId $criteriaId (assistantId: $newAssistantId). Current responses: ${_evaluateResponses.map((r) => r.results.map((res) => res.assistantId).toList()).toList()}',
+        );
+        console.log(
+          'Completed evaluation for criteriaId $criteriaId. Total completed: ${_evaluateResponses.length}, Total criteria: $_criteriaCount',
+        );
+      } else {
+        console.log(
+          'Duplicate response for assistantId $newAssistantId detected, not adding to _evaluateResponses.',
+        );
+      }
+    } else {
+      console.log(
+        'No valid response data for criteriaId $criteriaId, not adding to _evaluateResponses.',
+      );
     }
     notifyListeners();
   }
@@ -121,7 +161,6 @@ class AssessmentProvider with ChangeNotifier {
       budget: 0.0,
       rfiPdfBase64: fileUrl,
       evaluationResults: convertResponsesToRFIModels(_evaluateResponses),
-      // _evaluateResponses.expand((e) => e.results).toList(),
     );
   }
 
@@ -133,14 +172,14 @@ class AssessmentProvider with ChangeNotifier {
       final response = entry.value;
 
       return EvaluateRFIModel(
-        id: 'rfi_$index', // You can replace this with a UUID or Firebase doc ID
-        projectName: 'Project $index', // Placeholder
-        location: 'Unknown', // Placeholder
-        budget: 0.0, // Placeholder
+        id: 'rfi_$index',
+        projectName: 'Project $index',
+        location: 'Unknown',
+        budget: 0.0,
         rfiPdf: response.document,
         evaluationResults:
             response.results.isNotEmpty ? [response.results[0]] : [],
-        archived: false, // Default value
+        archived: false,
       );
     }).toList();
   }
@@ -160,7 +199,7 @@ class AssessmentProvider with ChangeNotifier {
       final value =
           snapshot.docs.map((doc) {
             final data = doc.data() as Map<String, dynamic>;
-            final id = doc.id; // Use Firebase document ID as unique identifier
+            final id = doc.id;
             return RFIModel(
               title: data['project_name'] as String? ?? 'Unknown Project',
               comment:
@@ -179,9 +218,8 @@ class AssessmentProvider with ChangeNotifier {
               percentage: _calculatePercentage(
                 data['evaluation_results'] as List<dynamic>?,
               ),
-              result:
-                  data['result'] as String? ?? 'PENDING', // Add result if saved
-              id: id, // Store the document ID
+              result: data['result'] as String? ?? 'PENDING',
+              id: id,
             );
           }).toList();
       setRfis(ApiResponse.completed(value));
@@ -246,7 +284,7 @@ class AssessmentProvider with ChangeNotifier {
       ApiResponse.loading();
 
   setCriteriaSummary(ApiResponse<CriteriaSummaryResponseModel> val) {
-    ApiResponse.completed(val);
+    criteriaSummary = val;
     notifyListeners();
   }
 

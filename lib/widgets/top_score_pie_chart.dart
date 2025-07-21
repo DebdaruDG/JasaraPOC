@@ -1,10 +1,14 @@
 // ✅ Updated TopScorePieChart Widget and Updated Integration in AssessmentPage
 
+import 'dart:developer' as console;
+
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
+import '../providers/assessment_provider.dart';
 
 class TopScorePieChart extends StatelessWidget {
   final List<EvaluateResponse> evaluateResponses;
@@ -23,7 +27,7 @@ class TopScorePieChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final int totalCriteria = criteriaList.length;
-    final double totalScore = (totalCriteria * 10).toDouble();
+    final int totalScore = (totalCriteria * 10).toInt();
 
     // Prevent overcount if duplicate evaluation happens
     final Map<String, double> scoresByAssistantId = {};
@@ -39,64 +43,71 @@ class TopScorePieChart extends StatelessWidget {
       (a, b) => a + b,
     );
 
-    return Center(
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SizedBox(
-                height: 140,
-                width: 140,
-                child: PieChart(
-                  PieChartData(
-                    startDegreeOffset: -90,
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 45,
-                    sections: [
-                      PieChartSectionData(
-                        color: JasaraPalette.primary,
-                        value: achievedScore,
-                        title: '',
-                        radius: 10,
-                      ),
-                      PieChartSectionData(
-                        color: JasaraPalette.primary.withOpacity(0.2),
-                        value: (totalScore - achievedScore),
-                        title: '',
-                        radius: 10,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              isLoading
-                  ? _buildLoader()
-                  : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "${achievedScore.toStringAsFixed(2)} / ${totalScore.toStringAsFixed(2)}",
-                        style: JasaraTextStyles.primaryText500.copyWith(
-                          fontSize: 18,
-                          color: JasaraPalette.dark2,
+    console.log(
+      'totalScore :- $totalScore , totalCriteria - $totalCriteria , achievedScore - $achievedScore',
+    );
+    return Consumer<AssessmentProvider>(
+      builder:
+          (_, provider, __) => Center(
+            child: Column(
+              children: [
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    SizedBox(
+                      height: 140,
+                      width: 140,
+                      child: PieChart(
+                        PieChartData(
+                          startDegreeOffset: -90,
+                          sectionsSpace: 0,
+                          centerSpaceRadius: 45,
+                          sections: [
+                            PieChartSectionData(
+                              color: JasaraPalette.mintGreen,
+                              value: achievedScore,
+                              title: '',
+                              radius: 10,
+                            ),
+                            PieChartSectionData(
+                              color: JasaraPalette.primary.withOpacity(0.2),
+                              value: (totalScore - achievedScore),
+                              title: '',
+                              radius: 10,
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
+                    isLoading
+                        ? _buildLoader()
+                        : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${((provider.averageScore / 100) * 10).toInt() * totalCriteria} / ${(10 * totalCriteria).toStringAsFixed(2)}",
+                              style: JasaraTextStyles.primaryText500.copyWith(
+                                fontSize: 13,
+                                color: JasaraPalette.dark2,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                if (!isLoading)
+                  Text(
+                    _getResultText(averageScore),
+                    style: JasaraTextStyles.primaryText500.copyWith(
+                      fontSize: 14,
+                      color: _getResultColor(averageScore),
+                    ),
                   ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          if (!isLoading)
-            Text(
-              _getResultText(averageScore),
-              style: JasaraTextStyles.primaryText500.copyWith(
-                fontSize: 14,
-                color: _getResultColor(averageScore),
-              ),
+              ],
             ),
-        ],
-      ),
+          ),
     );
   }
 

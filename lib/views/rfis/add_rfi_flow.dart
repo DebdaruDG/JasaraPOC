@@ -255,8 +255,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
                                   formJson: formJson,
                                   file: file,
                                 );
-                                await assessmentProvider
-                                    .clearEvaluateResponses();
+                                assessmentProvider.clearEvaluateResponses();
                                 for (var item
                                     in criteriaProvider.criteriaListResponse) {
                                   try {

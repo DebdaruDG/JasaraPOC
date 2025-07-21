@@ -3,6 +3,7 @@ import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../core/services/api/api_response.dart';
 import '../../models/response/evaluate_response_model.dart';
@@ -12,7 +13,6 @@ import '../../providers/screen_switch_provider.dart';
 import '../../widgets/top_score_pie_chart.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
-import 'package:uuid/uuid.dart';
 
 class AssessmentPage extends StatefulWidget {
   final html.File? file;
@@ -24,9 +24,15 @@ class AssessmentPage extends StatefulWidget {
 }
 
 class _AssessmentPageState extends State<AssessmentPage> {
+  bool _isInitialized = false;
+
   @override
   void initState() {
     super.initState();
+    if (_isInitialized) return;
+    _isInitialized = true;
+    console.log('initState called for AssessmentPage');
+
     try {
       final criteriaVM = Provider.of<CriteriaProvider>(context, listen: false);
       final assessmentVM = Provider.of<AssessmentProvider>(
@@ -34,24 +40,53 @@ class _AssessmentPageState extends State<AssessmentPage> {
         listen: false,
       );
       Future.delayed(Duration.zero, () async {
+        if (!mounted) return;
         await assessmentVM.setCriteriaCount(0);
-        await assessmentVM.clearEvaluateResponses();
+        assessmentVM.clearEvaluateResponses();
         await criteriaVM.fetchCriteriaList();
+        if (!mounted) return;
+
+        console.log(
+          'Criteria list: ${criteriaVM.criteriaListResponse.map((c) => c.assistantId).toList()}',
+        );
+
         await assessmentVM.setCriteriaCount(
           criteriaVM.criteriaListResponse.length,
         );
+
         List<String> descriptions = [];
+
         for (var item in criteriaVM.criteriaListResponse) {
+          if (!mounted) return;
+          console.log(
+            'Starting evaluation for criteriaId: ${item.assistantId}',
+          );
           await assessmentVM.evaluateBE(
             widget.formJson ?? {},
             item.assistantId,
             widget.file!,
           );
-          for (var item in assessmentVM.evaluateResponses) {
-            descriptions.add(item.results[0].summary);
+
+          if (assessmentVM.evaluateResponses.isNotEmpty) {
+            for (var response in assessmentVM.evaluateResponses) {
+              if (response.results.isNotEmpty &&
+                  !descriptions.contains(response.results[0].summary)) {
+                descriptions.add(response.results[0].summary);
+              }
+            }
           }
+
+          console.log(
+            'Completed evaluation for criteriaId: ${item.assistantId}, Total completed: ${assessmentVM.evaluateResponses.length}, Total criteria: ${assessmentVM.criteriaCount}',
+          );
         }
+
+        if (!mounted) return;
         await assessmentVM.evaluateCriteriaSummary(descriptions);
+        console.log(
+          'Final evaluateResponses: ${assessmentVM.evaluateResponses.map((r) => r.results.map((res) => res.assistantId).toList()).toList()}',
+        );
+
         if (assessmentVM.evaluateResponses.length ==
             criteriaVM.criteriaListResponse.length) {
           var uuid = Uuid();
@@ -61,7 +96,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
             comment: 'Summary of all criteria evaluations',
             fileName: widget.file?.name ?? 'evaluation.pdf',
             fileUrl:
-                'data:application/pdf;base64,${widget.file?.toString() ?? ''}', // Replace with actual base64 or URL
+                'data:application/pdf;base64,${widget.file?.toString() ?? ''}',
             percentage: assessmentVM.averageScore,
             result: assessmentVM.averageScore >= 70 ? 'GO' : 'NO GO',
           );
@@ -83,10 +118,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 final total = criteriaProvider.criteriaListResponse.length;
                 final completed = assessmentProvider.evaluateResponses.length;
                 final isLoading =
-                    assessmentProvider.evaluateResponse.status !=
-                    Status.completed;
+                    assessmentProvider.evaluateResponse.status ==
+                    Status.loading;
+                console.log(
+                  'assessmentProvider.criteriaSummary.data?.summary :- ${assessmentProvider.criteriaSummary.data?.summary}',
+                );
 
-                return Padding(
+                return SingleChildScrollView(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,13 +157,19 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                     Text('Evaluating...'),
                                   ],
                                 )
-                                : Text(
-                                  "${assessmentProvider.criteriaSummary.data?.summary}",
-                                  style: JasaraTextStyles.primaryText500
-                                      .copyWith(
-                                        fontSize: 16,
-                                        color: JasaraPalette.dark2,
-                                      ),
+                                : Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.55,
+                                  padding: const EdgeInsets.all(12),
+                                  child: Text(
+                                    "${assessmentProvider.criteriaSummary.data?.summary}",
+                                    maxLines: 8,
+                                    style: JasaraTextStyles.primaryText500
+                                        .copyWith(
+                                          fontSize: 13,
+                                          color: JasaraPalette.dark2,
+                                        ),
+                                  ),
                                 ),
                           ],
                         ),
@@ -165,40 +209,34 @@ class _AssessmentPageState extends State<AssessmentPage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: total,
-                          itemBuilder: (context, index) {
-                            final criteria =
-                                criteriaProvider.criteriaListResponse[index];
-                            final assistantId = criteria.assistantId;
-
-                            final matchedResponse = assessmentProvider
-                                .evaluateResponses
-                                .firstWhere(
-                                  (e) => e.results.any(
-                                    (r) => r.assistantId == assistantId,
-                                  ),
-                                  orElse:
-                                      () => EvaluateResponse(
-                                        document: '',
-                                        results: [],
-                                      ),
-                                );
-
-                            return _buildCriteriaItem(
-                              context,
-                              matchedResponse,
-                              index,
-                              assistantId: assistantId,
-                              criteriaLabel: criteria.title,
-                              isLoading: assessmentProvider.loadingIds.contains(
-                                assistantId,
+                      ...List.generate(total, (index) {
+                        final criteria =
+                            criteriaProvider.criteriaListResponse[index];
+                        final assistantId = criteria.assistantId;
+                        final matchedResponse = assessmentProvider
+                            .evaluateResponses
+                            .firstWhere(
+                              (e) => e.results.any(
+                                (r) => r.assistantId == assistantId,
                               ),
+                              orElse:
+                                  () => EvaluateResponse(
+                                    document: '',
+                                    results: [],
+                                  ),
                             );
-                          },
-                        ),
-                      ),
+
+                        return _buildCriteriaItem(
+                          context,
+                          matchedResponse,
+                          index,
+                          assistantId: assistantId,
+                          criteriaLabel: criteria.title,
+                          isLoading: assessmentProvider.loadingIds.contains(
+                            assistantId,
+                          ),
+                        );
+                      }),
                     ],
                   ),
                 );
@@ -221,6 +259,11 @@ class _AssessmentPageState extends State<AssessmentPage> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: JasaraPalette.primary.withOpacity(0.2)),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -247,32 +290,27 @@ class _AssessmentPageState extends State<AssessmentPage> {
                     ),
           ),
           const SizedBox(height: 8),
-          hasData == false
-              ? Text('--')
-              : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Score: ${((model?.results[0].score ?? 0) / 10).toStringAsFixed(2)} / 10",
-                    style: JasaraTextStyles.primaryText500.copyWith(
-                      fontSize: 14,
-                      color: JasaraPalette.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: LinearProgressIndicator(
-                      minHeight: 10,
-                      value: (model?.results[0].score ?? 0) / 10,
-                      backgroundColor: JasaraPalette.background,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        JasaraPalette.deepIndigo,
-                      ),
-                    ),
-                  ),
-                ],
+          if (hasData) ...[
+            Text(
+              "Score: ${((model?.results[0].score ?? 0) / 10).toStringAsFixed(2)} / 10",
+              style: JasaraTextStyles.primaryText500.copyWith(
+                fontSize: 14,
+                color: JasaraPalette.primary,
               ),
+            ),
+            const SizedBox(height: 6),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: LinearProgressIndicator(
+                minHeight: 10,
+                value: (model?.results[0].score ?? 0) / 10,
+                backgroundColor: JasaraPalette.background,
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  JasaraPalette.deepIndigo,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );

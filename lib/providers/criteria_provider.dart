@@ -60,9 +60,6 @@ class CriteriaProvider extends ChangeNotifier {
       pdfFiles: validPdfs,
     );
 
-    console.log('response.status - ${response.status}');
-
-    console.log('response.data :- ${response.data}');
     if (response.status == Status.completed && response.data != null) {
       _responseBodyModel = ApiResponse.completed(response.data!);
 
