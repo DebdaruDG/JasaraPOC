@@ -382,275 +382,280 @@ class _CriteriasListState extends State<CriteriasList> {
       backgroundColor: Colors.grey.shade100,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 45.0),
-        child: Column(
-          children: [
-            LayoutBuilder(
-              builder: (context, constraints) {
-                double width = constraints.maxWidth;
-                int crossAxisCount = width < 1024 ? 2 : 4;
-
-                final stats = [
-                  RFIStatModel(
-                    label: 'Total Criteria',
-                    value: '108',
-                    icon: Icons.list_alt,
-                    gradientColors: [
-                      JasaraPalette.indigoBlue,
-                      JasaraPalette.primary,
-                    ],
-                  ),
-                  RFIStatModel(
-                    label: 'Active Criteria',
-                    value: '78',
-                    icon: Icons.check_circle,
-                    gradientColors: [
-                      JasaraPalette.aquaGreen,
-                      JasaraPalette.skyBlue,
-                    ],
-                  ),
-                  RFIStatModel(
-                    label: 'Inactive Criteria',
-                    value: '30',
-                    icon: Icons.remove_circle,
-                    gradientColors: [
-                      JasaraPalette.primary,
-                      JasaraPalette.indigoBlue,
-                    ],
-                  ),
-                  RFIStatModel(
-                    label: 'Archived Criteria',
-                    value: '12',
-                    icon: Icons.archive,
-                    gradientColors: [
-                      JasaraPalette.skyBlue,
-                      JasaraPalette.aquaGreen,
-                    ],
-                  ),
-                ];
-
-                return GridView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: stats.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: crossAxisCount,
-                    mainAxisExtent: 120,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemBuilder:
-                      (context, index) => RFIStatCard(stat: stats[index]),
-                );
-              },
-            ),
-            const SizedBox(height: 24),
-            Align(
-              alignment: Alignment.centerRight,
-              child: LayoutBuilder(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              LayoutBuilder(
                 builder: (context, constraints) {
-                  double screenWidth = constraints.maxWidth;
-                  double buttonWidth;
+                  double width = constraints.maxWidth;
+                  int crossAxisCount = width < 1024 ? 2 : 4;
 
-                  if (screenWidth < 600) {
-                    buttonWidth = 100;
-                  } else if (screenWidth < 1024) {
-                    buttonWidth = 140;
-                  } else {
-                    buttonWidth = 180;
-                  }
-
-                  return CustomButton2(
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 6.0),
-                      child: Icon(
-                        Icons.add,
-                        color: JasaraPalette.background,
-                        size: 20,
-                      ),
+                  final stats = [
+                    RFIStatModel(
+                      label: 'Total Criteria',
+                      value: '108',
+                      icon: Icons.list_alt,
+                      gradientColors: [
+                        JasaraPalette.indigoBlue,
+                        JasaraPalette.primary,
+                      ],
                     ),
-                    label: "Add Criteria",
-                    height: 50,
-                    width: buttonWidth,
-                    backgroundColor: JasaraPalette.indigoBlue,
-                    onPressed: () => _openCriteriaDialog(rootContext: context),
+                    RFIStatModel(
+                      label: 'Active Criteria',
+                      value: '78',
+                      icon: Icons.check_circle,
+                      gradientColors: [
+                        JasaraPalette.aquaGreen,
+                        JasaraPalette.skyBlue,
+                      ],
+                    ),
+                    RFIStatModel(
+                      label: 'Inactive Criteria',
+                      value: '30',
+                      icon: Icons.remove_circle,
+                      gradientColors: [
+                        JasaraPalette.primary,
+                        JasaraPalette.indigoBlue,
+                      ],
+                    ),
+                    RFIStatModel(
+                      label: 'Archived Criteria',
+                      value: '12',
+                      icon: Icons.archive,
+                      gradientColors: [
+                        JasaraPalette.skyBlue,
+                        JasaraPalette.aquaGreen,
+                      ],
+                    ),
+                  ];
+
+                  return GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: stats.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisExtent: 120,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemBuilder:
+                        (context, index) => RFIStatCard(stat: stats[index]),
                   );
                 },
               ),
-            ),
-            const SizedBox(height: 24),
-            Container(
-              decoration: BoxDecoration(
-                color: JasaraPalette.white,
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-              ),
-              child: Consumer<CriteriaProvider>(
-                builder: (context, criteriaVM, _) {
-                  final list = criteriaVM.criteriaListResponse;
+              const SizedBox(height: 24),
+              Align(
+                alignment: Alignment.centerRight,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double screenWidth = constraints.maxWidth;
+                    double buttonWidth;
 
-                  return Column(
-                    children: [
-                      GenericDataTable(
-                        columnFlexes: [3, 3, 2, 1],
-                        columnTitles: const [
-                          'Title',
-                          'Instructions',
-                          'Supporting Files',
-                          '',
-                        ],
-                        rowData:
-                            list.map((item) {
-                              return [
-                                Text(item.title),
-                                Text(
-                                  item.textInstructions,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Wrap(
-                                  spacing: 6,
-                                  runSpacing: 6,
-                                  children:
-                                      item.files.map((f) {
-                                        return Material(
-                                          color: JasaraPalette.greyShade100,
-                                          borderRadius: BorderRadius.circular(
-                                            20,
-                                          ),
-                                          child: InkWell(
+                    if (screenWidth < 600) {
+                      buttonWidth = 100;
+                    } else if (screenWidth < 1024) {
+                      buttonWidth = 140;
+                    } else {
+                      buttonWidth = 180;
+                    }
+
+                    return CustomButton2(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(right: 6.0),
+                        child: Icon(
+                          Icons.add,
+                          color: JasaraPalette.background,
+                          size: 20,
+                        ),
+                      ),
+                      label: "Add Criteria",
+                      height: 50,
+                      width: buttonWidth,
+                      backgroundColor: JasaraPalette.indigoBlue,
+                      onPressed:
+                          () => _openCriteriaDialog(rootContext: context),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 24),
+              Container(
+                decoration: BoxDecoration(
+                  color: JasaraPalette.white,
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                ),
+                child: Consumer<CriteriaProvider>(
+                  builder: (context, criteriaVM, _) {
+                    final list = criteriaVM.criteriaListResponse;
+
+                    return Column(
+                      children: [
+                        GenericDataTable(
+                          columnFlexes: [3, 3, 2, 1],
+                          columnTitles: const [
+                            'Title',
+                            'Instructions',
+                            'Supporting Files',
+                            '',
+                          ],
+                          rowData:
+                              list.map((item) {
+                                return [
+                                  Text(item.title),
+                                  Text(
+                                    item.textInstructions,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 6,
+                                    children:
+                                        item.files.map((f) {
+                                          return Material(
+                                            color: JasaraPalette.greyShade100,
                                             borderRadius: BorderRadius.circular(
                                               20,
                                             ),
-                                            onTap: () {
-                                              showPDFViewerDialog(
-                                                context,
-                                                f.name,
-                                                f.base64,
-                                              );
-                                            },
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 10,
-                                                    vertical: 6,
-                                                  ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  const Icon(
-                                                    Icons.picture_as_pdf,
-                                                    size: 18,
-                                                    color: Colors.red,
-                                                  ),
-                                                  const SizedBox(width: 4),
+                                            child: InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              onTap: () {
+                                                showPDFViewerDialog(
+                                                  context,
+                                                  f.name,
+                                                  f.base64,
+                                                );
+                                              },
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 6,
+                                                    ),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    const Icon(
+                                                      Icons.picture_as_pdf,
+                                                      size: 18,
+                                                      color: Colors.red,
+                                                    ),
+                                                    const SizedBox(width: 4),
 
-                                                  Flexible(
-                                                    child: Text(
-                                                      f.name,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: const TextStyle(
-                                                        fontSize: 13,
+                                                    Flexible(
+                                                      child: Text(
+                                                        f.name,
+                                                        overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                        style: const TextStyle(
+                                                          fontSize: 13,
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                  const SizedBox(width: 6),
-                                                  const Icon(
-                                                    Icons.visibility,
-                                                    size: 18,
-                                                    color:
-                                                        JasaraPalette
-                                                            .deepIndigo,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                ),
-
-                                PopupActionMenu(
-                                  onEdit: () => {},
-                                  onArchive:
-                                      () =>
-                                          debugPrint('Archive: ${item.title}'),
-                                  onDelete: () async {
-                                    final confirm = await showDialog<bool>(
-                                      context: context,
-                                      builder:
-                                          (_) => AlertDialog(
-                                            title: const Text(
-                                              'Delete Criteria',
-                                            ),
-                                            content: const Text(
-                                              'Are you sure you want to delete this criteria?',
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed:
-                                                    () => Navigator.pop(
-                                                      context,
-                                                      false,
+                                                    const SizedBox(width: 6),
+                                                    const Icon(
+                                                      Icons.visibility,
+                                                      size: 18,
+                                                      color:
+                                                          JasaraPalette
+                                                              .deepIndigo,
                                                     ),
-                                                child: const Text('Cancel'),
-                                              ),
-                                              TextButton(
-                                                onPressed:
-                                                    () => Navigator.pop(
-                                                      context,
-                                                      true,
-                                                    ),
-                                                child: const Text(
-                                                  'Delete',
-                                                  style: TextStyle(
-                                                    color: Colors.red,
-                                                  ),
+                                                  ],
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                    );
+                                            ),
+                                          );
+                                        }).toList(),
+                                  ),
 
-                                    if (confirm == true) {
-                                      try {
-                                        await FirebaseService.deleteCriteria(
-                                          item.docId ?? '',
-                                        );
+                                  PopupActionMenu(
+                                    onEdit: () => {},
+                                    onArchive:
+                                        () => debugPrint(
+                                          'Archive: ${item.title}',
+                                        ),
+                                    onDelete: () async {
+                                      final confirm = await showDialog<bool>(
+                                        context: context,
+                                        builder:
+                                            (_) => AlertDialog(
+                                              title: const Text(
+                                                'Delete Criteria',
+                                              ),
+                                              content: const Text(
+                                                'Are you sure you want to delete this criteria?',
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed:
+                                                      () => Navigator.pop(
+                                                        context,
+                                                        false,
+                                                      ),
+                                                  child: const Text('Cancel'),
+                                                ),
+                                                TextButton(
+                                                  onPressed:
+                                                      () => Navigator.pop(
+                                                        context,
+                                                        true,
+                                                      ),
+                                                  child: const Text(
+                                                    'Delete',
+                                                    style: TextStyle(
+                                                      color: Colors.red,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                      );
 
-                                        /// ✅ Refresh API after deletion
-                                        await Provider.of<CriteriaProvider>(
-                                          context,
-                                          listen: false,
-                                        ).fetchCriteriaList();
+                                      if (confirm == true) {
+                                        try {
+                                          await FirebaseService.deleteCriteria(
+                                            item.docId ?? '',
+                                          );
 
-                                        JasaraToast.success(
-                                          context,
-                                          "Criteria deleted successfully.",
-                                        );
-                                      } catch (e) {
-                                        console.log("Error deleting: $e");
-                                        JasaraToast.error(
-                                          context,
-                                          "Failed to delete the criteria.",
-                                        );
+                                          /// ✅ Refresh API after deletion
+                                          await Provider.of<CriteriaProvider>(
+                                            context,
+                                            listen: false,
+                                          ).fetchCriteriaList();
+
+                                          JasaraToast.success(
+                                            context,
+                                            "Criteria deleted successfully.",
+                                          );
+                                        } catch (e) {
+                                          console.log("Error deleting: $e");
+                                          JasaraToast.error(
+                                            context,
+                                            "Failed to delete the criteria.",
+                                          );
+                                        }
                                       }
-                                    }
-                                  },
-                                ),
-                              ];
-                            }).toList(),
-                      ),
-                      if (list.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("No Criteria Added Yet !"),
+                                    },
+                                  ),
+                                ];
+                              }).toList(),
                         ),
-                    ],
-                  );
-                },
+                        if (list.isEmpty)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text("No Criteria Added Yet !"),
+                          ),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
