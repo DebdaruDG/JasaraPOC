@@ -101,26 +101,6 @@ class Sidebar extends StatelessWidget {
                 ],
               ),
             ),
-            // Container(
-            //   margin: EdgeInsets.symmetric(vertical: 8),
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.only(
-            //       topRight: Radius.circular(30),
-            //       bottomRight: Radius.circular(30),
-            //     ),
-            //   ),
-            //   child: Padding(
-            //     padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            //     child: Row(
-            //       children: [
-            //         Icon(Icons.description, color: Colors.black),
-            //         SizedBox(width: 12),
-            //         Text('RFI', style: TextStyle(color: Colors.black)),
-            //       ],
-            //     ),
-            //   ),
-            // ),
 
             // Profile + Switch to admin button
             Expanded(

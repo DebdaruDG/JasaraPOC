@@ -1,9 +1,6 @@
 import 'dart:developer' as console;
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:provider/provider.dart';
 import '../../core/services/firebase/core_service.dart';
 import '../../providers/criteria_provider.dart';
@@ -16,7 +13,6 @@ import '../../models/rfi_stat_model.dart';
 import '../../widgets/utils/app_button.dart';
 import '../../widgets/utils/app_text_field.dart';
 import '../../widgets/utils/app_toast.dart';
-import 'dart:html' as html;
 
 import '../../widgets/view_pdf.dart';
 
