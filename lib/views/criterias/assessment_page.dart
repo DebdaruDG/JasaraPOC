@@ -200,7 +200,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                               assessmentProvider.evaluateResponse.status ==
                                       Status.loading
                                   ? null
-                                  : () {},
+                                  : () {
+                                    Navigator.pop(context);
+                                  },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: JasaraPalette.accent,
                             foregroundColor: JasaraPalette.dark2,
