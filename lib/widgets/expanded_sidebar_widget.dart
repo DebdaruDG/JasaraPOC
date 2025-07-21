@@ -43,7 +43,12 @@ class ExpandedSidebarItem extends StatelessWidget {
                           : Radius.zero,
                 ),
               )
-              : null,
+              : BoxDecoration(
+                color: JasaraPalette.deepIndigo,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(100),
+                ),
+              ),
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
         leading: Icon(
