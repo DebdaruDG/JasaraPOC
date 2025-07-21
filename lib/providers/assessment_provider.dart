@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 import '../core/services/api/api_client.dart';
 import '../core/services/api/api_response.dart';
 import '../core/services/backend/evaluate_service.dart' as backend;
+import '../core/services/backend/evaluate_service.dart';
 import '../core/services/firebase/evaluate_service.dart' as firebase;
 import '../models/assessment_result.dart';
 import '../models/evaluate_assessment_firebase_model.dart';
+import '../models/response/criteria_summary_response_model.dart';
 import '../models/response/evaluate_response_model.dart';
 import '../models/rfi_model.dart';
 import '../widgets/utils/app_toast.dart';
@@ -238,5 +240,26 @@ class AssessmentProvider with ChangeNotifier {
     await firebase.EvaluateService.evaluateAssessment.doc(documentId).update({
       'archived': true,
     });
+  }
+
+  ApiResponse<CriteriaSummaryResponseModel> criteriaSummary =
+      ApiResponse.loading();
+
+  setCriteriaSummary(ApiResponse<CriteriaSummaryResponseModel> val) {
+    ApiResponse.completed(val);
+    notifyListeners();
+  }
+
+  evaluateCriteriaSummary(List<String> descriptions) async {
+    try {
+      criteriaSummary = ApiResponse.loading();
+      final value = await EvaluateService.summarizeCriteria(
+        criteriaDescriptions: descriptions,
+      );
+      setCriteriaSummary(value);
+    } catch (err) {
+      console.log('error :- $err');
+      setCriteriaSummary(ApiResponse.error('Error'));
+    }
   }
 }

@@ -47,7 +47,11 @@ class _AssessmentPageState extends State<AssessmentPage> {
             widget.file!,
           );
         }
-        // Automatically save once all evaluations are done
+        List<String> descriptions = [];
+        for (var item in assessmentVM.evaluateResponses) {
+          descriptions.add(item.results[0].summary);
+        }
+        await assessmentVM.evaluateCriteriaSummary(descriptions);
         if (assessmentVM.evaluateResponses.length ==
             criteriaVM.criteriaListResponse.length) {
           var uuid = Uuid();
@@ -94,6 +98,38 @@ class _AssessmentPageState extends State<AssessmentPage> {
                         isLoading: isLoading,
                       ),
                       const SizedBox(height: 16),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            assessmentProvider.criteriaSummary.status ==
+                                    Status.loading
+                                ? Row(
+                                  children: [
+                                    SizedBox(
+                                      height: 20,
+                                      width: 20,
+                                      child: CircularProgressIndicator(
+                                        color: JasaraPalette.deepIndigo,
+                                        strokeWidth: 1.25,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text('Evaluating...'),
+                                  ],
+                                )
+                                : Text(
+                                  "${assessmentProvider.criteriaSummary.data?.summary}",
+                                  style: JasaraTextStyles.primaryText500
+                                      .copyWith(
+                                        fontSize: 16,
+                                        color: JasaraPalette.dark2,
+                                      ),
+                                ),
+                          ],
+                        ),
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
