@@ -5,6 +5,7 @@ import '../../models/evaluate_assessment_firebase_model.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../providers/screen_switch_provider.dart';
 import '../../widgets/generic_data_table.dart';
+import '../../widgets/hoverable_card.dart';
 import '../../widgets/popup_action_menu.dart';
 import '../../widgets/rfi_result_indicator.dart';
 import '../../widgets/rfi_stat_card.dart';
@@ -86,14 +87,14 @@ class _RFIListPageState extends State<RFIListPage> {
   Widget build(BuildContext context) {
     return Consumer<AssessmentProvider>(
       builder: (context, provider, _) {
-        final List<RFIStatModel> stats = [
-          RFIStatModel(
+        final List<StatModel> stats = [
+          StatModel(
             label: 'RFIs Assessed',
             value: (provider.rfis.data ?? []).length.toString(),
             icon: Icons.fact_check,
             gradientColors: [JasaraPalette.indigoBlue, JasaraPalette.primary],
           ),
-          RFIStatModel(
+          StatModel(
             label: 'Go',
             value:
                 (provider.rfis.data ?? [])
@@ -103,7 +104,7 @@ class _RFIListPageState extends State<RFIListPage> {
             icon: Icons.check_circle,
             gradientColors: [JasaraPalette.aquaGreen, JasaraPalette.skyBlue],
           ),
-          RFIStatModel(
+          StatModel(
             label: 'No Go',
             value:
                 (provider.rfis.data ?? [])
@@ -113,7 +114,7 @@ class _RFIListPageState extends State<RFIListPage> {
             icon: Icons.cancel,
             gradientColors: [JasaraPalette.primary, JasaraPalette.indigoBlue],
           ),
-          RFIStatModel(
+          StatModel(
             label: 'Need Review',
             value:
                 (provider.rfis.data ?? [])
@@ -148,7 +149,9 @@ class _RFIListPageState extends State<RFIListPage> {
                           mainAxisSpacing: 16,
                         ),
                         itemBuilder:
-                            (context, index) => RFIStatCard(stat: stats[index]),
+                            (context, index) => HoverableCard(
+                              child: StatCard(stat: stats[index]),
+                            ),
                       );
                     },
                   ),

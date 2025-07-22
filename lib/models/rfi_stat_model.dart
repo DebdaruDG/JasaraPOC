@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class RFIStatModel {
+class StatModel {
   final String label;
   final String value;
   final IconData icon;
   final List<Color> gradientColors;
 
-  RFIStatModel({
+  StatModel({
     required this.label,
     required this.value,
     required this.icon,

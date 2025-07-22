@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../core/services/api/api_response.dart';
 import '../../core/services/firebase/core_service.dart';
 import '../../providers/criteria_provider.dart';
+import '../../widgets/hoverable_card.dart';
 import '../../widgets/utils/app_palette.dart';
 import '../../widgets/utils/app_textStyles.dart';
 import '../../widgets/generic_data_table.dart';
@@ -416,13 +417,14 @@ class _CriteriasListState extends State<CriteriasList> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    const SizedBox(height: 12),
                     LayoutBuilder(
                       builder: (context, constraints) {
                         double width = constraints.maxWidth;
                         int crossAxisCount = width < 1024 ? 2 : 4;
 
                         final stats = [
-                          RFIStatModel(
+                          StatModel(
                             label: 'Total Criteria',
                             value: '${provider.criteriaListResponse.length}',
                             icon: Icons.list_alt,
@@ -431,7 +433,7 @@ class _CriteriasListState extends State<CriteriasList> {
                               JasaraPalette.primary,
                             ],
                           ),
-                          RFIStatModel(
+                          StatModel(
                             label: 'Active Criteria',
                             value: '${provider.criteriaListResponse.length}',
                             icon: Icons.check_circle,
@@ -440,7 +442,7 @@ class _CriteriasListState extends State<CriteriasList> {
                               JasaraPalette.skyBlue,
                             ],
                           ),
-                          RFIStatModel(
+                          StatModel(
                             label: 'Inactive Criteria',
                             value: '0',
                             icon: Icons.remove_circle,
@@ -449,7 +451,7 @@ class _CriteriasListState extends State<CriteriasList> {
                               JasaraPalette.indigoBlue,
                             ],
                           ),
-                          RFIStatModel(
+                          StatModel(
                             label: 'Archived Criteria',
                             value: '0',
                             icon: Icons.archive,
@@ -472,8 +474,9 @@ class _CriteriasListState extends State<CriteriasList> {
                                 mainAxisSpacing: 16,
                               ),
                           itemBuilder:
-                              (context, index) =>
-                                  RFIStatCard(stat: stats[index]),
+                              (context, index) => HoverableCard(
+                                child: StatCard(stat: stats[index]),
+                              ),
                         );
                       },
                     ),

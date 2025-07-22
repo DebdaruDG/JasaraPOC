@@ -3,10 +3,10 @@ import 'package:jasara_poc/widgets/utils/app_palette.dart';
 import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import '../models/rfi_stat_model.dart';
 
-class RFIStatCard extends StatelessWidget {
-  final RFIStatModel stat;
+class StatCard extends StatelessWidget {
+  final StatModel stat;
 
-  const RFIStatCard({super.key, required this.stat});
+  const StatCard({super.key, required this.stat});
 
   @override
   Widget build(BuildContext context) {
