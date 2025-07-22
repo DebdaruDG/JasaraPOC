@@ -18,6 +18,7 @@ class EvaluateService {
     required double budget,
     required double evaluationPercentage,
     required String rfiPdfBase64,
+    required String fileName,
     required List<EvaluateRFIModel> evaluationResults,
   }) async {
     try {
@@ -28,6 +29,7 @@ class EvaluateService {
         'location': location,
         'budget': budget,
         'rfi_pdf': rfiPdfBase64,
+        'fileName': fileName,
         'evaluation_results': evaluationResults.map((e) => e.toMap()).toList(),
         'archived': false,
       };

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/services/api/api_response.dart';
+import '../../core/utils/file_utils.dart';
 import '../../models/response/criteria_summary_response_model.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_provider.dart';
@@ -134,14 +135,18 @@ class _AssessmentPageState extends State<AssessmentPage> {
             'save size :- ${widget.file?.size} \truntimeType :- ${widget.file?.runtimeType} \tname - ${widget.file?.name}',
           );
           var uuid = Uuid();
+          var base64FileContent = await FileUtils.fileToBase64(widget.file!);
+          var title =
+              widget.formJson?.containsKey('project_name') == true
+                  ? widget.formJson!['project_name']
+                  : 'Some Project';
+          console.log('title - $title');
           await assessmentVM.saveEvaluationAsRFI(
             id: uuid.v4(),
-            title: widget.file?.name ?? '',
-            // 'Evaluation Summary',
+            title: title,
             comment: assessmentVM.criteriaSummary.data?.summary ?? '',
             fileName: widget.file?.name ?? 'evaluation.pdf',
-            fileUrl:
-                'data:application/pdf;base64,${widget.file?.toString() ?? ''}',
+            fileUrl: base64FileContent,
             percentage: assessmentVM.averageScore,
             result: assessmentVM.averageScore >= 70 ? 'GO' : 'NO GO',
           );
@@ -214,7 +219,6 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                   padding: const EdgeInsets.all(12),
                                   child: Text(
                                     "${assessmentProvider.criteriaSummary.data?.summary}",
-                                    maxLines: 8,
                                     style: JasaraTextStyles.primaryText500
                                         .copyWith(
                                           fontSize: 13,

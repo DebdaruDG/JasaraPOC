@@ -162,6 +162,7 @@ class AssessmentProvider with ChangeNotifier {
         location: 'N/A',
         budget: 0.0,
         rfiPdfBase64: fileUrl,
+        fileName: fileName,
         summarizerComment: comment,
         evaluationPercentage: percentage,
         evaluationResults: convertResponsesToRFIModels(_evaluateResponses),
@@ -219,13 +220,11 @@ class AssessmentProvider with ChangeNotifier {
                       .where((s) => s != null)
                       .join(', ') ??
                   'AI evaluation summary',
-              fileName:
-                  (data['rfi_pdf'] as String?)?.split('/').last ??
-                  'unknown.pdf',
+              // fileName:
+              //     (data['rfi_pdf'] as String?)?.split('/').last ??
+              //     'unknown.pdf',
               fileUrl: data['rfi_pdf'] as String? ?? '',
-              // percentage: _calculatePercentage(
-              //   data['evaluation_results'] as List<dynamic>?,
-              // ),
+              fileName: data['fileName'] as String? ?? '',
               result: data['result'] as String? ?? 'PENDING',
               id: id,
               summarizerComment: data['summarizerComment'] as String? ?? '',

@@ -35,10 +35,10 @@ class PopupActionMenu extends StatelessWidget {
       itemBuilder:
           (context) => [
             const PopupMenuItem<String>(value: 'edit', child: Text('Edit')),
-            const PopupMenuItem<String>(
-              value: 'archive',
-              child: Text('Archive'),
-            ),
+            // const PopupMenuItem<String>(
+            //   value: 'archive',
+            //   child: Text('Archive'),
+            // ),
             const PopupMenuItem<String>(value: 'delete', child: Text('Delete')),
           ],
     );

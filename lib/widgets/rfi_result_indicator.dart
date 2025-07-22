@@ -1,3 +1,5 @@
+import 'dart:developer' as console;
+
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import '../models/rfi_model.dart';
@@ -10,6 +12,7 @@ class RFIResultIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    console.log('rfi.result :- ${rfi.result} \t rfi.result :- ${rfi.result}');
     return Container(
       padding: const EdgeInsets.all(4.0),
       child: Column(

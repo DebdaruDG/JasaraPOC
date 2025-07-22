@@ -424,7 +424,7 @@ class _CriteriasListState extends State<CriteriasList> {
                         final stats = [
                           RFIStatModel(
                             label: 'Total Criteria',
-                            value: '15',
+                            value: '${provider.criteriaListResponse.length}',
                             icon: Icons.list_alt,
                             gradientColors: [
                               JasaraPalette.indigoBlue,
@@ -433,7 +433,7 @@ class _CriteriasListState extends State<CriteriasList> {
                           ),
                           RFIStatModel(
                             label: 'Active Criteria',
-                            value: '15',
+                            value: '${provider.criteriaListResponse.length}',
                             icon: Icons.check_circle,
                             gradientColors: [
                               JasaraPalette.aquaGreen,

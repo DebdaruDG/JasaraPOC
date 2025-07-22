@@ -1,5 +1,3 @@
-import 'dart:developer' as console;
-
 import 'package:flutter/material.dart';
 import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
@@ -12,7 +10,6 @@ import '../../widgets/rfi_result_indicator.dart';
 import '../../widgets/rfi_stat_card.dart';
 import '../../models/rfi_stat_model.dart';
 import '../../widgets/add_rfi_document_modal.dart';
-import '../../widgets/top_score_pie_chart.dart';
 import '../../widgets/utils/app_button.dart';
 import 'package:provider/provider.dart';
 import '../../providers/assessment_provider.dart';
@@ -234,8 +231,10 @@ class _RFIListPageState extends State<RFIListPage> {
                                 onTap: () {
                                   showPDFViewerDialog(
                                     context,
-                                    item.fileName,
-                                    item.fileName,
+                                    item.fileName.isEmpty
+                                        ? 'No-Name'
+                                        : item.fileName,
+                                    item.fileUrl,
                                   );
                                 },
                                 child: Padding(
@@ -290,7 +289,6 @@ class _RFIListPageState extends State<RFIListPage> {
                                     Duration.zero,
                                     () async => await provider.fetchRFIs(),
                                   );
-                                  // No need to refresh manually – provider notifies listeners
                                 },
                               ),
                             ];
