@@ -43,9 +43,6 @@ class TopScorePieChart extends StatelessWidget {
       (a, b) => a + b,
     );
 
-    console.log(
-      'totalScore :- $totalScore , totalCriteria - $totalCriteria , achievedScore - $achievedScore',
-    );
     return Consumer<AssessmentProvider>(
       builder:
           (_, provider, __) => Center(
@@ -84,14 +81,6 @@ class TopScorePieChart extends StatelessWidget {
                         : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            // Text(
-                            //   "${achievedScore.toInt()} / $totalScore",
-                            //   style: JasaraTextStyles.primaryText500.copyWith(
-                            //     fontSize: 14,
-                            //     color: JasaraPalette.dark2,
-                            //     fontWeight: FontWeight.w700,
-                            //   ),
-                            // ),
                             Text(
                               "${((provider.averageScore / 100) * 10).toInt() * totalCriteria} / ${(10 * totalCriteria).toInt()}",
                               style: JasaraTextStyles.primaryText500.copyWith(
@@ -140,12 +129,6 @@ class TopScorePieChart extends StatelessWidget {
     if (score >= 9) return "GO";
     if (score >= 7) return "REVIEW";
     return "NO-GO";
-  }
-
-  String _getResultText(double score) {
-    if (score >= 9) return "Assessment Result: GO";
-    if (score >= 7) return "Assessment Result: REVIEW";
-    return "Assessment Result: NO-GO";
   }
 
   Color _getResultColor(double score) {
