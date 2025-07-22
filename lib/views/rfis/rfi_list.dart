@@ -210,7 +210,7 @@ class _RFIListPageState extends State<RFIListPage> {
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                     ),
                     child: GenericDataTable(
-                      columnFlexes: [1, 5, 2, 2, 1],
+                      columnFlexes: [2, 5, 2, 2, 1],
                       columnTitles: const [
                         'Project',
                         'AI Comments',
@@ -222,7 +222,13 @@ class _RFIListPageState extends State<RFIListPage> {
                           (provider.rfis.data ?? []).map((item) {
                             return [
                               Text(item.title, textAlign: TextAlign.center),
-                              Text(item.comment, textAlign: TextAlign.center),
+                              Text(
+                                item.summarizerComment,
+                                maxLines: 3,
+                                softWrap: true,
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               InkWell(
                                 borderRadius: BorderRadius.circular(20),
                                 onTap: () {

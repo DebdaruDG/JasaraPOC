@@ -18,11 +18,11 @@ class RFIResultIndicator extends StatelessWidget {
             radius: 21,
             lineWidth: 5.0,
             animation: true,
-            percent: rfi.percentage / 100,
+            percent: rfi.percentage.toInt() / 100,
             center: Padding(
               padding: const EdgeInsets.all(2.0),
               child: Text(
-                "${rfi.percentage}%",
+                "${rfi.percentage.toInt()}%",
                 style: JasaraTextStyles.primaryText500.copyWith(
                   fontSize: 13,
                   fontWeight: FontWeight.w800,

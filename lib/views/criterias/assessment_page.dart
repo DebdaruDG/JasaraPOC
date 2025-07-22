@@ -123,11 +123,20 @@ class _AssessmentPageState extends State<AssessmentPage> {
         // Save evaluation as RFI if all responses are received
         if (assessmentVM.evaluateResponses.length ==
             criteriaVM.criteriaListResponse.length) {
-          console.log('formJson :- ${widget.formJson}');
+          console.log('save formJson :- ${widget.formJson}');
+          console.log(
+            'save assessmentVM.criteriaSummary.data?.summary :- ${assessmentVM.criteriaSummary.data?.summary}',
+          );
+          console.log(
+            "save assessmentVM.averageScore :- ${assessmentVM.averageScore}",
+          );
+          console.log(
+            'save size :- ${widget.file?.size} \truntimeType :- ${widget.file?.runtimeType} \tname - ${widget.file?.name}',
+          );
           var uuid = Uuid();
           await assessmentVM.saveEvaluationAsRFI(
             id: uuid.v4(),
-            title: widget.formJson?['project_name'] ?? widget.file?.name,
+            title: widget.file?.name ?? '',
             // 'Evaluation Summary',
             comment: assessmentVM.criteriaSummary.data?.summary ?? '',
             fileName: widget.file?.name ?? 'evaluation.pdf',

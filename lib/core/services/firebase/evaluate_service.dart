@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer' as console;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,20 +14,24 @@ class EvaluateService {
   static Future<void> addEvaluateRfi({
     required String projectName,
     required String location,
+    required String summarizerComment,
     required double budget,
+    required double evaluationPercentage,
     required String rfiPdfBase64,
     required List<EvaluateRFIModel> evaluationResults,
   }) async {
     try {
       final payload = {
         'project_name': projectName,
+        'summarizerComment': summarizerComment,
+        'evaluationPercentage': evaluationPercentage,
         'location': location,
         'budget': budget,
         'rfi_pdf': rfiPdfBase64,
         'evaluation_results': evaluationResults.map((e) => e.toMap()).toList(),
         'archived': false,
       };
-      console.log('payload - $payload');
+      console.log('payload - ${jsonEncode(payload)}');
       await evaluateAssessment.add(payload);
       console.log('Added evaluate RFI successfully.');
     } catch (e) {

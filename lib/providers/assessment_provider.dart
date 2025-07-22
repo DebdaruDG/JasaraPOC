@@ -151,7 +151,8 @@ class AssessmentProvider with ChangeNotifier {
       comment: comment,
       fileName: fileName,
       fileUrl: fileUrl,
-      percentage: percentage.toInt(),
+      percentage: percentage,
+      summarizerComment: comment,
       result: result,
     );
 
@@ -161,6 +162,8 @@ class AssessmentProvider with ChangeNotifier {
         location: 'N/A',
         budget: 0.0,
         rfiPdfBase64: fileUrl,
+        summarizerComment: comment,
+        evaluationPercentage: percentage,
         evaluationResults: convertResponsesToRFIModels(_evaluateResponses),
       );
       await fetchRFIs();
@@ -220,11 +223,13 @@ class AssessmentProvider with ChangeNotifier {
                   (data['rfi_pdf'] as String?)?.split('/').last ??
                   'unknown.pdf',
               fileUrl: data['rfi_pdf'] as String? ?? '',
-              percentage: _calculatePercentage(
-                data['evaluation_results'] as List<dynamic>?,
-              ),
+              // percentage: _calculatePercentage(
+              //   data['evaluation_results'] as List<dynamic>?,
+              // ),
               result: data['result'] as String? ?? 'PENDING',
               id: id,
+              summarizerComment: data['summarizerComment'] as String? ?? '',
+              percentage: data['evaluationPercentage'] as double? ?? 0,
             );
           }).toList();
       setRfis(ApiResponse.completed(value));

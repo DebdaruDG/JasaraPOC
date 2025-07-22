@@ -8,8 +8,9 @@ class RFIModel {
   final String comment;
   final String fileName;
   final String fileUrl;
-  final int percentage;
   final String result; // 'GO' | 'NO GO' | 'REVIEW'
+  final String summarizerComment;
+  final double percentage;
 
   RFIModel({
     required this.id,
@@ -19,6 +20,7 @@ class RFIModel {
     required this.fileUrl,
     required this.percentage,
     required this.result,
+    required this.summarizerComment,
   });
 
   Color get progressColor {
