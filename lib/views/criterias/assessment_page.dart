@@ -251,6 +251,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: JasaraPalette.mintGreen,
                             foregroundColor: JasaraPalette.background,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(6.0),
