@@ -136,14 +136,17 @@ class _AssessmentPageState extends State<AssessmentPage> {
           );
           var uuid = Uuid();
           var base64FileContent = await FileUtils.fileToBase64(widget.file!);
-          var title =
-              widget.formJson?.containsKey('project_name') == true
-                  ? widget.formJson!['project_name']
-                  : 'Some Project';
-          console.log('title - $title');
+          String title = 'unnamed_project';
+          if (widget.formJson?.containsKey('project_name') == true) {
+            title =
+                (widget.formJson!['project_name'].trim() ?? '').isEmpty
+                    ? ''
+                    : widget.formJson!['project_name'];
+          }
+          console.log('project title - $title');
           await assessmentVM.saveEvaluationAsRFI(
             id: uuid.v4(),
-            title: title,
+            title: title.isEmpty ? 'unnamed_project' : title,
             comment: assessmentVM.criteriaSummary.data?.summary ?? '',
             fileName: widget.file?.name ?? 'evaluation.pdf',
             fileUrl: base64FileContent,
