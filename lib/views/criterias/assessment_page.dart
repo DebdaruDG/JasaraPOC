@@ -180,25 +180,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           ],
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Evaluating $completed of $total Criterias",
-                            style: JasaraTextStyles.primaryText500.copyWith(
-                              fontSize: 16,
-                              color: JasaraPalette.dark2,
-                            ),
-                          ),
-                          Text(
-                            'Average Score : ${(assessmentProvider.averageScore / 10).toStringAsFixed(2)}',
-                            style: JasaraTextStyles.primaryText500.copyWith(
-                              fontSize: 16,
-                              color: JasaraPalette.primary,
-                            ),
-                          ),
-                        ],
-                      ),
+
                       const SizedBox(height: 16),
                       Center(
                         child: ElevatedButton(
@@ -232,6 +214,46 @@ class _AssessmentPageState extends State<AssessmentPage> {
                             ),
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Evaluating $completed of $total Criterias",
+                            style: JasaraTextStyles.primaryText500.copyWith(
+                              fontSize: 16,
+                              color: JasaraPalette.dark2,
+                            ),
+                          ),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "Average Score :  ",
+                                  style: JasaraTextStyles.primaryText500
+                                      .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.1,
+                                        color: JasaraPalette.deepIndigo,
+                                      ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '${(assessmentProvider.averageScore / 10).toStringAsFixed(2)} / ${assessmentProvider.evaluateResponses.length * 10}',
+                                  style: JasaraTextStyles.primaryText500
+                                      .copyWith(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        letterSpacing: 0.1,
+                                        color: JasaraPalette.dark2,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 16),
                       ...List.generate(total, (index) {

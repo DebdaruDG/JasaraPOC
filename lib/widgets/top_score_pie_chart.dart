@@ -67,13 +67,13 @@ class TopScorePieChart extends StatelessWidget {
                               color: JasaraPalette.mintGreen,
                               value: achievedScore,
                               title: '',
-                              radius: 10,
+                              radius: 14,
                             ),
                             PieChartSectionData(
-                              color: JasaraPalette.primary.withOpacity(0.2),
+                              color: JasaraPalette.grey.withOpacity(0.125),
                               value: (totalScore - achievedScore),
                               title: '',
-                              radius: 10,
+                              radius: 14,
                             ),
                           ],
                         ),
@@ -84,12 +84,20 @@ class TopScorePieChart extends StatelessWidget {
                         : Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            // Text(
+                            //   "${achievedScore.toInt()} / $totalScore",
+                            //   style: JasaraTextStyles.primaryText500.copyWith(
+                            //     fontSize: 14,
+                            //     color: JasaraPalette.dark2,
+                            //     fontWeight: FontWeight.w700,
+                            //   ),
+                            // ),
                             Text(
-                              "${((provider.averageScore / 100) * 10).toInt() * totalCriteria} / ${(10 * totalCriteria).toStringAsFixed(2)}",
+                              "${((provider.averageScore / 100) * 10).toInt() * totalCriteria} / ${(10 * totalCriteria).toInt()}",
                               style: JasaraTextStyles.primaryText500.copyWith(
-                                fontSize: 13,
+                                fontSize: 14,
                                 color: JasaraPalette.dark2,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
@@ -98,17 +106,40 @@ class TopScorePieChart extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 if (!isLoading)
-                  Text(
-                    _getResultText(averageScore),
-                    style: JasaraTextStyles.primaryText500.copyWith(
-                      fontSize: 14,
-                      color: _getResultColor(averageScore),
+                  Text.rich(
+                    TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Assessment Result:  ",
+                          style: JasaraTextStyles.primaryText500.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.1,
+                            color: JasaraPalette.deepIndigo,
+                          ),
+                        ),
+                        TextSpan(
+                          text: _getResultLabel(averageScore),
+                          style: JasaraTextStyles.primaryText500.copyWith(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.1,
+                            color: _getResultColor(averageScore),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
               ],
             ),
           ),
     );
+  }
+
+  String _getResultLabel(double score) {
+    if (score >= 9) return "GO";
+    if (score >= 7) return "REVIEW";
+    return "NO-GO";
   }
 
   String _getResultText(double score) {

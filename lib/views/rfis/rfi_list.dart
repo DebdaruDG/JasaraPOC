@@ -3,6 +3,8 @@ import 'dart:developer' as console;
 import 'package:flutter/material.dart';
 import 'package:jasara_poc/widgets/utils/app_textStyles.dart';
 import 'package:jasara_poc/widgets/utils/app_palette.dart';
+import '../../models/evaluate_assessment_firebase_model.dart';
+import '../../models/response/evaluate_response_model.dart';
 import '../../providers/screen_switch_provider.dart';
 import '../../widgets/generic_data_table.dart';
 import '../../widgets/popup_action_menu.dart';
@@ -10,6 +12,7 @@ import '../../widgets/rfi_result_indicator.dart';
 import '../../widgets/rfi_stat_card.dart';
 import '../../models/rfi_stat_model.dart';
 import '../../widgets/add_rfi_document_modal.dart';
+import '../../widgets/top_score_pie_chart.dart';
 import '../../widgets/utils/app_button.dart';
 import 'package:provider/provider.dart';
 import '../../providers/assessment_provider.dart';
@@ -23,6 +26,11 @@ class RFIListPage extends StatefulWidget {
 }
 
 class _RFIListPageState extends State<RFIListPage> {
+  // Dummy Variables
+  List<EvaluateResponse> dummyEvaluateResponses = [];
+  List<String> dummyCriteriaList = [];
+  double dummyAverageScore = 0.0;
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +43,46 @@ class _RFIListPageState extends State<RFIListPage> {
       await provider.fetchRFIs();
       screenSwitchProvider.toggleAssessment(false);
     });
+    dummyEvaluateResponses = [
+      EvaluateResponse(
+        document: "doc_001",
+        results: [
+          EvaluateResult(
+            assistantId: "assistant_1",
+            criteria: "Clarity",
+            summary: "Very clear response.",
+            score: 8.5,
+          ),
+          EvaluateResult(
+            assistantId: "assistant_2",
+            criteria: "Relevance",
+            summary: "Relevant to the context.",
+            score: 9.0,
+          ),
+          EvaluateResult(
+            assistantId: "assistant_3",
+            criteria: "Feasibility",
+            summary: "Feasible and well structured.",
+            score: 7.5,
+          ),
+        ],
+      ),
+      EvaluateResponse(
+        document: "doc_002",
+        results: [
+          EvaluateResult(
+            assistantId: "assistant_4",
+            criteria: "Innovation",
+            summary: "Highly innovative ideas.",
+            score: 9.2,
+          ),
+        ],
+      ),
+    ];
+
+    dummyCriteriaList = ["Clarity", "Relevance", "Feasibility", "Innovation"];
+
+    dummyAverageScore = 8.55; // Out of 10
   }
 
   @override
@@ -148,6 +196,13 @@ class _RFIListPageState extends State<RFIListPage> {
                       },
                     ),
                   ),
+                  // Dummy Purpose - For Styling.
+                  // TopScorePieChart(
+                  //   evaluateResponses: dummyEvaluateResponses,
+                  //   averageScore: dummyAverageScore,
+                  //   criteriaList: dummyCriteriaList,
+                  //   isLoading: false,
+                  // ),
                   const SizedBox(height: 24),
                   Container(
                     decoration: BoxDecoration(
