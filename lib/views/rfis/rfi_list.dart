@@ -148,9 +148,7 @@ class _RFIListPageState extends State<RFIListPage> {
                       },
                     ),
                   ),
-
                   const SizedBox(height: 24),
-
                   Container(
                     decoration: BoxDecoration(
                       color: JasaraPalette.scaffoldBackground,

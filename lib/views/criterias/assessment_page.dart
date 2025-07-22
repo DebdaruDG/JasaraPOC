@@ -143,19 +143,25 @@ class _AssessmentPageState extends State<AssessmentPage> {
                           children: [
                             assessmentProvider.criteriaSummary.status ==
                                     Status.loading
-                                ? Row(
-                                  children: [
-                                    SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        color: JasaraPalette.deepIndigo,
-                                        strokeWidth: 1.25,
+                                ? Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
+                                  padding: const EdgeInsets.all(12),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          color: JasaraPalette.deepIndigo,
+                                          strokeWidth: 1.25,
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Text('Evaluating...'),
-                                  ],
+                                      const SizedBox(width: 8),
+                                      Text('Summarizing...'),
+                                    ],
+                                  ),
                                 )
                                 : Container(
                                   width:
@@ -212,10 +218,19 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                     Navigator.pop(context);
                                   },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: JasaraPalette.accent,
-                            foregroundColor: JasaraPalette.dark2,
+                            backgroundColor: JasaraPalette.mintGreen,
+                            foregroundColor: JasaraPalette.background,
                           ),
-                          child: Text('Accept Decision'),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              'Accept Decision',
+                              style: JasaraTextStyles.primaryText500.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: JasaraPalette.background,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -265,24 +280,35 @@ class _AssessmentPageState extends State<AssessmentPage> {
     required bool isLoading,
   }) {
     final hasData = model != null && model.results.isNotEmpty;
-
+    if (hasData) {
+      console.log('model.results[0].score :- ${model.results[0].score}');
+    }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        border: Border.all(color: JasaraPalette.primary.withOpacity(0.2)),
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
-      ),
+      padding: const EdgeInsets.all(12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Criteria ${index + 1}: $criteriaLabel",
-            style: JasaraTextStyles.primaryText500.copyWith(
-              fontSize: 16,
-              color: JasaraPalette.dark2,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                criteriaLabel,
+                style: JasaraTextStyles.primaryText500.copyWith(
+                  fontSize: 16,
+                  color: JasaraPalette.dark2,
+                ),
+              ),
+              if (hasData)
+                Text(
+                  "${((model.results[0].score) / 10).toStringAsFixed(2)} / 10",
+                  style: JasaraTextStyles.primaryText500.copyWith(
+                    fontSize: 18,
+                    color: JasaraPalette.dark1,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+            ],
           ),
           const SizedBox(height: 8),
           Container(
@@ -301,20 +327,12 @@ class _AssessmentPageState extends State<AssessmentPage> {
           ),
           const SizedBox(height: 8),
           if (hasData) ...[
-            Text(
-              "Score: ${((model?.results[0].score ?? 0) / 10).toStringAsFixed(2)} / 10",
-              style: JasaraTextStyles.primaryText500.copyWith(
-                fontSize: 14,
-                color: JasaraPalette.primary,
-              ),
-            ),
-            const SizedBox(height: 6),
             ClipRRect(
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(16),
               child: LinearProgressIndicator(
-                minHeight: 10,
-                value: (model?.results[0].score ?? 0) / 10,
-                backgroundColor: JasaraPalette.background,
+                minHeight: 12,
+                value: (model.results[0].score) / 100,
+                backgroundColor: JasaraPalette.grey.withOpacity(0.25),
                 valueColor: AlwaysStoppedAnimation<Color>(
                   JasaraPalette.deepIndigo,
                 ),
@@ -326,7 +344,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
     );
   }
 
-  Widget _buildSparkleLoader({Widget? child}) {
+  Widget _buildSparkleLoader() {
     return SizedBox(
       height: 40,
       child: Center(
