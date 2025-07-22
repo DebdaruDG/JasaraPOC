@@ -526,6 +526,12 @@ class _CriteriasListState extends State<CriteriasList> {
                             children: [
                               GenericDataTable(
                                 columnFlexes: [3, 3, 2, 1],
+                                columnTextAligns: [
+                                  TextAlign.left,
+                                  TextAlign.center,
+                                  TextAlign.center,
+                                  TextAlign.center,
+                                ],
                                 columnTitles: const [
                                   'Title',
                                   'Instructions',
@@ -535,85 +541,93 @@ class _CriteriasListState extends State<CriteriasList> {
                                 rowData:
                                     list.map((item) {
                                       return [
-                                        Text(item.title),
+                                        Text(
+                                          item.title,
+                                          textAlign: TextAlign.left,
+                                        ),
                                         Text(
                                           item.textInstructions,
-                                          maxLines: 2,
+                                          maxLines: 3,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        Wrap(
-                                          spacing: 6,
-                                          runSpacing: 6,
-                                          children:
-                                              item.files.map((f) {
-                                                return Material(
-                                                  color:
-                                                      JasaraPalette
-                                                          .greyShade100,
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
-                                                  child: InkWell(
+                                        if (item.files.isEmpty)
+                                          Text('--')
+                                        else
+                                          Wrap(
+                                            spacing: 6,
+                                            runSpacing: 6,
+                                            children:
+                                                item.files.map((f) {
+                                                  return Material(
+                                                    color:
+                                                        JasaraPalette
+                                                            .greyShade100,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                           20,
                                                         ),
-                                                    onTap: () {
-                                                      showPDFViewerDialog(
-                                                        context,
-                                                        f.name,
-                                                        f.base64,
-                                                      );
-                                                    },
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            horizontal: 10,
-                                                            vertical: 6,
+                                                    child: InkWell(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            20,
                                                           ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          const Icon(
-                                                            Icons
-                                                                .picture_as_pdf,
-                                                            size: 18,
-                                                            color: Colors.red,
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 4,
-                                                          ),
-
-                                                          Flexible(
-                                                            child: Text(
-                                                              f.name,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style:
-                                                                  const TextStyle(
-                                                                    fontSize:
-                                                                        13,
-                                                                  ),
+                                                      onTap: () {
+                                                        showPDFViewerDialog(
+                                                          context,
+                                                          f.name,
+                                                          f.base64,
+                                                        );
+                                                      },
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 10,
+                                                              vertical: 6,
                                                             ),
-                                                          ),
-                                                          const SizedBox(
-                                                            width: 6,
-                                                          ),
-                                                          const Icon(
-                                                            Icons.visibility,
-                                                            size: 18,
-                                                            color:
-                                                                JasaraPalette
-                                                                    .deepIndigo,
-                                                          ),
-                                                        ],
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            const Icon(
+                                                              Icons
+                                                                  .picture_as_pdf,
+                                                              size: 18,
+                                                              color: Colors.red,
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 4,
+                                                            ),
+
+                                                            Flexible(
+                                                              child: Text(
+                                                                f.name,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                      fontSize:
+                                                                          13,
+                                                                    ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              width: 6,
+                                                            ),
+                                                            const Icon(
+                                                              Icons.visibility,
+                                                              size: 18,
+                                                              color:
+                                                                  JasaraPalette
+                                                                      .deepIndigo,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                );
-                                              }).toList(),
-                                        ),
+                                                  );
+                                                }).toList(),
+                                          ),
 
                                         PopupActionMenu(
                                           onEdit: () => {},

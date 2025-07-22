@@ -218,7 +218,7 @@ class _RFIListPageState extends State<RFIListPage> {
                       rowData:
                           (provider.rfis.data ?? []).map((item) {
                             return [
-                              Text(item.title, textAlign: TextAlign.center),
+                              Text(item.title, textAlign: TextAlign.left),
                               Text(
                                 item.summarizerComment,
                                 maxLines: 3,

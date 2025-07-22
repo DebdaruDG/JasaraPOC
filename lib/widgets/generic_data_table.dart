@@ -4,15 +4,17 @@ import 'utils/app_palette.dart';
 class GenericDataTable extends StatelessWidget {
   final List<String> columnTitles;
   final List<List<Widget>> rowData;
-  final List<double>? columnFlexes; // ✅ Optional parameter
+  final List<double>? columnFlexes;
+  final List<TextAlign>? columnTextAligns; // ✅ NEW
   final Color headingRowColor;
-  final TextAlign? headerTextAlign;
+  final TextAlign? headerTextAlign; // Optional default header align
 
   const GenericDataTable({
     super.key,
     required this.columnTitles,
     required this.rowData,
-    this.columnFlexes, // ✅ Not required
+    this.columnFlexes,
+    this.columnTextAligns, // ✅ NEW
     this.headingRowColor = JasaraPalette.white,
     this.headerTextAlign,
   });
@@ -24,11 +26,9 @@ class GenericDataTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final totalWidth = constraints.maxWidth;
-
-        // ✅ If custom flexes provided, use them
         final defaultFlexes = List<double>.filled(columnCount, 1);
         final usedFlexes = columnFlexes ?? defaultFlexes;
-        final totalFlex = usedFlexes.fold(0, (a, b) => int.parse('${a + b}'));
+        final totalFlex = usedFlexes.fold(0, (a, b) => (a + b).toInt());
 
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -49,6 +49,11 @@ class GenericDataTable extends StatelessWidget {
               ),
               columns: List.generate(columnCount, (index) {
                 final colWidth = (usedFlexes[index] / totalFlex) * totalWidth;
+                final align =
+                    columnTextAligns?[index] ??
+                    headerTextAlign ??
+                    TextAlign.center;
+
                 return DataColumn(
                   label: SizedBox(
                     width: colWidth,
@@ -57,7 +62,7 @@ class GenericDataTable extends StatelessWidget {
                       child: Text(
                         columnTitles[index],
                         overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
+                        textAlign: align,
                       ),
                     ),
                   ),
@@ -69,6 +74,9 @@ class GenericDataTable extends StatelessWidget {
                       cells: List.generate(rowCells.length, (index) {
                         final colWidth =
                             (usedFlexes[index] / totalFlex) * totalWidth;
+                        final align =
+                            columnTextAligns?[index] ?? TextAlign.center;
+
                         return DataCell(
                           SizedBox(
                             width: colWidth,
@@ -76,7 +84,10 @@ class GenericDataTable extends StatelessWidget {
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 8,
                               ),
-                              child: Center(child: rowCells[index]),
+                              child: Align(
+                                alignment: _getAlignmentFromTextAlign(align),
+                                child: rowCells[index],
+                              ),
                             ),
                           ),
                         );
@@ -88,5 +99,18 @@ class GenericDataTable extends StatelessWidget {
         );
       },
     );
+  }
+
+  /// Helper to convert TextAlign to Alignment for proper Align widget usage
+  Alignment _getAlignmentFromTextAlign(TextAlign align) {
+    switch (align) {
+      case TextAlign.left:
+        return Alignment.centerLeft;
+      case TextAlign.right:
+        return Alignment.centerRight;
+      case TextAlign.center:
+      default:
+        return Alignment.center;
+    }
   }
 }
