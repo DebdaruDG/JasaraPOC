@@ -41,8 +41,10 @@ class _AssessmentPageState extends State<AssessmentPage> {
         context,
         listen: false,
       );
+
       Future.delayed(Duration.zero, () async {
         if (!mounted) return;
+        assessmentVM.setCriteriaSummary(ApiResponse.loading());
         await assessmentVM.setCriteriaCount(0);
         assessmentVM.clearEvaluateResponses();
         await criteriaVM.fetchCriteriaList();
@@ -137,11 +139,12 @@ class _AssessmentPageState extends State<AssessmentPage> {
           var uuid = Uuid();
           var base64FileContent = await FileUtils.fileToBase64(widget.file!);
           String title = 'unnamed_project';
-          if (widget.formJson?.containsKey('project_name') == true) {
+          console.log('widget.formJson :- ${widget.formJson}');
+          if (widget.formJson?.containsKey('opportunityName') == true) {
             title =
-                (widget.formJson!['project_name'].trim() ?? '').isEmpty
+                (widget.formJson!['opportunityName'].trim() ?? '').isEmpty
                     ? ''
-                    : widget.formJson!['project_name'];
+                    : widget.formJson!['opportunityName'];
           }
           console.log('project title - $title');
           await assessmentVM.saveEvaluationAsRFI(
@@ -248,6 +251,9 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                         );
                                     screenSwitchProvider.toggleAssessment(
                                       false,
+                                    );
+                                    assessmentProvider.setCriteriaSummary(
+                                      ApiResponse.loading(),
                                     );
                                     Navigator.pop(context);
                                   },

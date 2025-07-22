@@ -30,6 +30,16 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
   final formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+    final screenProvider = Provider.of<ScreenSwitchProvider>(
+      context,
+      listen: false,
+    );
+    screenProvider.toggleAssessment(false, file: null, formJson: {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 600;
 
