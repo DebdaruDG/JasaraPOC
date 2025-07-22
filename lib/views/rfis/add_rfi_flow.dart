@@ -47,6 +47,7 @@ class _AddRFIDocumentPageState extends State<AddRFIDocumentPage> {
         screenProvider,
         _,
       ) {
+        console.log('screenProvider.file :- ${screenProvider.file}');
         return SingleChildScrollView(
           child:
               screenProvider.showAssessment

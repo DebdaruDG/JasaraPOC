@@ -83,9 +83,8 @@ class _AssessmentPageState extends State<AssessmentPage> {
         List<String> descriptions = [];
         for (var response in assessmentVM.evaluateResponses) {
           if (response.results.isNotEmpty &&
-              response.results[0].summary != null &&
               !descriptions.contains(response.results[0].summary)) {
-            descriptions.add(response.results[0].summary!);
+            descriptions.add(response.results[0].summary);
           }
         }
 
@@ -124,11 +123,13 @@ class _AssessmentPageState extends State<AssessmentPage> {
         // Save evaluation as RFI if all responses are received
         if (assessmentVM.evaluateResponses.length ==
             criteriaVM.criteriaListResponse.length) {
+          console.log('formJson :- ${widget.formJson}');
           var uuid = Uuid();
           await assessmentVM.saveEvaluationAsRFI(
             id: uuid.v4(),
-            title: 'Evaluation Summary',
-            comment: 'Summary of all criteria evaluations',
+            title: widget.formJson?['project_name'] ?? widget.file?.name,
+            // 'Evaluation Summary',
+            comment: assessmentVM.criteriaSummary.data?.summary ?? '',
             fileName: widget.file?.name ?? 'evaluation.pdf',
             fileUrl:
                 'data:application/pdf;base64,${widget.file?.toString() ?? ''}',
@@ -276,7 +277,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
                                 ),
                                 TextSpan(
                                   text:
-                                      '${(assessmentProvider.averageScore / 10).toStringAsFixed(2)} / ${assessmentProvider.evaluateResponses.length * 10}',
+                                      '${(assessmentProvider.averageScore / 10).toStringAsFixed(2)} / ${10}',
                                   style: JasaraTextStyles.primaryText500
                                       .copyWith(
                                         fontSize: 16,
