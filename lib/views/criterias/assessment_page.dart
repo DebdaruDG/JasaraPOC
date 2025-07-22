@@ -355,13 +355,14 @@ class _AssessmentPageState extends State<AssessmentPage> {
                 style: JasaraTextStyles.primaryText500.copyWith(
                   fontSize: 16,
                   color: JasaraPalette.dark2,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               if (hasData)
                 Text(
                   "${((model.results[0].score) / 10).toStringAsFixed(2)} / 10",
                   style: JasaraTextStyles.primaryText500.copyWith(
-                    fontSize: 18,
+                    fontSize: 16,
                     color: JasaraPalette.dark1,
                     fontWeight: FontWeight.w900,
                   ),
