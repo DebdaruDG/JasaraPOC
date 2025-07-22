@@ -19,6 +19,7 @@ class EvaluateService {
     required double evaluationPercentage,
     required String rfiPdfBase64,
     required String fileName,
+    required String result,
     required List<EvaluateRFIModel> evaluationResults,
   }) async {
     try {
@@ -26,6 +27,7 @@ class EvaluateService {
         'project_name': projectName,
         'summarizerComment': summarizerComment,
         'evaluationPercentage': evaluationPercentage,
+        'result': result,
         'location': location,
         'budget': budget,
         'rfi_pdf': rfiPdfBase64,

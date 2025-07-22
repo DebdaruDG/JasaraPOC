@@ -165,6 +165,7 @@ class AssessmentProvider with ChangeNotifier {
         fileName: fileName,
         summarizerComment: comment,
         evaluationPercentage: percentage,
+        result: result,
         evaluationResults: convertResponsesToRFIModels(_evaluateResponses),
       );
       await fetchRFIs();

@@ -12,7 +12,9 @@ class RFIResultIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    console.log('rfi.result :- ${rfi.result} \t rfi.result :- ${rfi.result}');
+    console.log(
+      'rfi.result :- ${rfi.result} \t rfi.percentage :- ${rfi.percentage}',
+    );
     return Container(
       padding: const EdgeInsets.all(4.0),
       child: Column(
