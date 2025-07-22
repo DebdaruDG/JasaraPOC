@@ -155,13 +155,18 @@ class AssessmentProvider with ChangeNotifier {
       result: result,
     );
 
-    await firebase.EvaluateService.addEvaluateRfi(
-      projectName: title,
-      location: 'N/A',
-      budget: 0.0,
-      rfiPdfBase64: fileUrl,
-      evaluationResults: convertResponsesToRFIModels(_evaluateResponses),
-    );
+    try {
+      await firebase.EvaluateService.addEvaluateRfi(
+        projectName: title,
+        location: 'N/A',
+        budget: 0.0,
+        rfiPdfBase64: fileUrl,
+        evaluationResults: convertResponsesToRFIModels(_evaluateResponses),
+      );
+      await fetchRFIs();
+    } catch (exc) {
+      console.log('exc - $exc');
+    }
   }
 
   List<EvaluateRFIModel> convertResponsesToRFIModels(

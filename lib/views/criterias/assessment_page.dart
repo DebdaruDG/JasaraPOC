@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/services/api/api_response.dart';
+import '../../models/response/criteria_summary_response_model.dart';
 import '../../models/response/evaluate_response_model.dart';
 import '../../providers/assessment_provider.dart';
 import '../../providers/criteria_provider.dart';
@@ -54,39 +55,73 @@ class _AssessmentPageState extends State<AssessmentPage> {
           criteriaVM.criteriaListResponse.length,
         );
 
+        // Validate input
+        if (widget.file == null || widget.formJson == null) {
+          console.log('Invalid input: file or formJson is null');
+          return;
+        }
+
+        // Create a list of futures for parallel evaluation
+        final evaluationFutures =
+            criteriaVM.criteriaListResponse.map((item) {
+              console.log(
+                'Starting evaluation for criteriaId: ${item.assistantId} at ${DateTime.now()}',
+              );
+              return assessmentVM.evaluateBE(
+                widget.formJson!,
+                item.assistantId,
+                widget.file!,
+              );
+            }).toList();
+
+        // Execute all evaluations in parallel
+        await Future.wait(evaluationFutures, eagerError: true);
+
+        if (!mounted) return;
+
+        // Collect summaries from responses
         List<String> descriptions = [];
-
-        for (var item in criteriaVM.criteriaListResponse) {
-          if (!mounted) return;
-          console.log(
-            'Starting evaluation for criteriaId: ${item.assistantId}',
-          );
-          await assessmentVM.evaluateBE(
-            widget.formJson ?? {},
-            item.assistantId,
-            widget.file!,
-          );
-
-          if (assessmentVM.evaluateResponses.isNotEmpty) {
-            for (var response in assessmentVM.evaluateResponses) {
-              if (response.results.isNotEmpty &&
-                  !descriptions.contains(response.results[0].summary)) {
-                descriptions.add(response.results[0].summary);
-              }
-            }
+        for (var response in assessmentVM.evaluateResponses) {
+          if (response.results.isNotEmpty &&
+              response.results[0].summary != null &&
+              !descriptions.contains(response.results[0].summary)) {
+            descriptions.add(response.results[0].summary!);
           }
+        }
 
+        console.log(
+          'Collected ${descriptions.length} unique descriptions: $descriptions',
+        );
+
+        // Summarize criteria only if descriptions are available
+        if (descriptions.isNotEmpty) {
+          console.log('Calling evaluateCriteriaSummary at ${DateTime.now()}');
+          await assessmentVM.evaluateCriteriaSummary(descriptions);
           console.log(
-            'Completed evaluation for criteriaId: ${item.assistantId}, Total completed: ${assessmentVM.evaluateResponses.length}, Total criteria: ${assessmentVM.criteriaCount}',
+            'evaluateCriteriaSummary completed at ${DateTime.now()}, criteriaSummary: ${assessmentVM.criteriaSummary.data?.summary}',
+          );
+        } else {
+          console.log(
+            'No valid descriptions to summarize, skipping summarizer API call',
+          );
+          assessmentVM.setCriteriaSummary(
+            ApiResponse.completed(
+              CriteriaSummaryResponseModel(
+                summary: 'No valid summaries available',
+              ),
+            ),
           );
         }
 
-        if (!mounted) return;
-        await assessmentVM.evaluateCriteriaSummary(descriptions);
+        console.log(
+          'Completed all evaluations. Total completed: ${assessmentVM.evaluateResponses.length}, Total criteria: ${assessmentVM.criteriaCount}',
+        );
+
         console.log(
           'Final evaluateResponses: ${assessmentVM.evaluateResponses.map((r) => r.results.map((res) => res.assistantId).toList()).toList()}',
         );
 
+        // Save evaluation as RFI if all responses are received
         if (assessmentVM.evaluateResponses.length ==
             criteriaVM.criteriaListResponse.length) {
           var uuid = Uuid();
@@ -104,7 +139,7 @@ class _AssessmentPageState extends State<AssessmentPage> {
         }
       });
     } catch (exc) {
-      console.log('exc - $exc');
+      console.log('Exception in initState: $exc');
     }
   }
 
