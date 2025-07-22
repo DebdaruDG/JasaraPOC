@@ -206,11 +206,27 @@ class _RFIListPageState extends State<RFIListPage> {
                   const SizedBox(height: 24),
                   Container(
                     decoration: BoxDecoration(
-                      color: JasaraPalette.scaffoldBackground,
+                      color: JasaraPalette.white,
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
                     ),
                     child: GenericDataTable(
                       columnFlexes: [2, 5, 2, 2, 1],
+                      headingRowColor: JasaraPalette.greyShade100,
+                      tableborder: TableBorder.symmetric(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                          bottomLeft: Radius.circular(12),
+                          bottomRight: Radius.circular(12),
+                        ),
+                      ),
+                      columnTextAligns: [
+                        TextAlign.center,
+                        TextAlign.left,
+                        TextAlign.center,
+                        TextAlign.center,
+                        TextAlign.center,
+                      ],
                       columnTitles: const [
                         'Project',
                         'AI Comments',
@@ -226,7 +242,7 @@ class _RFIListPageState extends State<RFIListPage> {
                                 item.summarizerComment,
                                 maxLines: 3,
                                 softWrap: true,
-                                textAlign: TextAlign.center,
+                                textAlign: TextAlign.left,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               InkWell(

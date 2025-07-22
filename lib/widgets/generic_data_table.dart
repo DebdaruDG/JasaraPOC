@@ -8,6 +8,7 @@ class GenericDataTable extends StatelessWidget {
   final List<TextAlign>? columnTextAligns; // ✅ NEW
   final Color headingRowColor;
   final TextAlign? headerTextAlign; // Optional default header align
+  final TableBorder? tableborder;
 
   const GenericDataTable({
     super.key,
@@ -17,6 +18,7 @@ class GenericDataTable extends StatelessWidget {
     this.columnTextAligns, // ✅ NEW
     this.headingRowColor = JasaraPalette.white,
     this.headerTextAlign,
+    this.tableborder,
   });
 
   @override
@@ -36,9 +38,11 @@ class GenericDataTable extends StatelessWidget {
             constraints: BoxConstraints(minWidth: totalWidth),
             child: DataTable(
               headingRowColor: WidgetStateProperty.all(headingRowColor),
-              border: TableBorder.symmetric(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              border:
+                  tableborder ??
+                  TableBorder.symmetric(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
               horizontalMargin: 0,
               columnSpacing: 0,
               dataRowMinHeight: 60,

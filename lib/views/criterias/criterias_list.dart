@@ -528,6 +528,15 @@ class _CriteriasListState extends State<CriteriasList> {
                           return Column(
                             children: [
                               GenericDataTable(
+                                headingRowColor: JasaraPalette.greyShade100,
+                                tableborder: TableBorder.symmetric(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(12),
+                                    topRight: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                ),
                                 columnFlexes: [3, 3, 2, 1],
                                 columnTextAligns: [
                                   TextAlign.left,
