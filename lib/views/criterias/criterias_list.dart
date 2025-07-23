@@ -417,68 +417,70 @@ class _CriteriasListState extends State<CriteriasList> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const SizedBox(height: 12),
-                    LayoutBuilder(
-                      builder: (context, constraints) {
-                        double width = constraints.maxWidth;
-                        int crossAxisCount = width < 1024 ? 2 : 4;
+                    Container(
+                      margin: const EdgeInsets.only(top: 16),
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          double width = constraints.maxWidth;
+                          int crossAxisCount = width < 1024 ? 2 : 4;
 
-                        final stats = [
-                          StatModel(
-                            label: 'Total Criteria',
-                            value: '${provider.criteriaListResponse.length}',
-                            icon: Icons.list_alt,
-                            gradientColors: [
-                              JasaraPalette.indigoBlue,
-                              JasaraPalette.primary,
-                            ],
-                          ),
-                          StatModel(
-                            label: 'Active Criteria',
-                            value: '${provider.criteriaListResponse.length}',
-                            icon: Icons.check_circle,
-                            gradientColors: [
-                              JasaraPalette.aquaGreen,
-                              JasaraPalette.skyBlue,
-                            ],
-                          ),
-                          StatModel(
-                            label: 'Inactive Criteria',
-                            value: '0',
-                            icon: Icons.remove_circle,
-                            gradientColors: [
-                              JasaraPalette.primary,
-                              JasaraPalette.indigoBlue,
-                            ],
-                          ),
-                          StatModel(
-                            label: 'Archived Criteria',
-                            value: '0',
-                            icon: Icons.archive,
-                            gradientColors: [
-                              JasaraPalette.skyBlue,
-                              JasaraPalette.aquaGreen,
-                            ],
-                          ),
-                        ];
+                          final stats = [
+                            StatModel(
+                              label: 'Total Criteria',
+                              value: '${provider.criteriaListResponse.length}',
+                              icon: Icons.list_alt,
+                              gradientColors: [
+                                JasaraPalette.indigoBlue,
+                                JasaraPalette.primary,
+                              ],
+                            ),
+                            StatModel(
+                              label: 'Active Criteria',
+                              value: '${provider.criteriaListResponse.length}',
+                              icon: Icons.check_circle,
+                              gradientColors: [
+                                JasaraPalette.aquaGreen,
+                                JasaraPalette.skyBlue,
+                              ],
+                            ),
+                            StatModel(
+                              label: 'Inactive Criteria',
+                              value: '0',
+                              icon: Icons.remove_circle,
+                              gradientColors: [
+                                JasaraPalette.primary,
+                                JasaraPalette.indigoBlue,
+                              ],
+                            ),
+                            StatModel(
+                              label: 'Archived Criteria',
+                              value: '0',
+                              icon: Icons.archive,
+                              gradientColors: [
+                                JasaraPalette.skyBlue,
+                                JasaraPalette.aquaGreen,
+                              ],
+                            ),
+                          ];
 
-                        return GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: stats.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: crossAxisCount,
-                                mainAxisExtent: 120,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
-                              ),
-                          itemBuilder:
-                              (context, index) => HoverableCard(
-                                child: StatCard(stat: stats[index]),
-                              ),
-                        );
-                      },
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: stats.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  mainAxisExtent: 120,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                ),
+                            itemBuilder:
+                                (context, index) => HoverableCard(
+                                  child: StatCard(stat: stats[index]),
+                                ),
+                          );
+                        },
+                      ),
                     ),
                     const SizedBox(height: 24),
                     Align(
@@ -506,6 +508,11 @@ class _CriteriasListState extends State<CriteriasList> {
                               ),
                             ),
                             label: "Add Criteria",
+                            textStyle: JasaraTextStyles.primaryText500.copyWith(
+                              color: JasaraPalette.background,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                            ),
                             height: 50,
                             width: buttonWidth,
                             backgroundColor: JasaraPalette.indigoBlue,

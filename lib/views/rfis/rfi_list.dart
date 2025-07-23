@@ -133,27 +133,31 @@ class _RFIListPageState extends State<RFIListPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  LayoutBuilder(
-                    builder: (context, constraints) {
-                      double width = constraints.maxWidth;
-                      int crossAxisCount = width < 1024 ? 2 : 4;
+                  Container(
+                    margin: const EdgeInsets.only(top: 16),
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        double width = constraints.maxWidth;
+                        int crossAxisCount = width < 1024 ? 2 : 4;
 
-                      return GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: stats.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          mainAxisExtent: 120,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                        ),
-                        itemBuilder:
-                            (context, index) => HoverableCard(
-                              child: StatCard(stat: stats[index]),
-                            ),
-                      );
-                    },
+                        return GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: stats.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: crossAxisCount,
+                                mainAxisExtent: 120,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                              ),
+                          itemBuilder:
+                              (context, index) => HoverableCard(
+                                child: StatCard(stat: stats[index]),
+                              ),
+                        );
+                      },
+                    ),
                   ),
 
                   const SizedBox(height: 24),
@@ -185,7 +189,7 @@ class _RFIListPageState extends State<RFIListPage> {
                           label: "New RFI",
                           textStyle: JasaraTextStyles.primaryText500.copyWith(
                             color: JasaraPalette.background,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             fontSize: 16,
                           ),
                           height: 50,
