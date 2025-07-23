@@ -16,7 +16,7 @@ class RFIResultIndicator extends StatelessWidget {
       'rfi.result :- ${rfi.result} \t rfi.percentage :- ${rfi.percentage}',
     );
     return Container(
-      padding: const EdgeInsets.all(4.0),
+      margin: const EdgeInsets.only(top: 8.0),
       child: Column(
         children: [
           CircularPercentIndicator(
@@ -25,11 +25,11 @@ class RFIResultIndicator extends StatelessWidget {
             animation: true,
             percent: rfi.percentage.toInt() / 100,
             center: Padding(
-              padding: const EdgeInsets.all(2.0),
+              padding: const EdgeInsets.all(3.0),
               child: Text(
                 "${rfi.percentage.toInt()}%",
                 style: JasaraTextStyles.primaryText500.copyWith(
-                  fontSize: 13,
+                  fontSize: 12,
                   fontWeight: FontWeight.w800,
                 ),
               ),

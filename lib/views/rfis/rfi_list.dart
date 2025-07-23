@@ -205,9 +205,14 @@ class _RFIListPageState extends State<RFIListPage> {
                   // ),
                   const SizedBox(height: 24),
                   Container(
+                    margin: const EdgeInsets.only(bottom: 24.0),
                     decoration: BoxDecoration(
                       color: JasaraPalette.white,
                       borderRadius: const BorderRadius.all(Radius.circular(12)),
+                      border: Border.all(
+                        color: JasaraPalette.greyShade100,
+                        width: 1.0,
+                      ),
                     ),
                     child: GenericDataTable(
                       columnFlexes: [2, 5, 2, 2, 1],
@@ -319,6 +324,7 @@ class _RFIListPageState extends State<RFIListPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: Text('Nothing to Show !'),
                     ),
+                  // const SizedBox(height: 12),
                 ],
               ),
             ),

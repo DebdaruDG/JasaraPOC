@@ -517,9 +517,14 @@ class _CriteriasListState extends State<CriteriasList> {
                     ),
                     const SizedBox(height: 24),
                     Container(
+                      margin: const EdgeInsets.only(bottom: 24.0),
                       decoration: BoxDecoration(
                         color: JasaraPalette.white,
                         borderRadius: BorderRadius.all(Radius.circular(12)),
+                        border: Border.all(
+                          color: JasaraPalette.greyShade100,
+                          width: 1.0,
+                        ),
                       ),
                       child: Consumer<CriteriaProvider>(
                         builder: (context, criteriaVM, _) {
